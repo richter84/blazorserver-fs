@@ -1,0 +1,167 @@
+﻿@page "/job"
+
+<h3>Job</h3>
+
+<div class="col-md-8">
+
+    <div class="state-map-container">
+        <div class="state">
+            <div class="state-icon @IsPendingComplete">
+                <span class="oi oi-lock-unlocked"></span>
+            </div>
+            <h3 class="@IsPendingComplete">Pending</h3>
+            <p>
+                Tue 18 June 2020
+                <br />10:03am
+            </p>
+        </div>
+        <div class="state-line @IsJobComplete"></div>
+        <div class="state">
+            <div class="state-icon @IsJobComplete">
+                <span class="oi oi-lock-locked"></span>
+            </div>
+            <h3 class="@IsJobComplete">Complete</h3>
+            <p>
+                Tue 18 June 2020
+                <br />10:15am
+            </p>
+        </div>
+        <div class="state-line @IsApprovedComplete"></div>
+        <div class="state">
+            <div class="state-icon @IsApprovedComplete">
+                <span class="oi oi-check"></span>
+            </div>
+            <h3 class="@IsApprovedComplete">Approved</h3>
+            <p>
+                Thu 20 June 2020
+                <br />7:45am
+            </p>
+        </div>
+        <div class="state-line @IsInvoicedComplete"></div>
+        <div class="state">
+            <div class="state-icon @IsInvoicedComplete">
+                <span class="oi oi-document"></span>
+            </div>
+            <h3 class="@IsInvoicedComplete">Invoiced</h3>
+            <p>
+                Fri 21 June 2020
+                <br />3:21pm
+            </p>
+        </div>
+        <div class="state-line @IsPaidComplete"></div>
+        <div class="state">
+            <div class="state-icon @IsPaidComplete">
+                <span class="oi oi-british-pound"></span>
+            </div>
+            <h3 class="@IsPaidComplete">Paid</h3>
+            <p>
+                Awaiting Payment
+                <br /><br />
+            </p>
+        </div>
+    </div>
+
+    <div></div>
+    <button class="btn btn-primary" @onclick="HandleUpdateState">
+        @ButtonText
+    </button>
+    <div></div><br /><br />
+    <section>
+        <fieldset>
+            <legend>
+                Customer Detail
+            </legend>
+        </fieldset>
+    </section>
+    <br /><br />
+          <section>
+              <fieldset>
+                  <legend>
+                      Select Door
+                  </legend>
+                  <div class="form-group">
+                      <select @onchange="HandleDoorTypeChange" class="btn btn-primary">
+                          <option>Door Type ...</option>
+                          <option style="background-color:none; padding:5px;">Roller Shutter</option>
+                          <option disabled>Sectional</option>
+                          <option disabled>Pedestrian</option>
+                          <option disabled>Gates</option>
+                          <option disabled>Bars / Grilles</option>
+                      </select>
+                  </div>
+              </fieldset>
+              <div class="@Display">
+                  <RollerShutter></RollerShutter>
+              </div>
+          </section>
+    <br /><br />
+    <section>
+        <fieldset>
+            <legend>
+                Handover
+            </legend>
+            <form>
+                <div class="form-group">
+                    <label for="startdate">Start Date</label>
+                </div>
+                <div class="form-group">
+                    <label for="enddate">End Date</label>
+                </div>
+            </form>
+        </fieldset>
+    </section>
+
+</div>
+
+    @code {
+        private string IsPendingComplete;
+        private string IsJobComplete;
+        private string IsApprovedComplete;
+        private string IsInvoicedComplete;
+        private string IsPaidComplete;
+
+        private int stateIndex = 1;
+        private JobStatus State;
+
+        private const string IsComplete = "complete";
+
+        private string ButtonText = "Save Job";
+
+        private string Display = "d-none";
+
+        void HandleUpdateState()
+        {
+            State = (JobStatus)Enum.ToObject(typeof(JobStatus), stateIndex++);
+
+            switch (State)
+            {
+                case JobStatus.Pending:
+                    IsPendingComplete = IsComplete;
+                    ButtonText = "Complete Job";
+                    break;
+                case JobStatus.Complete:
+                    IsJobComplete = IsComplete;
+                    ButtonText = "Approve Job";
+                    break;
+                case JobStatus.Approved:
+                    IsApprovedComplete = IsComplete;
+                    ButtonText = "Send Invoice";
+                    break;
+                case JobStatus.Invoiced:
+                    IsInvoicedComplete = IsComplete;
+                    ButtonText = "Mark as Paid";
+                    break;
+                case JobStatus.Paid:
+                    IsPaidComplete = IsComplete;
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        void HandleDoorTypeChange()
+        {
+            Display = "d-block";
+        }
+    }

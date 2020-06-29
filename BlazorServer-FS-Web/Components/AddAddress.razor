@@ -1,0 +1,42 @@
+﻿<h3>Addresses</h3>
+
+<EditForm Model=@Address OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="Street">Street</label>
+        <InputText @bind-Value=Address.Street class="form-control" id="Street" />
+        <ValidationMessage For="() => Address.Street"></ValidationMessage>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="TownCity">Town or City</label>
+            <InputText @bind-Value=Address.TownCity class="form-control" id="TownCity" />
+            <ValidationMessage For="() => Address.TownCity"></ValidationMessage>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="Region">Region</label>
+            <InputText @bind-Value=Address.Region class="form-control" id="Region" />
+            <ValidationMessage For="() => Address.Region"></ValidationMessage>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="PostCode">Post Code</label>
+            <InputText @bind-Value=Address.PostCode class="form-control" id="PostCode" />
+            <ValidationMessage For="() => Address.PostCode"></ValidationMessage>
+        </div>
+    </div>
+        <button class="btn btn-primary">Add Address</button>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public EventCallback<Address> OnAdd { get; set; }
+
+    [Parameter]
+    public Address Address { get; set; }
+
+    void HandleValidSubmit()
+    {
+        OnAdd.InvokeAsync(Address);
+    }
+}

@@ -1,0 +1,22 @@
+﻿<EditForm Model=@Address OnValidSubmit="@HandleValidSubmit">
+    <div class="d-flex flex-row existingaddress">
+        <label class="p-2">@Address.Street</label>
+        <label class="p-2">@Address.TownCity</label>
+        <label class="p-2">@Address.Region</label>
+        <label class="p-2">@Address.PostCode</label>
+        <button class=" btn btn-danger">Delete</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Address Address { get; set; }
+
+    [Parameter]
+    public EventCallback<Address> OnDelete { get; set; }
+
+    void HandleValidSubmit()
+    {
+        OnDelete.InvokeAsync(Address);
+    }
+}

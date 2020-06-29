@@ -1,0 +1,80 @@
+﻿@page "/Customer/Add"
+
+<h1>Add Customer</h1>
+
+<EditForm Model=@Customer OnValidSubmit="@HandleValidAddCustomer">
+    <DataAnnotationsValidator />
+    <fieldset class="col-md-6">
+        <legend>Details</legend>
+        <div class="form-group">
+            <label for="Name">Name</label>
+            <InputText @bind-Value=Customer.Name class="form-control" id="Name" />
+            <ValidationMessage For="() => Customer.Name"></ValidationMessage>
+        </div>
+        <div class="form-group">
+            <label for="EmailAddress">Email Address</label>
+            <InputText @bind-Value=Customer.EmailAddress class="form-control" id="EmailAddress" />
+            <ValidationMessage For="() => Customer.EmailAddress"></ValidationMessage>
+        </div>
+        <div class="form-group">
+            <label for="PhoneNumber">Phone Number</label>
+            <InputText @bind-Value=Customer.PhoneNumber class="form-control" id="PhoneNumber" />
+            <ValidationMessage For="() => Customer.PhoneNumber"></ValidationMessage>
+        </div>
+    </fieldset>
+    <hr />
+    <fieldset class="col-md-6">
+        <legend>Addresses</legend>
+        <div class="form-group">
+            <AddAddress Address="@Address" OnAdd="AddAddress"></AddAddress>
+
+            @if (Customer.Address.Any())
+            {
+                <div class="existingaddress-container">
+                    <h3>Existing Addresses</h3>
+                    @foreach (var address in Customer.Address)
+                    {
+                        <ExistingAddress Address="@address" OnDelete="DeleteAddress"></ExistingAddress>
+                    }
+                </div>
+            }
+            else
+            {
+                <br />
+                <p>No existing addresses</p>
+            }
+
+        </div>
+    </fieldset>
+    <ValidationSummary />
+    <input type="submit" class="btn btn-primary" value="Save" />
+</EditForm>
+
+@code {
+    public Customer Customer { get; set; } = new Customer() { Address = new List<Address>() };
+
+    public Address Address { get; set; } = new Address();
+
+    void HandleValidAddAddress(EditContext editContext)
+    {
+        Customer.Address.Add((Address)editContext.Model);
+        Address = new Address();
+    }
+
+    void AddAddress(Address address)
+    {
+        Customer.Address.Add(address);
+        Address = new Address();
+    }
+
+    void DeleteAddress(Address address)
+    {
+        Customer.Address.Remove(address);
+        Address = new Address();
+    }
+
+    async Task HandleValidAddCustomer(EditContext editContext)
+    {
+        //await customerService.Add((Customer)editContext.Model);
+    }
+}
