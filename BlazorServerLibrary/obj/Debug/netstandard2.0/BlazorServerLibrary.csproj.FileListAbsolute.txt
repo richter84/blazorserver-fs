@@ -1,3 +1,11 @@
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\bin\Debug\netstandard2.0\BlazorServerLibrary.deps.json
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\bin\Debug\netstandard2.0\BlazorServerLibrary.dll
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\bin\Debug\netstandard2.0\BlazorServerLibrary.pdb
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.AssemblyInfoInputs.cache
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.AssemblyInfo.cs
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.csproj.CoreCompileInputs.cache
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.dll
+C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\bin\Debug\netstandard2.0\BlazorServerLibrary.deps.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\bin\Debug\netstandard2.0\BlazorServerLibrary.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\bin\Debug\netstandard2.0\BlazorServerLibrary.pdb
@@ -6,4 +14,3 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netsta
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.csproj.CoreCompileInputs.cache
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.pdb
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.csprojAssemblyReference.cache
