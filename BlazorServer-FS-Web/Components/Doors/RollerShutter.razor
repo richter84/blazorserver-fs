@@ -145,6 +145,50 @@
             <label for="anglecutsize">Angle Cut Size</label>
             <InputText @bind-Value="rollerShutter.AngleCutSize" class="form-control" id="anglecutsize"></InputText>
         </div>
+        <div class="form-group">
+            <label for="iscanopy">Canopy</label>
+            <input type="checkbox" @onchange="HandleCanopyChange" class="form-control checkbox" id="iscanopy" />
+        </div>
+        <div class="@IsVisibleCanopy">
+            <div class="form-group">
+                <label for="canopytype">Canopy Type</label>
+                <InputText @bind-Value="rollerShutter.CanopyType" class="form-control" id="canopytype"></InputText>
+            </div>
+            <div class="form-group">
+                <label for="canopycutsize">Canopy Cut Size</label>
+                <InputText @bind-Value="rollerShutter.CanopyCutSize" class="form-control" id="canopycutsize"></InputText>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="isfascia">Fascia</label>
+            <input type="checkbox" @onchange="HandleFasciaChange" class="form-control checkbox" id="isfascia" />
+        </div>
+        <div class="@IsVisibleFascia">
+            <div class="form-group">
+                <label for="fasciatype">Fascia Type</label>
+                <InputText @bind-Value="rollerShutter.FasciaType" class="form-control" id="fasciatype"></InputText>
+            </div>
+            <div class="form-group">
+                <label for="fasciasize">Fascia Size</label>
+                <InputText @bind-Value="rollerShutter.FasciaSize" class="form-control" id="fasciasize"></InputText>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="colour">Colour</label>
+            <InputText @bind-Value="rollerShutter.Colour" class="form-control" id="colour"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="colour">Colour</label>
+            <InputText @bind-Value="rollerShutter.Colour" class="form-control" id="colour"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="wicketeurodoor">Wicket / Euro Door</label>
+            <input type="checkbox" class="form-control checkbox" id="wicketeurodoor" />
+        </div>
+        <div class="form-group">
+            <label for="extranotes">Extra Notes</label>
+            <InputTextArea @bind-Value="rollerShutter.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
+        </div>
     </fieldset>
 </EditForm>
 
@@ -152,6 +196,8 @@
 
     private BlazorServerLibrary.Models.RollerShutter rollerShutter = new BlazorServerLibrary.Models.RollerShutter() { ElectricOperation = new ElectricOperation() };
 
+    private string IsVisibleCanopy = "d-none";
+    private string IsVisibleFascia = "d-none";
     private string IsVisibleSupplierOrderNumber = "d-none";
     private int ProgressPercentage = 0;
 
@@ -159,6 +205,16 @@
     {
         IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
         ProgressPercentage = 10;
+    }
+
+    public void HandleCanopyChange(ChangeEventArgs e)
+    {
+        IsVisibleCanopy = IsVisibleCanopy == "d-none" ? "d-block" : "d-none";
+    }
+
+    public void HandleFasciaChange(ChangeEventArgs e)
+    {
+        IsVisibleFascia = IsVisibleFascia == "d-none" ? "d-block" : "d-none";
     }
 
     public TEnum HandleSelectChange<TEnum>(TEnum EnumType, ChangeEventArgs e) where TEnum : Enum
