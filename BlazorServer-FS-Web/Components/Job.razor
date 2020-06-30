@@ -1,4 +1,5 @@
-﻿@page "/job"
+﻿@page "/Customer/{CustomerId:int}/Job"
+@inject ICustomerService CustomerService
 
 <h3>Job</h3>
 
@@ -71,29 +72,40 @@
             <legend>
                 Customer Detail
             </legend>
+            <div class="row">
+                <div class="col-sm-12">
+                    @Customer.Name
+                </div>
+                <div class="col-sm-6">
+                    @Customer.EmailAddress
+                </div>
+                <div class="col-sm-6">
+                    @Customer.PhoneNumber
+                </div>
+            </div>
         </fieldset>
     </section>
     <br /><br />
-          <section>
-              <fieldset>
-                  <legend>
-                      Select Door
-                  </legend>
-                  <div class="form-group">
-                      <select @onchange="HandleDoorTypeChange" class="btn btn-primary">
-                          <option>Door Type ...</option>
-                          <option style="background-color:none; padding:5px;">Roller Shutter</option>
-                          <option disabled>Sectional</option>
-                          <option disabled>Pedestrian</option>
-                          <option disabled>Gates</option>
-                          <option disabled>Bars / Grilles</option>
-                      </select>
-                  </div>
-              </fieldset>
-              <div class="@Display">
-                  <RollerShutter></RollerShutter>
-              </div>
-          </section>
+    <section>
+        <fieldset>
+            <legend>
+                Select Door
+            </legend>
+            <div class="form-group">
+                <select @onchange="HandleDoorTypeChange" class="btn btn-primary">
+                    <option>Door Type ...</option>
+                    <option style="background-color:none; padding:5px;">Roller Shutter</option>
+                    <option disabled>Sectional</option>
+                    <option disabled>Pedestrian</option>
+                    <option disabled>Gates</option>
+                    <option disabled>Bars / Grilles</option>
+                </select>
+            </div>
+        </fieldset>
+        <div class="@Display">
+            <RollerShutter></RollerShutter>
+        </div>
+    </section>
     <br /><br />
     <section>
         <fieldset>
@@ -110,58 +122,81 @@
             </form>
         </fieldset>
     </section>
+    <br /><br />
+    <section class="@DisplayInvoiceItems">
+        <fieldset>
+            <legend>
+                Invoice Items
+            </legend>
+            <form>
+            </form>
+        </fieldset>
+    </section>
 
 </div>
 
-    @code {
-        private string IsPendingComplete;
-        private string IsJobComplete;
-        private string IsApprovedComplete;
-        private string IsInvoicedComplete;
-        private string IsPaidComplete;
+@code {
 
-        private int stateIndex = 1;
-        private JobStatus State;
+    [Parameter]
+    public int CustomerId { get; set; }
 
-        private const string IsComplete = "complete";
+    public Customer Customer { get; set; } = new Customer() { Address = new List<Address>() };
 
-        private string ButtonText = "Save Job";
+    private string IsPendingComplete;
+    private string IsJobComplete;
+    private string IsApprovedComplete;
+    private string IsInvoicedComplete;
+    private string IsPaidComplete;
 
-        private string Display = "d-none";
+    private int stateIndex = 1;
+    private JobStatus State;
 
-        void HandleUpdateState()
+    private const string IsComplete = "complete";
+
+    private string ButtonText = "Save Job";
+
+    private string Display = "d-none";
+    private string DisplayInvoiceItems = "d-none";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Customer = await CustomerService.GetCustomer(CustomerId);
+    }
+
+    private void HandleUpdateState()
+    {
+        State = (JobStatus)Enum.ToObject(typeof(JobStatus), stateIndex++);
+
+        switch (State)
         {
-            State = (JobStatus)Enum.ToObject(typeof(JobStatus), stateIndex++);
+            case JobStatus.Pending:
+                IsPendingComplete = IsComplete;
+                ButtonText = "Complete Job";
+                break;
+            case JobStatus.Complete:
+                IsJobComplete = IsComplete;
+                ButtonText = "Approve Job";
+                break;
+            case JobStatus.Approved:
+                IsApprovedComplete = IsComplete;
+                ButtonText = "Send Invoice";
+                DisplayInvoiceItems = "d-block";
+                break;
+            case JobStatus.Invoiced:
+                IsInvoicedComplete = IsComplete;
+                ButtonText = "Mark as Paid";
+                break;
+            case JobStatus.Paid:
+                IsPaidComplete = IsComplete;
+                break;
+            default:
+                break;
 
-            switch (State)
-            {
-                case JobStatus.Pending:
-                    IsPendingComplete = IsComplete;
-                    ButtonText = "Complete Job";
-                    break;
-                case JobStatus.Complete:
-                    IsJobComplete = IsComplete;
-                    ButtonText = "Approve Job";
-                    break;
-                case JobStatus.Approved:
-                    IsApprovedComplete = IsComplete;
-                    ButtonText = "Send Invoice";
-                    break;
-                case JobStatus.Invoiced:
-                    IsInvoicedComplete = IsComplete;
-                    ButtonText = "Mark as Paid";
-                    break;
-                case JobStatus.Paid:
-                    IsPaidComplete = IsComplete;
-                    break;
-                default:
-                    break;
-
-            }
-        }
-
-        void HandleDoorTypeChange()
-        {
-            Display = "d-block";
         }
     }
+
+    void HandleDoorTypeChange()
+    {
+        Display = "d-block";
+    }
+}

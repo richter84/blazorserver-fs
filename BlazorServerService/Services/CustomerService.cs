@@ -46,6 +46,11 @@ namespace BlazorServerService.Services
 
         public async Task<Customer> GetCustomer(int Id)
         {
+            var query = from c in _context.Customers
+                        where c.Id == Id
+                        select c;
+
+
             return await _context.Customers
                 .Include(c => c.Address)
                 .FirstOrDefaultAsync(c => c.Id == Id);
