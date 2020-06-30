@@ -107,6 +107,13 @@ using BlazorServerLibrary.Helpers;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 15 "C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\_Imports.razor"
+using BlazorServerService.Interfaces;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/job")]
     public partial class Job : Microsoft.AspNetCore.Components.ComponentBase
     {

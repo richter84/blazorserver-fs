@@ -8,9 +8,10 @@ namespace BlazorServerService.Interfaces
 {
     public interface ICustomerService
     {
-        Task<Customer> Add(Customer customer);
+        Task<Customer> AddorUpdate(Customer customer);
         Task<Customer> Archive(Customer customer);
         Task<Customer> Delete(Customer customer);
-        Task<Customer> Update(Customer customer);
+        Task<Customer> GetCustomer(int Id);
+        Task<List<Customer>> GetCustomers();
     }
 }

@@ -111,6 +111,13 @@ using BlazorServerLibrary.Helpers;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 15 "C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\_Imports.razor"
+using BlazorServerService.Interfaces;
+
+#line default
+#line hidden
+#nullable disable
     public partial class SurveyPrompt : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998

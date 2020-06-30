@@ -9,5 +9,7 @@ namespace BlazorServerLibrary.Interfaces
         string Name { get; set; }
         string EmailAddress { get; set; }
         string PhoneNumber { get; set; }
+        DateTimeOffset Created { get; set; }
+        DateTimeOffset LastUpdate { get; set; }
     }
 }

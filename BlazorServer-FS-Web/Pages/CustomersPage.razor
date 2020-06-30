@@ -1,0 +1,17 @@
+﻿@page "/Customers"
+@page "/Customer/{CustomerId:int}"
+
+@if (!CustomerId.HasValue)
+{
+    <Customers></Customers>
+}
+else
+{
+    <CustomerDetail CustomerId="@CustomerId"></CustomerDetail>
+}
+
+
+@code {
+    [Parameter]
+    public int? CustomerId { get; set; }
+}

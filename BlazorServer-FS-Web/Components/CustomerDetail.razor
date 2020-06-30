@@ -1,8 +1,9 @@
 ﻿@page "/Customer/Add"
+@inject ICustomerService CustomerService
 
-<h1>Add Customer</h1>
+<h1>Customer</h1>
 
-<EditForm Model=@Customer OnValidSubmit="@HandleValidAddCustomer">
+<EditForm Model=@Customer OnValidSubmit="@HandleValidAddorUpdateCustomer">
     <DataAnnotationsValidator />
     <fieldset class="col-md-6">
         <legend>Details</legend>
@@ -51,9 +52,22 @@
 </EditForm>
 
 @code {
+
+    [Parameter]
+    public int? CustomerId { get; set; }
+
     public Customer Customer { get; set; } = new Customer() { Address = new List<Address>() };
 
     public Address Address { get; set; } = new Address();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CustomerId.HasValue)
+        {
+            Customer = await CustomerService.GetCustomer(CustomerId.Value);
+        }
+    }
+
 
     void HandleValidAddAddress(EditContext editContext)
     {
@@ -73,8 +87,15 @@
         Address = new Address();
     }
 
-    async Task HandleValidAddCustomer(EditContext editContext)
+    async Task HandleValidAddorUpdateCustomer(EditContext editContext)
     {
-        //await customerService.Add((Customer)editContext.Model);
+        if (Customer.Created == null)
+        {
+            Customer.Created = DateTimeOffset.UtcNow;
+        }
+
+        Customer.LastUpdate = DateTimeOffset.UtcNow;
+
+        await CustomerService.AddorUpdate((Customer)editContext.Model);
     }
 }

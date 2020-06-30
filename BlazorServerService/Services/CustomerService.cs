@@ -1,15 +1,37 @@
 ﻿using BlazorServerLibrary.Models;
+using BlazorServerService.Data;
 using BlazorServerService.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlazorServerService.Services
 {
     public class CustomerService : ICustomerService
     {
-        public Task<Customer> Add(Customer customer)
+        private readonly DataContext _context;
+
+        public CustomerService(DataContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<Customer> AddorUpdate(Customer customer)
+        {
+            var existingCustomer = await _context.Customers.FindAsync(customer.Id);
+
+            if (existingCustomer == null)
+            {
+                _context.Customers.Add(customer);
+            }
+            else
+            {
+                _context.Customers.Update(existingCustomer);
+            }
+            
+            await _context.SaveChangesAsync();
+            return customer;
         }
 
         public Task<Customer> Archive(Customer customer)
@@ -22,9 +44,16 @@ namespace BlazorServerService.Services
             throw new NotImplementedException();
         }
 
-        public Task<Customer> Update(Customer customer)
+        public async Task<Customer> GetCustomer(int Id)
         {
-            throw new NotImplementedException();
+            return await _context.Customers
+                .Include(c => c.Address)
+                .FirstOrDefaultAsync(c => c.Id == Id);
+        }
+
+        public async Task<List<Customer>> GetCustomers()
+        {
+            return await _context.Customers.OrderBy(c => c.Name).ToListAsync();
         }
     }
 }

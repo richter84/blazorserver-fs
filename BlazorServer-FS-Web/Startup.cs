@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using BlazorServer_FS_Web.Data;
 using BlazorServerService;
 using BlazorServerService.Data;
+using BlazorServerService.Interfaces;
+using BlazorServerService.Services;
 
 namespace BlazorServer_FS_Web
 {
@@ -34,6 +36,8 @@ namespace BlazorServer_FS_Web
             services.AddSingleton<WeatherForecastService>();
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("OrbitDbServerAzure")));
+
+            services.AddTransient<ICustomerService, CustomerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

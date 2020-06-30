@@ -1,0 +1,45 @@
+﻿@using BlazorServer_FS_Web.Data
+@inject ICustomerService CustomerService
+
+<h1>Customers</h1>
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                var link = $"Customer/{customer.Id}";
+               
+                <tr>
+                    <td><NavLink href="@link">@customer.Name</NavLink></td>
+                    <td>@customer.EmailAddress</td>
+                    <td>@customer.PhoneNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    <br /><br />
+    <a href="Customer/Add" class="btn btn-primary">Add Customer</a>
+}
+
+@code {
+    private List<Customer> customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await CustomerService.GetCustomers();
+    }
+}
