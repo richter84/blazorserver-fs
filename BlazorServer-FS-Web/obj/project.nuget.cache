@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "yVUBT0u1y8PQkc3NiqGHBOMP0CHLdTCBPNgH/jzjCktrlnvC+X7dzVrHPXiN8voSmM4lWj8mRdlsTh7A7ccWmQ==",
+  "dgSpecHash": "cg15gQXrHPeorUjzzWkGtmkfyXqx9NE9Qw0fkcbjXO5SL8lbfWIWG0orWZALxYAvRbrW7uMAYlwe58BDeYLc7w==",
   "success": true,
   "projectFilePath": "C:\\Users\\nncri\\source\\repos\\BlazorServer-FS\\BlazorServer-FS-Web\\BlazorServer-FS-Web.csproj",
   "expectedPackageFiles": [
@@ -24,6 +24,7 @@
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.entityframeworkcore.design\\3.1.5\\microsoft.entityframeworkcore.design.3.1.5.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\3.1.5\\microsoft.entityframeworkcore.relational.3.1.5.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\3.1.5\\microsoft.entityframeworkcore.sqlserver.3.1.5.nupkg.sha512",
+    "C:\\Users\\nncri\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\3.1.3\\microsoft.entityframeworkcore.tools.3.1.3.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\3.1.5\\microsoft.extensions.caching.abstractions.3.1.5.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.extensions.caching.memory\\3.1.5\\microsoft.extensions.caching.memory.3.1.5.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.extensions.configuration\\3.1.5\\microsoft.extensions.configuration.3.1.5.nupkg.sha512",

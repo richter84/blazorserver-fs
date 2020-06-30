@@ -14,5 +14,6 @@
     <WebStackScaffolding_LayoutPageFile />
     <_SelectedScaffolderID>RazorComponentScaffolder</_SelectedScaffolderID>
     <_SelectedScaffolderCategoryPath>root/Common/RazorComponent</_SelectedScaffolderCategoryPath>
+    <NameOfLastUsedPublishProfile>BlazorServer-FS-Web - Web Deploy</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

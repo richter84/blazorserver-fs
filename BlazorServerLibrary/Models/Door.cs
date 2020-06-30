@@ -1,11 +1,12 @@
 ﻿using BlazorServerLibrary.Enums;
+using BlazorServerLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BlazorServerLibrary.Models
 {
-    public abstract class Door
+    public abstract class Door : IDoor
     {
         public string Colour { get; set; }
         public string ExtraNotes { get; set; }

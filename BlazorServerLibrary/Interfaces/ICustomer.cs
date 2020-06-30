@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BlazorServerLibrary.Interfaces
 {
-    interface ICustomer
+    public interface ICustomer
     {
         string Name { get; set; }
         string EmailAddress { get; set; }

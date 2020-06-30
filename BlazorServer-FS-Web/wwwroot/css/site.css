@@ -10,17 +10,31 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: #fff;
     background-color: #FF7800;
     border-color: #FF7800;
-    font-size:14px;
-    font-weight:bold;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .btn-primary:hover {
     background-color: #FF9233;
     border-color: #FF7800;
 }
+
+.btn-secondary {
+    background-color: #FFFFFF;
+    border-color: #FF7800;
+    color: #FF7800;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+    .btn-secondary:hover {
+        background-color: #FF7800;
+        border-color: #FF7800;
+        color: #fff;
+    }
 
 app {
     position: relative;

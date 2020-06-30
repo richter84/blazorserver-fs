@@ -16,12 +16,15 @@ namespace BlazorServerService.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
+        public DbSet<Job> Jobs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.Entity<Address>().ToTable("Address");
             builder.Entity<Customer>().ToTable("Customer");
+            builder.Entity<Job>().ToTable("Job");
         }
     }
 }

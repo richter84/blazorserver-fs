@@ -3,7 +3,7 @@
 
 <h3>Job</h3>
 
-<div class="col-md-8">
+<div class="col-sm-10 col-md-8">
 
     <div class="state-map-container">
         <div class="state">
@@ -64,6 +64,9 @@
 
     <div></div>
     <button class="btn btn-primary" @onclick="HandleUpdateState">
+        Save Job
+    </button>
+    <button class="btn btn-secondary" @onclick="HandleUpdateState">
         @ButtonText
     </button>
     <div></div><br /><br />
@@ -153,7 +156,7 @@
 
     private const string IsComplete = "complete";
 
-    private string ButtonText = "Save Job";
+    private string ButtonText = "Complete Job";
 
     private string Display = "d-none";
     private string DisplayInvoiceItems = "d-none";
@@ -171,7 +174,6 @@
         {
             case JobStatus.Pending:
                 IsPendingComplete = IsComplete;
-                ButtonText = "Complete Job";
                 break;
             case JobStatus.Complete:
                 IsJobComplete = IsComplete;
