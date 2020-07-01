@@ -1,11 +1,12 @@
 ﻿using BlazorServerLibrary.Enums;
+using BlazorServerLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BlazorServerLibrary.Models
 {
-    public class RollerShutter : Door
+    public class RollerShutter : Door, IDoorType
     {
         public string AngleCutSize { get; set; }
         public string AngleType { get; set; }

@@ -7,7 +7,9 @@ namespace BlazorServerLibrary.Interfaces
 {
     public interface IDoor
     {
+        int Id { get; set; }
         string Colour { get; set; }
+        DoorType DoorType { get; set; }
         string ExtraNotes { get; set; }
         string FixingType { get; set; }
         bool IsSupplied { get; set; }

@@ -1,5 +1,7 @@
-﻿@page "/Customer/{CustomerId:int}/Job"
-@inject ICustomerService CustomerService
+﻿@page "/Customer/{CustomerId:int}/NewInstall"
+@page "/Customer/{CustomerId:int}/NewInstall/{NewInstallId:int}"
+@inject ICustomerService<Customer> CustomerService
+@inject INewInstall<NewInstall> NewInstallService
 
 <h3>Job</h3>
 
@@ -96,17 +98,18 @@
             </legend>
             <div class="form-group">
                 <select @onchange="HandleDoorTypeChange" class="btn btn-primary">
-                    <option>Door Type ...</option>
-                    <option style="background-color:none; padding:5px;">Roller Shutter</option>
-                    <option disabled>Sectional</option>
-                    <option disabled>Pedestrian</option>
-                    <option disabled>Gates</option>
-                    <option disabled>Bars / Grilles</option>
+                    @foreach (var type in Enum.GetValues(typeof(DoorType)))
+                    {
+                        var isSelected = type.ToString() == DoorType.ToString();
+                        <option value="@type" selected="@isSelected">
+                            @EnumHelper.GetDisplayName((DoorType)Enum.Parse(typeof(DoorType), type.ToString()))
+                        </option>
+                    }
                 </select>
             </div>
         </fieldset>
         <div class="@Display">
-            <RollerShutter></RollerShutter>
+            <RollerShutterComponent OnSave="@HandleSave" RollerShutter="@RollerShutter"></RollerShutterComponent>
         </div>
     </section>
     <br /><br />
@@ -142,8 +145,16 @@
 
     [Parameter]
     public int CustomerId { get; set; }
+    [Parameter]
+    public int NewInstallId { get; set; }
 
     public Customer Customer { get; set; } = new Customer() { Address = new List<Address>() };
+
+    public NewInstall NewInstall { get; set; } = new NewInstall();
+
+    public RollerShutter RollerShutter { get; set; } = new RollerShutter() { ElectricOperation = new ElectricOperation() };
+    public IDoorType DoorTypezzzzzzzzz { get; set; }
+
 
     private string IsPendingComplete;
     private string IsJobComplete;
@@ -161,9 +172,19 @@
     private string Display = "d-none";
     private string DisplayInvoiceItems = "d-none";
 
+    public DoorType DoorType { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Customer = await CustomerService.GetCustomer(CustomerId);
+        var newInstall = await NewInstallService.GetNewInstall(NewInstallId);
+        if(newInstall != null)
+        {
+            RollerShutter = (RollerShutter)newInstall.Door;
+            DoorType = newInstall.Door.DoorType;
+            HandleDoorTypeChange();
+            HandleUpdateState();
+        }
     }
 
     private void HandleUpdateState()
@@ -200,5 +221,14 @@
     void HandleDoorTypeChange()
     {
         Display = "d-block";
+    }
+
+    public async Task HandleSave(BlazorServerLibrary.Models.RollerShutter rollerShutter)
+    {
+        NewInstall.Customer = Customer;
+        NewInstall.Door = rollerShutter;
+        NewInstall.Status = JobStatus.Pending;
+
+        await NewInstallService.AddorUpdate(NewInstall);
     }
 }

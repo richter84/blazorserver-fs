@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlazorServerService.Services
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService<TEntity> : ICustomerService<TEntity> where TEntity : Customer
     {
         private readonly DataContext _context;
 
@@ -17,7 +17,8 @@ namespace BlazorServerService.Services
         {
             _context = context;
         }
-        public async Task<Customer> AddorUpdate(Customer customer)
+
+        public async Task<TEntity> AddorUpdate(TEntity customer)
         {
             var existingCustomer = await _context.Customers.FindAsync(customer.Id);
 
@@ -34,12 +35,12 @@ namespace BlazorServerService.Services
             return customer;
         }
 
-        public Task<Customer> Archive(Customer customer)
+        public Task<TEntity> Archive(TEntity entityType)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Customer> Delete(Customer customer)
+        public Task<TEntity> Delete(TEntity customer)
         {
             throw new NotImplementedException();
         }

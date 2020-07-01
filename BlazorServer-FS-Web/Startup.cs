@@ -15,6 +15,8 @@ using BlazorServerService;
 using BlazorServerService.Data;
 using BlazorServerService.Interfaces;
 using BlazorServerService.Services;
+using BlazorServerLibrary.Models;
+using BlazorServerLibrary.Interfaces;
 
 namespace BlazorServer_FS_Web
 {
@@ -37,7 +39,10 @@ namespace BlazorServer_FS_Web
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("OrbitDbServerAzure")));
 
-            services.AddTransient<ICustomerService, CustomerService>();
+            //services.AddTransient<ICustomer, Customer>();
+            //services.AddTransient<IJob, Job>();
+            services.AddTransient<ICustomerService<Customer>, CustomerService<Customer>>();
+            services.AddTransient<INewInstall<NewInstall>, NewInstallsService<NewInstall>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

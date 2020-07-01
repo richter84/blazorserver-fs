@@ -1,25 +1,27 @@
-﻿<div class="progress">
+﻿@inject INewInstall<NewInstall> NewInstallsService
+
+<div class="progress">
     <div class="progress-bar progress-bg" role="progressbar" style="width: @ProgressPercentage%;" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">@ProgressPercentage%</div>
 </div>
 <br />
-<EditForm Model=@rollerShutter>
+<EditForm Model=@RollerShutter OnSubmit="@HandleFormSubmit">
     <fieldset>
         <legend>Roller Shutter Door Detail</legend>
         <div class="form-group">
             <label for="manufacturer">Manufacturer</label>
-            <InputText @bind-Value="rollerShutter.Manufacturer" class="form-control" id="manufacturer"></InputText>
+            <InputText @bind-Value="RollerShutter.Manufacturer" class="form-control" id="manufacturer"></InputText>
         </div>
         <div class="form-group">
             <label for="issupplied">Supplied Door</label>
-            <input type="checkbox" @onchange="HandleSuppliedDoorChange" class="form-control checkbox" id="issupplied" />
+            <input type="checkbox" @onchange="HandleSuppliedDoorChange" checked="@RollerShutter.IsSupplied" class="form-control checkbox" id="issupplied" />
         </div>
         <div class="form-group @IsVisibleSupplierOrderNumber">
             <label for="supplierordernumber">Supplier Order Number</label>
-            <InputText @bind-Value="rollerShutter.SupplierOrderNumber" @onblur="HandleProgressUpdate" class="form-control" id="supplierordernumber"></InputText>
+            <InputText @bind-Value="RollerShutter.SupplierOrderNumber" @onblur="HandleProgressUpdate" class="form-control" id="supplierordernumber"></InputText>
         </div>
         <div class="form-group">
             <label for="sectortype">Sector Type</label>
-            <select @onchange="(eventArgs) => { rollerShutter.Sector = HandleSelectChange<SectorType>(rollerShutter.Sector, eventArgs); }" class="form-control" id="sectortype">
+            <select @onchange="(eventArgs) => { RollerShutter.Sector = HandleSelectChange<SectorType>(RollerShutter.Sector, eventArgs); }" class="form-control" id="sectortype">
                 <option value="">Select Sector Type ...</option>
                 @foreach (var type in Enum.GetNames(typeof(SectorType)))
                 {
@@ -30,7 +32,7 @@
         <div class="form-group">
             <label for="openingsizeheight">Opening Size Height</label>
             <div class="input-group">
-                <InputNumber @bind-Value="rollerShutter.OpeningSizeHeight" @onblur="HandleProgressUpdate" class="form-control" id="openingsizeheight"></InputNumber>
+                <InputNumber @bind-Value="RollerShutter.OpeningSizeHeight" @onblur="HandleProgressUpdate" class="form-control" id="openingsizeheight"></InputNumber>
                 <div class="input-group-append">
                     <span class="input-group-text">mm</span>
                 </div>
@@ -39,7 +41,7 @@
         <div class="form-group">
             <label for="openingsizewidth">Opening Size Width</label>
             <div class="input-group">
-                <InputNumber @bind-Value="rollerShutter.OpeningSizeWidth" @onblur="HandleProgressUpdate" class="form-control" id="openingsizewidth"></InputNumber>
+                <InputNumber @bind-Value="RollerShutter.OpeningSizeWidth" @onblur="HandleProgressUpdate" class="form-control" id="openingsizewidth"></InputNumber>
                 <div class="input-group-append">
                     <span class="input-group-text">mm</span>
                 </div>
@@ -47,16 +49,16 @@
         </div>
         <div class="form-group">
             <label for="fixingtype">Fixing Type</label>
-            <InputText @bind-Value="rollerShutter.FixingType" class="form-control" id="fixingtype"></InputText>
+            <InputText @bind-Value="RollerShutter.FixingType" class="form-control" id="fixingtype"></InputText>
         </div>
         <div class="form-group">
             <label for="fixingtype">Fixing Type</label>
-            <InputText @bind-Value="rollerShutter.FixingType" class="form-control" id="fixingtype"></InputText>
+            <InputText @bind-Value="RollerShutter.FixingType" class="form-control" id="fixingtype"></InputText>
         </div>
         <div class="form-group">
             <label for="lathcutsizez">Lath Cut Size</label>
             <div class="input-group">
-                <InputNumber @bind-Value="rollerShutter.LathCutSize" class="form-control" id="lathcutsizez"></InputNumber>
+                <InputNumber @bind-Value="RollerShutter.LathCutSize" class="form-control" id="lathcutsizez"></InputNumber>
                 <div class="input-group-append">
                     <span class="input-group-text">mm</span>
                 </div>
@@ -64,7 +66,7 @@
         </div>
         <div class="form-group">
             <label for="operationtype">Operation Type</label>
-            <select @onchange="(eventArgs) => { rollerShutter.OperationType = HandleSelectChange<OperationType>(rollerShutter.OperationType, eventArgs); }" class="form-control" id="operationtype">
+            <select @onchange="(eventArgs) => { RollerShutter.OperationType = HandleSelectChange<OperationType>(RollerShutter.OperationType, eventArgs); }" class="form-control" id="operationtype">
                 <option value="">Select Operation Type ...</option>
                 @foreach (var type in Enum.GetValues(typeof(OperationType)))
                 {
@@ -72,11 +74,11 @@
                 }
             </select>
         </div>
-        @if (rollerShutter.OperationType == OperationType.Electric)
+        @if (RollerShutter.OperationType == OperationType.Electric)
         {
             <div class="form-group">
                 <label for="supplytype">Supply Type</label>
-                <select @onchange="(eventArgs) => { rollerShutter.ElectricOperation.SupplyType = HandleSelectChange<ElectricalSupplyType>(rollerShutter.ElectricOperation.SupplyType, eventArgs); }" class="form-control" id="supplytype">
+                <select @onchange="(eventArgs) => { RollerShutter.ElectricOperation.SupplyType = HandleSelectChange<ElectricalSupplyType>(RollerShutter.ElectricOperation.SupplyType, eventArgs); }" class="form-control" id="supplytype">
                     <option>Select Supply Type ...</option>
                     @foreach (var type in Enum.GetValues(typeof(ElectricalSupplyType)))
                     {
@@ -86,15 +88,15 @@
             </div>
             <div class="form-group">
                 <label for="motortype">Motor Type</label>
-                <InputText @bind-Value="rollerShutter.ElectricOperation.MotorType" class="form-control" id="motortype"></InputText>
+                <InputText @bind-Value="RollerShutter.ElectricOperation.MotorType" class="form-control" id="motortype"></InputText>
             </div>
             <div class="form-group">
                 <label for="control">Control</label>
-                <InputText @bind-Value="rollerShutter.ElectricOperation.Control" class="form-control" id="control"></InputText>
+                <InputText @bind-Value="RollerShutter.ElectricOperation.Control" class="form-control" id="control"></InputText>
             </div>
             <div class="form-group">
                 <label for="supplytype">Electrical Safeties</label>
-                <select @onchange="(eventArgs) => { rollerShutter.ElectricOperation.ElectricalSafety = HandleSelectChange<ElectricalSafety>(rollerShutter.ElectricOperation.ElectricalSafety, eventArgs); }" class="form-control" id="supplytype">
+                <select @onchange="(eventArgs) => { RollerShutter.ElectricOperation.ElectricalSafety = HandleSelectChange<ElectricalSafety>(RollerShutter.ElectricOperation.ElectricalSafety, eventArgs); }" class="form-control" id="supplytype">
                     <option>Select Electrical Safeties ...</option>
                     @foreach (var type in Enum.GetValues(typeof(ElectricalSafety)))
                     {
@@ -102,48 +104,48 @@
                     }
                 </select>
             </div>
-            @if (rollerShutter.ElectricOperation.ElectricalSafety == ElectricalSafety.PEC)
+            @if (RollerShutter.ElectricOperation.ElectricalSafety == ElectricalSafety.PEC)
             {
                 <div class="form-group">
                     <label for="pecqty">P.E.C Qty</label>
-                    <InputNumber @bind-Value="rollerShutter.ElectricOperation.PECQty" class="form-control" id="pecqty"></InputNumber>
+                    <InputNumber @bind-Value="RollerShutter.ElectricOperation.PECQty" class="form-control" id="pecqty"></InputNumber>
                 </div>
             }
         }
         <div class="form-group">
             <label for="tubetype">Tube Type and Gauge</label>
-            <InputText @bind-Value="rollerShutter.TubeTypeGauge" class="form-control" id="tubetype"></InputText>
+            <InputText @bind-Value="RollerShutter.TubeTypeGauge" class="form-control" id="tubetype"></InputText>
         </div>
         <div class="form-group">
             <label for="rollercutsize">Roller Cut Size</label>
-            <InputText @bind-Value="rollerShutter.RollerCutSize" class="form-control" id="rollercutsize"></InputText>
+            <InputText @bind-Value="RollerShutter.RollerCutSize" class="form-control" id="rollercutsize"></InputText>
         </div>
         <div class="form-group">
             <label for="curtaintype">Curtain Type</label>
-            <InputText @bind-Value="rollerShutter.CurtainType" class="form-control" id="curtaintype"></InputText>
+            <InputText @bind-Value="RollerShutter.CurtainType" class="form-control" id="curtaintype"></InputText>
         </div>
         <div class="form-group">
             <label for="guidetype">Guide Type</label>
-            <InputText @bind-Value="rollerShutter.GuideType" class="form-control" id="guidetype"></InputText>
+            <InputText @bind-Value="RollerShutter.GuideType" class="form-control" id="guidetype"></InputText>
         </div>
         <div class="form-group">
             <label for="guidecutsize">Guide Cut Size</label>
-            <InputText @bind-Value="rollerShutter.GuideCutSize" class="form-control" id="guidecutsize"></InputText>
+            <InputText @bind-Value="RollerShutter.GuideCutSize" class="form-control" id="guidecutsize"></InputText>
         </div>
         <div class="form-group">
             <label for="boltonguides">Bolt on Guides</label>
-            <select @bind="rollerShutter.IsBoltOnGuides" class="form-control" id="supplytype">
+            <select @bind="RollerShutter.IsBoltOnGuides" class="form-control" id="supplytype">
                 <option value="0">No</option>
                 <option value="1">Yes</option>
             </select>
         </div>
         <div class="form-group">
             <label for="angletype">Angle Type</label>
-            <InputText @bind-Value="rollerShutter.AngleType" class="form-control" id="angletype"></InputText>
+            <InputText @bind-Value="RollerShutter.AngleType" class="form-control" id="angletype"></InputText>
         </div>
         <div class="form-group">
             <label for="anglecutsize">Angle Cut Size</label>
-            <InputText @bind-Value="rollerShutter.AngleCutSize" class="form-control" id="anglecutsize"></InputText>
+            <InputText @bind-Value="RollerShutter.AngleCutSize" class="form-control" id="anglecutsize"></InputText>
         </div>
         <div class="form-group">
             <label for="iscanopy">Canopy</label>
@@ -152,11 +154,11 @@
         <div class="@IsVisibleCanopy">
             <div class="form-group">
                 <label for="canopytype">Canopy Type</label>
-                <InputText @bind-Value="rollerShutter.CanopyType" class="form-control" id="canopytype"></InputText>
+                <InputText @bind-Value="RollerShutter.CanopyType" class="form-control" id="canopytype"></InputText>
             </div>
             <div class="form-group">
                 <label for="canopycutsize">Canopy Cut Size</label>
-                <InputText @bind-Value="rollerShutter.CanopyCutSize" class="form-control" id="canopycutsize"></InputText>
+                <InputText @bind-Value="RollerShutter.CanopyCutSize" class="form-control" id="canopycutsize"></InputText>
             </div>
         </div>
         <div class="form-group">
@@ -166,20 +168,20 @@
         <div class="@IsVisibleFascia">
             <div class="form-group">
                 <label for="fasciatype">Fascia Type</label>
-                <InputText @bind-Value="rollerShutter.FasciaType" class="form-control" id="fasciatype"></InputText>
+                <InputText @bind-Value="RollerShutter.FasciaType" class="form-control" id="fasciatype"></InputText>
             </div>
             <div class="form-group">
                 <label for="fasciasize">Fascia Size</label>
-                <InputText @bind-Value="rollerShutter.FasciaSize" class="form-control" id="fasciasize"></InputText>
+                <InputText @bind-Value="RollerShutter.FasciaSize" class="form-control" id="fasciasize"></InputText>
             </div>
         </div>
         <div class="form-group">
             <label for="colour">Colour</label>
-            <InputText @bind-Value="rollerShutter.Colour" class="form-control" id="colour"></InputText>
+            <InputText @bind-Value="RollerShutter.Colour" class="form-control" id="colour"></InputText>
         </div>
         <div class="form-group">
             <label for="colour">Colour</label>
-            <InputText @bind-Value="rollerShutter.Colour" class="form-control" id="colour"></InputText>
+            <InputText @bind-Value="RollerShutter.Colour" class="form-control" id="colour"></InputText>
         </div>
         <div class="form-group">
             <label for="wicketeurodoor">Wicket / Euro Door</label>
@@ -187,14 +189,21 @@
         </div>
         <div class="form-group">
             <label for="extranotes">Extra Notes</label>
-            <InputTextArea @bind-Value="rollerShutter.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
+            <InputTextArea @bind-Value="RollerShutter.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
         </div>
     </fieldset>
+
+    <input type="submit" class="btn btn-primary" value="Save" />
+    <br /><br />
 </EditForm>
 
 @code {
 
-    private BlazorServerLibrary.Models.RollerShutter rollerShutter = new BlazorServerLibrary.Models.RollerShutter() { ElectricOperation = new ElectricOperation() };
+    [Parameter]
+    public EventCallback<RollerShutter> OnSave { get; set; }
+
+    [Parameter]
+    public RollerShutter RollerShutter { get; set; }
 
     private string IsVisibleCanopy = "d-none";
     private string IsVisibleFascia = "d-none";
@@ -225,5 +234,10 @@
     public void HandleProgressUpdate()
     {
         ProgressPercentage += 15;
+    }
+
+    public async Task HandleFormSubmit()
+    {
+        OnSave.InvokeAsync(RollerShutter);
     }
 }

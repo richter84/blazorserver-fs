@@ -1,5 +1,6 @@
 ﻿@page "/Customer/Add"
-@inject ICustomerService CustomerService
+@inject ICustomerService<Customer> CustomerService
+@inject INewInstall<NewInstall> NewInstallService
 
 <h1>Customer</h1>
 
@@ -55,10 +56,26 @@
         <fieldset class="col-md-6">
             <legend>Jobs</legend>
             <div class="form-group">
-                <p>No existing jobs</p>
+                @if (NewInstalls.Any())
+                {
+                    <div class="existingaddress-container">
+                        <h3>Existing New Installs</h3>
+                        @foreach (var newInstall in NewInstalls)
+                        {
+                           <a href="/Customer/@CustomerId/NewInstall/@newInstall.Id">Serial Number - @newInstall.SerialNumber</a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <br />
+                    <p>No existing jobs</p>
+                }
             </div>
             <div class="form-group">
-                <a href="Customer/@CustomerId/Job" class="btn btn-primary">Add Job</a>
+                <a href="Customer/@CustomerId/NewInstall" class="btn btn-primary">Add New Install</a>
+                <a href="Customer/@CustomerId/Servicing" class="btn btn-primary">Add Servicing</a>
+                <a href="Customer/@CustomerId/Repair" class="btn btn-primary">Add Repair</a>
             </div>
         </fieldset>
         <br /><br />
@@ -77,11 +94,14 @@
 
     public Address Address { get; set; } = new Address();
 
+    public List<NewInstall> NewInstalls { get; set; } = new List<NewInstall>();
+
     protected override async Task OnInitializedAsync()
     {
         if (CustomerId.HasValue)
         {
             Customer = await CustomerService.GetCustomer(CustomerId.Value);
+            NewInstalls = await NewInstallService.GetNewInstalls(CustomerId.Value);
         }
     }
 
@@ -106,13 +126,6 @@
 
     async Task HandleValidAddorUpdateCustomer(EditContext editContext)
     {
-        if (Customer.Created == null)
-        {
-            Customer.Created = DateTimeOffset.UtcNow;
-        }
-
-        Customer.LastUpdate = DateTimeOffset.UtcNow;
-
         await CustomerService.AddorUpdate((Customer)editContext.Model);
     }
 }

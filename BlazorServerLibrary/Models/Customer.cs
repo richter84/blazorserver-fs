@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BlazorServerLibrary.Models
 {
-    public class Customer : ICustomer
+    public class Customer : ICustomer, IModel
     {
         public int Id { get; set; }
 
@@ -25,7 +25,5 @@ namespace BlazorServerLibrary.Models
         //[Phone(ErrorMessage = "Phone Number is not valid"]
         public string PhoneNumber { get; set; }
         public List<Address> Address { get; set; }
-        public DateTimeOffset Created { get; set; }
-        public DateTimeOffset LastUpdate { get; set; }
     }
 }

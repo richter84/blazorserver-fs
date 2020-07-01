@@ -8,9 +8,11 @@ namespace BlazorServerLibrary.Interfaces
 {
     public interface IJob
     {
-        string SerialNumber { get; set; }
-        ICustomer Customer { get; set; }
-        IDoor Door { get; set; }
+        string SerialNumber { get; }
+        Customer Customer { get; set; }
+        Door Door { get; set; }
         JobStatus Status { get; set; }
+        ICollection<HistoryStatus> History { get; set; }
+        ICollection<Invoice> Invoices { get; set; }
     }
 }

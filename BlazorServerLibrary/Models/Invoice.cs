@@ -9,5 +9,6 @@ namespace BlazorServerLibrary.Models
     {
         public int Id { get; set; }
         public string InvoiceNumber { get; set; }
+        public string FileName { get; set; }
     }
 }

@@ -8,6 +8,7 @@ namespace BlazorServerLibrary.Models
 {
     public class ElectricOperation
     {
+        public int Id { get; set; }
         public string Control { get; set; }
         public ElectricalSafety ElectricalSafety { get; set; }
         public string MotorType { get; set; }

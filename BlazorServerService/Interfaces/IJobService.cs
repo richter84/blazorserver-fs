@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlazorServerService.Interfaces
 {
-    public interface ICustomerService<TEntity> : IService<TEntity> where TEntity : Customer
+    public interface IJobService<TEntity> : IService<TEntity> where TEntity : NewInstall
     {
-        Task<Customer> GetCustomer(int Id);
-        Task<List<Customer>> GetCustomers();
     }
 }
