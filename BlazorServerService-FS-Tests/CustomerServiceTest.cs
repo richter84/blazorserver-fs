@@ -1,5 +1,6 @@
 using BlazorServerLibrary.Models;
 using BlazorServerService.Data;
+using BlazorServerService.Interfaces;
 using BlazorServerService.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
@@ -11,11 +12,13 @@ namespace BlazorServerService_FS_Tests
 {
     public class CustomerServiceTest : ServiceTestBase
     {
-        public CustomerServiceTest()
+        private readonly ICustomerService _customerService;
+        public CustomerServiceTest(ICustomerService customerService)
             : base(new DbContextOptionsBuilder<DataContext>()
                   .UseInMemoryDatabase("InMemoryDataContext")
                   .Options)
         {
+            _customerService = customerService;
         }
 
         [Fact]
@@ -23,9 +26,9 @@ namespace BlazorServerService_FS_Tests
         {
             using var context = new DataContext(ContextOptions);
             var customerId = 1;
-            var customerService = new CustomerService<Customer>(context);
+            var customerService = new CustomerService(context);
 
-            var customer = await customerService.GetCustomer(customerId);
+            var customer = await _customerService.GetCustomer(customerId);
 
             Assert.Equal("Customer One", customer.Name);
             Assert.Equal(2, customer.Address.Count);
@@ -36,7 +39,7 @@ namespace BlazorServerService_FS_Tests
         {
             using var context = new DataContext(ContextOptions);
             var customerId = 2;
-            var customerService = new CustomerService<Customer>(context);
+            var customerService = new CustomerService(context);
 
             var customer = await customerService.GetCustomer(customerId);
 
@@ -49,7 +52,7 @@ namespace BlazorServerService_FS_Tests
         {
             using var context = new DataContext(ContextOptions);
             var customerId = 200;
-            var customerService = new CustomerService<Customer>(context);
+            var customerService = new CustomerService(context);
 
             var customer = await customerService.GetCustomer(customerId);
 
@@ -67,7 +70,7 @@ namespace BlazorServerService_FS_Tests
                 PhoneNumber = "0700000004"
             };
 
-            var customerService = new CustomerService<Customer>(context);
+            var customerService = new CustomerService(context);
             var customer = await customerService.AddorUpdate(newCustomer);
 
             Assert.Equal("Customer Four", customer.Name);
@@ -87,7 +90,7 @@ namespace BlazorServerService_FS_Tests
                 PhoneNumber = "0700000004"
             };
 
-            var customerService = new CustomerService<Customer>(context);
+            var customerService = new CustomerService(context);
             var customer = await customerService.AddorUpdate(existingCustomer);
 
             Assert.Equal(1, customer.Id);

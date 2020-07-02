@@ -1,4 +1,5 @@
 ﻿using BlazorServerLibrary.Models;
+using BlazorServerService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace BlazorServerService.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : DbContext, IDataContext
     {
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)

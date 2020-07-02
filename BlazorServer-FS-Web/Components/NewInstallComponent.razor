@@ -1,6 +1,7 @@
 ﻿@page "/Customer/{CustomerId:int}/NewInstall"
 @page "/Customer/{CustomerId:int}/NewInstall/{NewInstallId:int}"
-@inject ICustomerService<Customer> CustomerService
+@inject ICustomerService CustomerService
+@inject IJob Job
 @inject INewInstall<NewInstall> NewInstallService
 
 <h3>Job</h3>
@@ -153,7 +154,6 @@
     public NewInstall NewInstall { get; set; } = new NewInstall();
 
     public RollerShutter RollerShutter { get; set; } = new RollerShutter() { ElectricOperation = new ElectricOperation() };
-    public IDoorType DoorTypezzzzzzzzz { get; set; }
 
 
     private string IsPendingComplete;
@@ -178,7 +178,7 @@
     {
         Customer = await CustomerService.GetCustomer(CustomerId);
         var newInstall = await NewInstallService.GetNewInstall(NewInstallId);
-        if(newInstall != null)
+        if (newInstall != null)
         {
             RollerShutter = (RollerShutter)newInstall.Door;
             DoorType = newInstall.Door.DoorType;

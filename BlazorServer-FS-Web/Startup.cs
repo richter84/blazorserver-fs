@@ -37,11 +37,13 @@ namespace BlazorServer_FS_Web
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddDbContext<DataContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("OrbitDbServerAzure")));
+                    options.UseSqlServer(Configuration["OrbitDbServerAzure:ConnectionString"]));
 
             //services.AddTransient<ICustomer, Customer>();
             //services.AddTransient<IJob, Job>();
-            services.AddTransient<ICustomerService<Customer>, CustomerService<Customer>>();
+            services.AddTransient<IDataContext, DataContext>();
+            //services.AddTransient<IDoor, Door>();
+            services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<INewInstall<NewInstall>, NewInstallsService<NewInstall>>();
         }
 
