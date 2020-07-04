@@ -31,18 +31,21 @@ namespace BlazorServerService.Data.Migrations
 
                     b.Property<string>("PostCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<string>("Region")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Street")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("TownCity")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -63,7 +66,8 @@ namespace BlazorServerService.Data.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<DateTimeOffset>("LastUpdated")
                         .HasColumnType("datetimeoffset");
@@ -75,7 +79,8 @@ namespace BlazorServerService.Data.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -90,7 +95,8 @@ namespace BlazorServerService.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Colour")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -157,6 +163,46 @@ namespace BlazorServerService.Data.Migrations
                     b.ToTable("ElectricOperation");
                 });
 
+            modelBuilder.Entity("BlazorServerLibrary.Models.Handover", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("ControlsIfApplicable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Demonstration")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("EndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsCompleteByEngineer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PointOfContactName")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PointOfContactSignature")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<bool>("SafetyDevicesExplained")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ServiceScheduleLog")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("StartDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Handover");
+                });
+
             modelBuilder.Entity("BlazorServerLibrary.Models.HistoryStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -188,10 +234,12 @@ namespace BlazorServerService.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("InvoiceNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<int?>("JobId")
                         .HasColumnType("int");
@@ -220,8 +268,12 @@ namespace BlazorServerService.Data.Migrations
                     b.Property<int?>("DoorId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("HandoverId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SerialNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -231,6 +283,8 @@ namespace BlazorServerService.Data.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("DoorId");
+
+                    b.HasIndex("HandoverId");
 
                     b.ToTable("Job");
 
@@ -250,6 +304,9 @@ namespace BlazorServerService.Data.Migrations
                     b.Property<int>("AntiFallSafety")
                         .HasColumnType("int");
 
+                    b.Property<string>("BGSize")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Canopy")
                         .HasColumnType("bit");
 
@@ -264,6 +321,9 @@ namespace BlazorServerService.Data.Migrations
 
                     b.Property<int?>("ElectricOperationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("FHSize")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Fascia")
                         .HasColumnType("bit");
@@ -309,6 +369,57 @@ namespace BlazorServerService.Data.Migrations
             modelBuilder.Entity("BlazorServerLibrary.Models.Sectional", b =>
                 {
                     b.HasBaseType("BlazorServerLibrary.Models.Door");
+
+                    b.Property<int>("AntiFallSafety")
+                        .HasColumnName("Sectional_AntiFallSafety")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Cable")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("ElectricOperationId")
+                        .HasColumnName("Sectional_ElectricOperationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LiftType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfSprings")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OperationType")
+                        .HasColumnName("Sectional_OperationType")
+                        .HasColumnType("int");
+
+                    b.Property<double>("OverJambSize")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PanelOECSize")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ShaftLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ShaftSize")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SizeToSpringAssembly")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SpringLength")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SpringSize")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TopOfTrackSize")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("WicketEuroDoor")
+                        .HasColumnName("Sectional_WicketEuroDoor")
+                        .HasColumnType("bit");
+
+                    b.HasIndex("ElectricOperationId");
 
                     b.HasDiscriminator().HasValue("Sectional");
                 });
@@ -367,9 +478,20 @@ namespace BlazorServerService.Data.Migrations
                     b.HasOne("BlazorServerLibrary.Models.Door", "Door")
                         .WithMany()
                         .HasForeignKey("DoorId");
+
+                    b.HasOne("BlazorServerLibrary.Models.Handover", "Handover")
+                        .WithMany()
+                        .HasForeignKey("HandoverId");
                 });
 
             modelBuilder.Entity("BlazorServerLibrary.Models.RollerShutter", b =>
+                {
+                    b.HasOne("BlazorServerLibrary.Models.ElectricOperation", "ElectricOperation")
+                        .WithMany()
+                        .HasForeignKey("ElectricOperationId");
+                });
+
+            modelBuilder.Entity("BlazorServerLibrary.Models.Sectional", b =>
                 {
                     b.HasOne("BlazorServerLibrary.Models.ElectricOperation", "ElectricOperation")
                         .WithMany()

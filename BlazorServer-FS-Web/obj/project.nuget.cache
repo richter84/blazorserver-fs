@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "cg15gQXrHPeorUjzzWkGtmkfyXqx9NE9Qw0fkcbjXO5SL8lbfWIWG0orWZALxYAvRbrW7uMAYlwe58BDeYLc7w==",
+  "dgSpecHash": "u40/ohBB985Lifd41Ss3WJXhmGvjPJ3CmQZ3xY9mJKqiARvTkh+ylMCQ5DxItTVDA/4uQKx7frBSKOBqtuW1qQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\nncri\\source\\repos\\BlazorServer-FS\\BlazorServer-FS-Web\\BlazorServer-FS-Web.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\nncri\\.nuget\\packages\\autofac\\5.2.0\\autofac.5.2.0.nupkg.sha512",
+    "C:\\Users\\nncri\\.nuget\\packages\\autofac.extensions.dependencyinjection\\6.0.0\\autofac.extensions.dependencyinjection.6.0.0.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",
     "C:\\Users\\nncri\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\3.1.0\\microsoft.aspnetcore.razor.language.3.1.0.nupkg.sha512",

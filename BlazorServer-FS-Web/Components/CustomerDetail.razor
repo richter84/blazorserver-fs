@@ -28,7 +28,7 @@
     <fieldset class="col-md-6">
         <legend>Addresses</legend>
         <div class="form-group">
-            <AddAddress Address="@Address" OnAdd="AddAddress"></AddAddress>
+            <AddAddress Address="@Address" OnAdd="AddAddresses"></AddAddress>
 
             @if (Customer.Address.Any())
             {
@@ -59,11 +59,21 @@
                 @if (NewInstalls.Any())
                 {
                     <div class="existingaddress-container">
-                        <h3>Existing New Installs</h3>
-                        @foreach (var newInstall in NewInstalls)
-                        {
-                           <a href="/Customer/@CustomerId/NewInstall/@newInstall.Id">Serial Number - @newInstall.SerialNumber</a>
-                        }
+                        <table class="table">
+                            <thead class="thead-light">
+                                <tr scope="col">Existing New Installs</tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var newInstall in NewInstalls)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <a href="/Customer/@CustomerId/NewInstall/@newInstall.Id">Serial Number - @newInstall.SerialNumber</a>
+                                        </th>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 }
                 else
@@ -112,7 +122,7 @@
         Address = new Address();
     }
 
-    void AddAddress(Address address)
+    void AddAddresses(Address address)
     {
         Customer.Address.Add(address);
         Address = new Address();

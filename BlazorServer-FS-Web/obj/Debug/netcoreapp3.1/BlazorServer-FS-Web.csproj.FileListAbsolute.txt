@@ -137,6 +137,7 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.BlazorServer-FS-Web - Web Deploy.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.exe
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.deps.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.runtimeconfig.json
@@ -145,6 +146,8 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.Views.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.Views.pdb
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Autofac.dll
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Autofac.Extensions.DependencyInjection.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll
@@ -303,4 +306,5 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.genruntimeconfig.cache
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Doors\SectionalComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Doors\SectionalComponent.razor.g.cs

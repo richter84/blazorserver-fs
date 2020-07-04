@@ -1,8 +1,9 @@
 ﻿@page "/Customer/{CustomerId:int}/NewInstall"
 @page "/Customer/{CustomerId:int}/NewInstall/{NewInstallId:int}"
 @inject ICustomerService CustomerService
-@inject IJob Job
 @inject INewInstall<NewInstall> NewInstallService
+@inject IServiceProvider ServiceProvider
+@inject IDoorService DoorService 
 
 <h3>Job</h3>
 
@@ -65,14 +66,7 @@
         </div>
     </div>
 
-    <div></div>
-    <button class="btn btn-primary" @onclick="HandleUpdateState">
-        Save Job
-    </button>
-    <button class="btn btn-secondary" @onclick="HandleUpdateState">
-        @ButtonText
-    </button>
-    <div></div><br /><br />
+    <div></div><div></div>
     <section>
         <fieldset>
             <legend>
@@ -80,55 +74,75 @@
             </legend>
             <div class="row">
                 <div class="col-sm-12">
-                    @Customer.Name
+                    <label for="customername"><strong>Name</strong></label><br />
+                    <label id="customername">@Customer.Name</label>
                 </div>
                 <div class="col-sm-6">
-                    @Customer.EmailAddress
+                    <label for="customeremailaddress"><strong>Email Address</strong></label><br />
+                    <label id="customeremailaddress">@Customer.EmailAddress</label>
                 </div>
                 <div class="col-sm-6">
-                    @Customer.PhoneNumber
+                    <label for="customerphonenumber"><strong>Phone Number</strong></label><br />
+                    <label id="customerphonenumber">@Customer.PhoneNumber</label>
                 </div>
             </div>
         </fieldset>
     </section>
     <br /><br />
-    <section>
-        <fieldset>
-            <legend>
-                Select Door
-            </legend>
-            <div class="form-group">
-                <select @onchange="HandleDoorTypeChange" class="btn btn-primary">
-                    @foreach (var type in Enum.GetValues(typeof(DoorType)))
-                    {
-                        var isSelected = type.ToString() == DoorType.ToString();
-                        <option value="@type" selected="@isSelected">
-                            @EnumHelper.GetDisplayName((DoorType)Enum.Parse(typeof(DoorType), type.ToString()))
-                        </option>
-                    }
-                </select>
+    <EditForm Model="@NewInstall" OnSubmit="@HandleSave">
+        <section>
+            <fieldset>
+                <legend>
+                    Select Door
+                </legend>
+                <div class="form-group">
+                    <select @onchange="HandleDoorTypeChange" class="btn btn-primary btn-mobile-maxwidth">
+                        <option value=" ">Select Door Type ...</option>
+                        @foreach (var type in Enum.GetValues(typeof(DoorType)))
+                        {
+                            var isSelected = type.ToString() == DoorType.ToString();
+                            <option value="@type" selected="@isSelected">
+                                @EnumHelper.GetDisplayName((DoorType)Enum.Parse(typeof(DoorType), type.ToString()))
+                            </option>
+                        }
+                    </select>
+                </div>
+            </fieldset>
+
+            <div class="@RollerShutterDisplay">
+                <CascadingValue Value="@RollerShutter">
+                    <RollerShutterComponent></RollerShutterComponent>
+                </CascadingValue>
             </div>
-        </fieldset>
-        <div class="@Display">
-            <RollerShutterComponent OnSave="@HandleSave" RollerShutter="@RollerShutter"></RollerShutterComponent>
-        </div>
-    </section>
-    <br /><br />
-    <section>
-        <fieldset>
-            <legend>
-                Handover
-            </legend>
-            <form>
-                <div class="form-group">
-                    <label for="startdate">Start Date</label>
-                </div>
-                <div class="form-group">
-                    <label for="enddate">End Date</label>
-                </div>
-            </form>
-        </fieldset>
-    </section>
+            <div class="@SectionalDisplay">
+                <CascadingValue Value="@Sectional">
+                    <SectionalComponent></SectionalComponent>
+                </CascadingValue>
+            </div>
+
+        </section>
+        <br /><br />
+        <section>
+            <fieldset>
+                <legend>
+                    Handover
+                </legend>
+                <form>
+                    <div class="form-group">
+                        <label for="startdate">Start Date</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="enddate">End Date</label>
+                    </div>
+                </form>
+            </fieldset>
+        </section>
+        <div></div>
+        <input type="submit" class="btn btn-primary" value="Save" />
+        <button class="btn btn-secondary btn-mobile-maxwidth" @onclick="HandleUpdateState">
+            @ButtonText
+        </button>
+    </EditForm>
     <br /><br />
     <section class="@DisplayInvoiceItems">
         <fieldset>
@@ -139,7 +153,6 @@
             </form>
         </fieldset>
     </section>
-
 </div>
 
 @code {
@@ -149,12 +162,16 @@
     [Parameter]
     public int NewInstallId { get; set; }
 
-    public Customer Customer { get; set; } = new Customer() { Address = new List<Address>() };
+    private Customer Customer { get; set; } = new Customer();
+    private NewInstall NewInstall { get; set; } = new NewInstall();
 
-    public NewInstall NewInstall { get; set; } = new NewInstall();
+    [CascadingParameter]
+    private RollerShutter RollerShutter { get; set; } = new RollerShutter();
 
-    public RollerShutter RollerShutter { get; set; } = new RollerShutter() { ElectricOperation = new ElectricOperation() };
+    [CascadingParameter]
+    private Sectional Sectional { get; set; } = new Sectional();
 
+    public EventCallback<EditContext> OnSave { get; set; }
 
     private string IsPendingComplete;
     private string IsJobComplete;
@@ -164,25 +181,41 @@
 
     private int stateIndex = 1;
     private JobStatus State;
+    private DoorType DoorType;
 
     private const string IsComplete = "complete";
-
     private string ButtonText = "Complete Job";
-
-    private string Display = "d-none";
+    private string RollerShutterDisplay = "d-none";
+    private string SectionalDisplay = "d-none";
     private string DisplayInvoiceItems = "d-none";
-
-    public DoorType DoorType { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+
+        //This needs a lot of learning and clean up.
+        //var builder = new ContainerBuilder();
+        //builder.RegisterType<RollerShutter>().Named<IDoor>("RollerShutter").InstancePerLifetimeScope();
+        //builder.RegisterType<Sectional>().Named<IDoor>("Sectional").InstancePerLifetimeScope();
+        //var container = builder.Build();
+
         Customer = await CustomerService.GetCustomer(CustomerId);
         var newInstall = await NewInstallService.GetNewInstall(NewInstallId);
         if (newInstall != null)
         {
-            RollerShutter = (RollerShutter)newInstall.Door;
-            DoorType = newInstall.Door.DoorType;
-            HandleDoorTypeChange();
+            NewInstall = newInstall;
+            switch (newInstall.Door.DoorType)
+            {
+                case DoorType.RollerShutter:
+                    RollerShutter = (RollerShutter)newInstall.Door; //DoorService.GetRollerShutterDoorById(NewInstall.Door.Id);
+                    break;
+                case DoorType.Sectional:
+                    Sectional = (Sectional)newInstall.Door;
+                    break;
+                default:
+                    break;
+            }
+            DoorType = NewInstall.Door.DoorType;
+            ChangeDoor(DoorType);
             HandleUpdateState();
         }
     }
@@ -218,17 +251,42 @@
         }
     }
 
-    void HandleDoorTypeChange()
+    private void ChangeDoor(DoorType door)
     {
-        Display = "d-block";
+        SectionalDisplay = RollerShutterDisplay = "d-none";
+        switch (door)
+        {
+            case DoorType.RollerShutter:
+                RollerShutterDisplay = "d-block";
+                NewInstall.Door = RollerShutter;
+                break;
+            case DoorType.Sectional:
+                SectionalDisplay = "d-block";
+                NewInstall.Door = Sectional;
+                break;
+        }
+
+        NewInstall.Door.DoorType = door;
+
     }
 
-    public async Task HandleSave(BlazorServerLibrary.Models.RollerShutter rollerShutter)
+    private void HandleDoorTypeChange(ChangeEventArgs e)
     {
-        NewInstall.Customer = Customer;
-        NewInstall.Door = rollerShutter;
-        NewInstall.Status = JobStatus.Pending;
+        var doorType = (DoorType)Enum.Parse(typeof(DoorType), e.Value.ToString());
+        ChangeDoor(doorType);
+    }
 
-        await NewInstallService.AddorUpdate(NewInstall);
+    public async Task HandleSave(EditContext editContext)
+    {
+        var newInstall = (NewInstall)editContext.Model;
+        newInstall.Status = JobStatus.Pending;
+
+        if (string.IsNullOrEmpty(newInstall.SerialNumber))
+        {
+            var SerialNumber = $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now.ToString("yyyy-MM")}-{newInstall.Id.ToString("0000")}";
+            newInstall.SerialNumber = SerialNumber;
+        }
+
+        await NewInstallService.AddorUpdate(newInstall);
     }
 }

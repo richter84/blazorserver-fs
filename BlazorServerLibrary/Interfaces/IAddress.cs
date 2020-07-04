@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BlazorServerLibrary.Interfaces
 {
-    interface IAddress
+    public interface IAddress
     {
         string Street { get; set; }
         string TownCity { get; set; }

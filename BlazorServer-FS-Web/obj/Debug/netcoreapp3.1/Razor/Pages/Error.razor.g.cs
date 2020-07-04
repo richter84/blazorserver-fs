@@ -121,6 +121,13 @@ using BlazorServerService.Interfaces;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 17 "C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\_Imports.razor"
+using Autofac;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/error")]
     public partial class Error : Microsoft.AspNetCore.Components.ComponentBase
     {

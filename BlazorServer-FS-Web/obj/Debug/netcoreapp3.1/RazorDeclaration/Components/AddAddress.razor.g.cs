@@ -125,6 +125,13 @@ using BlazorServerService.Interfaces;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 17 "C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\_Imports.razor"
+using Autofac;
+
+#line default
+#line hidden
+#nullable disable
     public partial class AddAddress : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998

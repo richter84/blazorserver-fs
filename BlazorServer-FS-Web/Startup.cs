@@ -17,11 +17,17 @@ using BlazorServerService.Interfaces;
 using BlazorServerService.Services;
 using BlazorServerLibrary.Models;
 using BlazorServerLibrary.Interfaces;
+using Autofac;
+using System.Runtime.Loader;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace BlazorServer_FS_Web
 {
     public class Startup
     {
+        public ILifetimeScope AutofacContainer { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,10 +47,25 @@ namespace BlazorServer_FS_Web
 
             //services.AddTransient<ICustomer, Customer>();
             //services.AddTransient<IJob, Job>();
+
             services.AddTransient<IDataContext, DataContext>();
-            //services.AddTransient<IDoor, Door>();
+            services.AddTransient<IDoor, RollerShutter>().AddOptions();
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<INewInstall<NewInstall>, NewInstallsService<NewInstall>>();
+            services.AddTransient<IDoorService, DoorService>();
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // Register your own things directly with Autofac, like:
+            //builder.RegisterModule(new MyApplicationModule());
+
+            //builder.RegisterType<Address>().As<IAddress>();
+            //builder.RegisterType<List<Address>>().As<ICollection<IAddress>>();
+            //builder.RegisterType<Customer>().As<ICustomer>();
+            //builder.Register(c => new Customer { Address = c.Resolve<List<Address>>() });
+            //builder.RegisterType<RollerShutter>().As<IDoor>().InstancePerLifetimeScope();
+            //builder.RegisterType<RollerShutter>().Named<IDoor>("RollerShutter").InstancePerLifetimeScope();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +92,8 @@ namespace BlazorServer_FS_Web
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
         }
     }
 }
