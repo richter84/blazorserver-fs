@@ -1,4 +1,6 @@
 ﻿using BlazorServerLibrary.Models;
+using BlazorServerLibrary.Models.Doors;
+using BlazorServerLibrary.Models.Jobs;
 using BlazorServerService.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -66,7 +68,7 @@ namespace BlazorServerService_FS_Tests
             var newInstalls = new NewInstall()
             {
                 Customer = customers.FirstOrDefault(),
-                Door = new RollerShutter()
+                Door = new RollerShutterDoor()
                 {
                     ElectricOperation = new ElectricOperation()
                 }

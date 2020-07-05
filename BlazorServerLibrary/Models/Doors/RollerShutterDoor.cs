@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlazorServerLibrary.Models
+namespace BlazorServerLibrary.Models.Doors
 {
-    public class RollerShutter : Door, IRollerShutter
+    public class RollerShutterDoor : Door, IRollerShutter
     {
         public string AngleCutSize { get; set; }
         public string AngleType { get; set; }

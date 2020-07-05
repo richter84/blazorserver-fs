@@ -21,6 +21,8 @@ using Autofac;
 using System.Runtime.Loader;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using BlazorServerLibrary.Models.Doors;
+using BlazorServerLibrary.Models.Jobs;
 
 namespace BlazorServer_FS_Web
 {
@@ -49,9 +51,9 @@ namespace BlazorServer_FS_Web
             //services.AddTransient<IJob, Job>();
 
             services.AddTransient<IDataContext, DataContext>();
-            services.AddTransient<IDoor, RollerShutter>().AddOptions();
+            services.AddTransient<IDoor, RollerShutterDoor>().AddOptions();
             services.AddTransient<ICustomerService, CustomerService>();
-            services.AddTransient<INewInstall<NewInstall>, NewInstallsService<NewInstall>>();
+            services.AddTransient<INewInstallService<NewInstall>, NewInstallsService<NewInstall>>();
             services.AddTransient<IDoorService, DoorService>();
         }
 

@@ -1,4 +1,6 @@
 ﻿using BlazorServerLibrary.Models;
+using BlazorServerLibrary.Models.Doors;
+using BlazorServerLibrary.Models.Jobs;
 using BlazorServerService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,8 +19,11 @@ namespace BlazorServerService.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         //public DbSet<Door> Doors { get; set; }
-        public DbSet<RollerShutter> RollerShutters { get; set; }
-        public DbSet<Sectional> Sectionals { get; set; }
+        public DbSet<RollerShutterDoor> RollerShutters { get; set; }
+        public DbSet<SectionalDoor> Sectionals { get; set; }
+        public DbSet<PedestrianDoor> Pedestrians { get; set; }
+        public DbSet<GatesDoor> Gates { get; set; }
+        public DbSet<BarsGrillesDoor> BarsGrilles { get; set; }
         public DbSet<NewInstall> NewInstalls { get; set; }
         public DbSet<Servicing> Servicings { get; set; }
         public DbSet<Repair> Repair { get; set; }

@@ -9,6 +9,12 @@
     <Compile Remove="Data\Migrations\20200701120307_JobEntity-NewInstallEntity-Added.Designer.cs" />
     <Compile Remove="Data\Migrations\20200701123455_JobEntity-NewInstallEntity-Added.cs" />
     <Compile Remove="Data\Migrations\20200701123455_JobEntity-NewInstallEntity-Added.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200705145345_SectionalPedestrianEntityAddedFields.cs" />
+    <Compile Remove="Data\Migrations\20200705145345_SectionalPedestrianEntityAddedFields.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200705145517_SectionalPedestrianEntityAddedFields.cs" />
+    <Compile Remove="Data\Migrations\20200705145517_SectionalPedestrianEntityAddedFields.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200705153535_GatesAndBarsEntityAddedFields.cs" />
+    <Compile Remove="Data\Migrations\20200705153535_GatesAndBarsEntityAddedFields.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

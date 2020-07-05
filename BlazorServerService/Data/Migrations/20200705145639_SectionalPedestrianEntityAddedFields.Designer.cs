@@ -4,14 +4,16 @@ using BlazorServerService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorServerService.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200705145639_SectionalPedestrianEntityAddedFields")]
+    partial class SectionalPedestrianEntityAddedFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,49 +293,11 @@ namespace BlazorServerService.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("Job");
                 });
 
-            modelBuilder.Entity("BlazorServerLibrary.Models.Doors.BarsGrillesDoor", b =>
-                {
-                    b.HasBaseType("BlazorServerLibrary.Models.Doors.Door");
-
-                    b.Property<double>("FH")
-                        .HasColumnType("float");
-
-                    b.Property<double>("FW")
-                        .HasColumnType("float");
-
-                    b.HasDiscriminator().HasValue("BarsGrillesDoor");
-                });
-
-            modelBuilder.Entity("BlazorServerLibrary.Models.Doors.GatesDoor", b =>
-                {
-                    b.HasBaseType("BlazorServerLibrary.Models.Doors.Door");
-
-                    b.Property<bool>("IsHingedLeaf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsHingesBottomTrack")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Leafs")
-                        .HasColumnType("int");
-
-                    b.Property<double>("OverJambSize")
-                        .HasColumnType("float");
-
-                    b.Property<double>("OverTracksSize")
-                        .HasColumnType("float");
-
-                    b.HasDiscriminator().HasValue("GatesDoor");
-                });
-
             modelBuilder.Entity("BlazorServerLibrary.Models.Doors.PedestrianDoor", b =>
                 {
                     b.HasBaseType("BlazorServerLibrary.Models.Doors.Door");
 
                     b.Property<int>("ElectricalEntry")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FireDefence")
                         .HasColumnType("int");
 
                     b.Property<string>("HandleType")
@@ -408,7 +372,6 @@ namespace BlazorServerService.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FireDefence")
-                        .HasColumnName("RollerShutterDoor_FireDefence")
                         .HasColumnType("int");
 
                     b.Property<string>("GuideCutSize")
@@ -466,7 +429,6 @@ namespace BlazorServerService.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("OverJambSize")
-                        .HasColumnName("SectionalDoor_OverJambSize")
                         .HasColumnType("float");
 
                     b.Property<double>("PanelOECSize")

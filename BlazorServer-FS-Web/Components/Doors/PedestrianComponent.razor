@@ -1,0 +1,168 @@
+﻿<fieldset>
+    <legend>Pedestrian Door Detail</legend>
+    <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <InputText @bind-Value="Pedestrian.Manufacturer" class="form-control" id="manufacturer"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="issupplied">Supplied Door</label>
+        <input type="checkbox" @onchange="HandleSuppliedDoorChange" checked="@Pedestrian.IsSupplied" class="form-control checkbox" id="issupplied" />
+    </div>
+    <div class="form-group @IsVisibleSupplierOrderNumber">
+        <label for="supplierordernumber">Supplier Order Number</label>
+        <InputText @bind-Value="Pedestrian.SupplierOrderNumber" class="form-control" id="supplierordernumber"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="sectortype">Sector Type</label>
+        <select @onchange="(eventArgs) => { HandleSelectSectorTypeChange(eventArgs); }" class="form-control" id="sectortype">
+            <option>Select Sector Type ...</option>
+            @foreach (var type in Enum.GetValues(typeof(SectorType)))
+            {
+                var isSelected = type.ToString() == Pedestrian.Sector.ToString();
+                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((SectorType)Enum.Parse(typeof(SectorType), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="openingsizeheight">Opening Size Height</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Pedestrian.OpeningSizeHeight" class="form-control" id="openingsizeheight"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="openingsizewidth">Opening Size Width</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Pedestrian.OpeningSizeWidth" class="form-control" id="openingsizewidth"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="fixingtype">Fixing Type</label>
+        <InputText @bind-Value="Pedestrian.FixingType" class="form-control" id="fixingtype"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="sizeoverstandardheight">Size Over Standard Height</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Pedestrian.SizeOverStandardHeight" class="form-control" id="sizeoverstandardheight"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="sizeoverstandardwidth">Size Over Standard Width</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Pedestrian.SizeOverStandardWidth" class="form-control" id="sizeoverstandardwidth"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="handletype">Handle Type</label>
+        <InputText @bind-Value="Pedestrian.HandleType" class="form-control" id="handletype"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="iscloser">Closer</label>
+        <InputCheckbox @bind-Value="Pedestrian.IsCloser" class="form-control checkbox" id="iscloser"></InputCheckbox>
+        <input type="checkbox" checked="@Pedestrian.IsCloser" class="form-control checkbox" id="iscloser" />
+    </div>
+    <div class="form-group">
+        <label for="ismaglock">Mag Lock</label>
+        <InputCheckbox @bind-Value="Pedestrian.IsMagLock" class="form-control checkbox" id="ismaglock"></InputCheckbox>
+    </div>
+    <div class="form-group">
+        <label for="iselectricalentry">Electrical Entry</label>
+        <input type="checkbox" @onchange="HandleIsElectricalEntryChange" checked="@Pedestrian.IsElectricalEntry" class="form-control checkbox" id="iselectricalentry" />
+    </div>
+    <div class="form-group @IsVisibleElectricalEntry">
+        <select @onchange="(eventArgs) => { HandleSelectElectricalEntryChange(eventArgs); }" class="form-control" id="electricalentry">
+            <option>Select Electrical Entry ...</option>
+            @foreach (var type in Enum.GetValues(typeof(ElectricalEntry)))
+            {
+                var isSelected = type.ToString() == Pedestrian.ElectricalEntry.ToString();
+                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((ElectricalEntry)Enum.Parse(typeof(ElectricalEntry), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="colour">Colour</label>
+        <InputText @bind-Value="Pedestrian.Colour" class="form-control" id="colour"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="fireescape">Fire Escape</label>
+        <InputCheckbox @bind-Value="Pedestrian.IsFireEscape" class="form-control checkbox" id="fireescape"></InputCheckbox>
+    </div>
+    <div class="form-group">
+        <label for="numlockingpoints">Number of Locking Points</label>
+        <InputNumber @bind-Value="Pedestrian.NumberOfLockingPoints" class="form-control" id="numlockingpoints"></InputNumber>
+    </div>
+    <div class="form-group">
+        <label for="firedefence">Fire Defence</label>
+        <select @onchange="(eventArgs) => { Pedestrian.FireDefence = (FireDefence)HandleSelectChange<FireDefence>(eventArgs); }" class="form-control" id="firedefence">
+            <option>Select Fire Defence ...</option>
+            @foreach (var type in Enum.GetValues(typeof(FireDefence)))
+            {
+                var isSelected = type.ToString() == Pedestrian.FireDefence.ToString();
+                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((FireDefence)Enum.Parse(typeof(FireDefence), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="extranotes">Extra Notes</label>
+        <InputTextArea @bind-Value="Pedestrian.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
+    </div>
+</fieldset>
+
+@code {
+    [Parameter]
+    public PedestrianDoor Pedestrian { get; set; }
+
+    private string IsVisibleSupplierOrderNumber = "d-none";
+    private string IsVisibleElectricalEntry = "d-none";
+
+    public void HandleSelectSectorTypeChange(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == " ")
+        {
+            return;
+        }
+
+        Pedestrian.Sector = (SectorType)Enum.Parse(typeof(SectorType), e.Value.ToString());
+    }
+
+    public void HandleSelectElectricalEntryChange(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == " ")
+        {
+            return;
+        }
+
+        Pedestrian.ElectricalEntry = (ElectricalEntry)Enum.Parse(typeof(ElectricalEntry), e.Value.ToString());
+    }
+
+    public void HandleIsElectricalEntryChange(ChangeEventArgs e)
+    {
+        IsVisibleElectricalEntry = IsVisibleElectricalEntry == "d-none" ? "d-block" : "d-none";
+    }
+
+    public int HandleSelectChange<TEnum>(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == " ")
+        {
+            return 0;
+        }
+
+        return (int)Enum.Parse(typeof(TEnum), e.Value.ToString());
+    }
+
+    public void HandleSuppliedDoorChange(ChangeEventArgs e)
+    {
+        IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
+    }
+}

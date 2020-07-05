@@ -1,12 +1,13 @@
 ﻿using BlazorServerLibrary.Enums;
 using BlazorServerLibrary.Interfaces;
+using BlazorServerLibrary.Models.Doors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BlazorServerLibrary.Models
+namespace BlazorServerLibrary.Models.Jobs
 {
     public abstract class Job
     {

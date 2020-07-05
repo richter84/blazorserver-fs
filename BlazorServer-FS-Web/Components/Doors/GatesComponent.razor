@@ -1,0 +1,125 @@
+﻿<fieldset>
+    <legend>Gates Door Detail</legend>
+    <div class="form-group">
+        <label for="manufacturer">Manufacturer</label>
+        <InputText @bind-Value="Gates.Manufacturer" class="form-control" id="manufacturer"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="issupplied">Supplied Door</label>
+        <input type="checkbox" @onchange="HandleSuppliedDoorChange" checked="@Gates.IsSupplied" class="form-control checkbox" id="issupplied" />
+    </div>
+    <div class="form-group @IsVisibleSupplierOrderNumber">
+        <label for="supplierordernumber">Supplier Order Number</label>
+        <InputText @bind-Value="Gates.SupplierOrderNumber" class="form-control" id="supplierordernumber"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="sectortype">Sector Type</label>
+        <select @onchange="(eventArgs) => { HandleSelectSectorTypeChange(eventArgs); }" class="form-control" id="sectortype">
+            <option>Select Sector Type ...</option>
+            @foreach (var type in Enum.GetValues(typeof(SectorType)))
+            {
+                var isSelected = type.ToString() == Gates.Sector.ToString();
+                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((SectorType)Enum.Parse(typeof(SectorType), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="openingsizeheight">Opening Size Height</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Gates.OpeningSizeHeight" class="form-control" id="openingsizeheight"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="openingsizewidth">Opening Size Width</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Gates.OpeningSizeWidth" class="form-control" id="openingsizewidth"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="fixingtype">Fixing Type</label>
+        <InputText @bind-Value="Gates.FixingType" class="form-control" id="fixingtype"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="oversizejamb">Size Over Jambs</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Gates.OverJambSize" class="form-control" id="oversizejamb"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="oversizetrack">Size Over Tracks</label>
+        <div class="input-group">
+            <InputNumber @bind-Value="Gates.OverTracksSize" class="form-control" id="oversizetrack"></InputNumber>
+            <div class="input-group-append">
+                <span class="input-group-text">mm</span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="leafs">Leafs</label>
+        <select @onchange="(eventArgs) => { HandleSelectLeafsChange(eventArgs); }" class="form-control" id="leafs">
+            <option>Select Sector Type ...</option>
+            @foreach (var type in Enum.GetValues(typeof(Leafs)))
+            {
+                var isSelected = type.ToString() == Gates.Leafs.ToString();
+                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((Leafs)Enum.Parse(typeof(Leafs), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="hingedleaf">Hinged Leaf</label>
+        <InputCheckbox @bind-Value="Gates.IsHingedLeaf" class="form-control" id="hingedleaf"></InputCheckbox>
+    </div>
+    <div class="form-group">
+        <label for="hingesbottomtrack">Hinges Bottom Track</label>
+        <InputCheckbox @bind-Value="Gates.IsHingesBottomTrack" class="form-control" id="hingesbottomtrack"></InputCheckbox>
+    </div>
+    <div class="form-group">
+        <label for="colour">Colour</label>
+        <InputText @bind-Value="Gates.Colour" class="form-control" id="colour"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="extranotes">Extra Notes</label>
+        <InputTextArea @bind-Value="Gates.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
+    </div>
+</fieldset>
+
+@code {
+    [Parameter]
+    public GatesDoor Gates { get; set; }
+
+    private string IsVisibleSupplierOrderNumber = "d-none";
+
+    public void HandleSelectLeafsChange(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == " ")
+        {
+            return;
+        }
+
+        Gates.Leafs = (Leafs)Enum.Parse(typeof(Leafs), e.Value.ToString());
+    }
+
+    public void HandleSelectSectorTypeChange(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == " ")
+        {
+            return;
+        }
+
+        Gates.Sector = (SectorType)Enum.Parse(typeof(SectorType), e.Value.ToString());
+    }
+
+    public void HandleSuppliedDoorChange(ChangeEventArgs e)
+    {
+        IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
+    }
+}

@@ -1,4 +1,5 @@
 ﻿using BlazorServerLibrary.Models;
+using BlazorServerLibrary.Models.Doors;
 using BlazorServerService.Data;
 using BlazorServerService.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace BlazorServerService.Services
             _context = context;
         }
 
-        public RollerShutter GetRollerShutterDoorById(int id)
+        public RollerShutterDoor GetRollerShutterDoorById(int id)
         {
             var rollerShutter = _context.RollerShutters
                 .Include(d => d.ElectricOperation)

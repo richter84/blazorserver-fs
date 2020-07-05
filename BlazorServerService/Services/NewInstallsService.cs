@@ -1,4 +1,5 @@
 ﻿using BlazorServerLibrary.Models;
+using BlazorServerLibrary.Models.Jobs;
 using BlazorServerService.Data;
 using BlazorServerService.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BlazorServerService.Services
 {
-    public class NewInstallsService<TEntity> : INewInstall<TEntity> where TEntity : NewInstall
+    public class NewInstallsService<TEntity> : INewInstallService<TEntity> where TEntity : NewInstall
     {
         private readonly DataContext _context;
         public NewInstallsService(DataContext context)

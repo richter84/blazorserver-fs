@@ -308,3 +308,9 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.genruntimeconfig.cache
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Doors\SectionalComponent.razor.g.cs
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Doors\SectionalComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Doors\PedestrianComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Doors\PedestrianComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Doors\BarsGrillesComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Doors\GatesComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Doors\BarsGrillesComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Doors\GatesComponent.razor.g.cs

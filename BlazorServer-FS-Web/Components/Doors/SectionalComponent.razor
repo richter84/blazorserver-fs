@@ -13,6 +13,17 @@
         <InputText @bind-Value="Sectional.SupplierOrderNumber" class="form-control" id="supplierordernumber"></InputText>
     </div>
     <div class="form-group">
+        <label for="sectortype">Sector Type</label>
+        <select @onchange="(eventArgs) => { HandleSelectSectorTypeChange(eventArgs); }" class="form-control" id="sectortype">
+            <option>Select Sector Type ...</option>
+            @foreach (var type in Enum.GetValues(typeof(SectorType)))
+            {
+                var isSelected = type.ToString() == Sectional.Sector.ToString();
+                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((SectorType)Enum.Parse(typeof(SectorType), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
         <label for="overjambsize">Over Jamb Size</label>
         <div class="input-group">
             <InputNumber @bind-Value="Sectional.OverJambSize" class="form-control" id="overjambsize"></InputNumber>
@@ -71,7 +82,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="shaftsize">Shaft Length</label>
+        <label for="shaftsize">Shaft Size</label>
         <div class="input-group">
             <InputNumber @bind-Value="Sectional.ShaftSize" class="form-control" id="shaftsize"></InputNumber>
             <div class="input-group-append">
@@ -150,37 +161,51 @@
                 <InputNumber @bind-Value="Sectional.ElectricOperation.PECQty" class="form-control" id="pecqty"></InputNumber>
             </div>
         }
-        <div class="form-group">
-            <label for="colour">Colour</label>
-            <InputText @bind-Value="Sectional.Colour" class="form-control" id="colour"></InputText>
-        </div>
-        <div class="form-group">
-            <label for="wicketeurodoor">Wicket / Euro Door</label>
-            <input type="checkbox" class="form-control checkbox" id="wicketeurodoor" />
-        </div>
-        <div class="form-group">
-            <label for="antifallsafety">Anti-Fall Safety</label>
-            <select @onchange="(eventArgs) => { Sectional.AntiFallSafety = HandleSelectChange<AntiFallSafety>(Sectional.AntiFallSafety, eventArgs); }" class="form-control" id="antifallsafety">
-                <option>Select Anti-Fall Safety ...</option>
-                @foreach (var type in Enum.GetValues(typeof(AntiFallSafety)))
-                {
-                    <option value="@type">@EnumHelper.GetDisplayName((AntiFallSafety)Enum.Parse(typeof(AntiFallSafety), type.ToString()))</option>
-                }
-            </select>
-        </div>
     }
+    <div class="form-group">
+        <label for="colour">Colour</label>
+        <InputText @bind-Value="Sectional.Colour" class="form-control" id="colour"></InputText>
+    </div>
+    <div class="form-group">
+        <label for="wicketeurodoor">Wicket / Euro Door</label>
+        <InputCheckbox @bind-Value="Sectional.WicketEuroDoor" class="form-control checkbox" id="wicketeurodoor"></InputCheckbox>
+    </div>
+    <div class="form-group">
+        <label for="antifallsafety">Anti-Fall Safety</label>
+        <select @onchange="(eventArgs) => { Sectional.AntiFallSafety = HandleSelectChange<AntiFallSafety>(Sectional.AntiFallSafety, eventArgs); }" class="form-control" id="antifallsafety">
+            <option>Select Anti-Fall Safety ...</option>
+            @foreach (var type in Enum.GetValues(typeof(AntiFallSafety)))
+            {
+                <option value="@type">@EnumHelper.GetDisplayName((AntiFallSafety)Enum.Parse(typeof(AntiFallSafety), type.ToString()))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="extranotes">Extra Notes</label>
+        <InputTextArea @bind-Value="Sectional.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
+    </div>
 </fieldset>
 
 @code {
 
-    [CascadingParameter]
-    public Sectional Sectional { get; set; }
+    [Parameter]
+    public SectionalDoor Sectional { get; set; }
 
     private string IsVisibleSupplierOrderNumber = "d-none";
 
     public TEnum HandleSelectChange<TEnum>(TEnum EnumType, ChangeEventArgs e) where TEnum : Enum
     {
         return (TEnum)Enum.Parse(EnumType.GetType(), e.Value.ToString());
+    }
+
+    public void HandleSelectSectorTypeChange(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == " ")
+        {
+            return;
+        }
+
+        Sectional.Sector = (SectorType)Enum.Parse(typeof(SectorType), e.Value.ToString());
     }
 
     public void HandleSuppliedDoorChange(ChangeEventArgs e)

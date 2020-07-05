@@ -1,11 +1,12 @@
 ﻿using BlazorServerLibrary.Interfaces;
+using BlazorServerLibrary.Models.Doors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BlazorServerLibrary.Models
+namespace BlazorServerLibrary.Models.Jobs
 {
     public class NewInstall : Job
     {

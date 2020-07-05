@@ -1,7 +1,7 @@
 ﻿@page "/Customer/{CustomerId:int}/NewInstall"
 @page "/Customer/{CustomerId:int}/NewInstall/{NewInstallId:int}"
 @inject ICustomerService CustomerService
-@inject INewInstall<NewInstall> NewInstallService
+@inject INewInstallService<NewInstall> NewInstallService
 @inject IServiceProvider ServiceProvider
 @inject IDoorService DoorService 
 
@@ -110,16 +110,20 @@
             </fieldset>
 
             <div class="@RollerShutterDisplay">
-                <CascadingValue Value="@RollerShutter">
-                    <RollerShutterComponent></RollerShutterComponent>
-                </CascadingValue>
+                <RollerShutterComponent RollerShutter="@RollerShutter"></RollerShutterComponent>
             </div>
             <div class="@SectionalDisplay">
-                <CascadingValue Value="@Sectional">
-                    <SectionalComponent></SectionalComponent>
-                </CascadingValue>
+                <SectionalComponent Sectional="@Sectional"></SectionalComponent>
             </div>
-
+            <div class="@PedestrianDisplay">
+                <PedestrianComponent Pedestrian="@Pedestrian"></PedestrianComponent>
+            </div>
+            <div class="@GatesDisplay">
+                <GatesComponent Gates="@Gates"></GatesComponent>
+            </div>
+            <div class="@BarsGrillesDisplay">
+                <BarsGrillesComponent BarsGrilles="@BarsGrilles"></BarsGrillesComponent>
+            </div>
         </section>
         <br /><br />
         <section>
@@ -165,11 +169,11 @@
     private Customer Customer { get; set; } = new Customer();
     private NewInstall NewInstall { get; set; } = new NewInstall();
 
-    [CascadingParameter]
-    private RollerShutter RollerShutter { get; set; } = new RollerShutter();
-
-    [CascadingParameter]
-    private Sectional Sectional { get; set; } = new Sectional();
+    private RollerShutterDoor RollerShutter { get; set; } = new RollerShutterDoor();
+    private SectionalDoor Sectional { get; set; } = new SectionalDoor();
+    private PedestrianDoor Pedestrian { get; set; } = new PedestrianDoor();
+    private GatesDoor Gates { get; set; } = new GatesDoor();
+    private BarsGrillesDoor BarsGrilles { get; set; } = new BarsGrillesDoor();
 
     public EventCallback<EditContext> OnSave { get; set; }
 
@@ -187,17 +191,13 @@
     private string ButtonText = "Complete Job";
     private string RollerShutterDisplay = "d-none";
     private string SectionalDisplay = "d-none";
+    private string PedestrianDisplay = "d-none";
+    private string GatesDisplay = "d-none";
+    private string BarsGrillesDisplay = "d-none";
     private string DisplayInvoiceItems = "d-none";
 
     protected override async Task OnInitializedAsync()
     {
-
-        //This needs a lot of learning and clean up.
-        //var builder = new ContainerBuilder();
-        //builder.RegisterType<RollerShutter>().Named<IDoor>("RollerShutter").InstancePerLifetimeScope();
-        //builder.RegisterType<Sectional>().Named<IDoor>("Sectional").InstancePerLifetimeScope();
-        //var container = builder.Build();
-
         Customer = await CustomerService.GetCustomer(CustomerId);
         var newInstall = await NewInstallService.GetNewInstall(NewInstallId);
         if (newInstall != null)
@@ -206,10 +206,19 @@
             switch (newInstall.Door.DoorType)
             {
                 case DoorType.RollerShutter:
-                    RollerShutter = (RollerShutter)newInstall.Door; //DoorService.GetRollerShutterDoorById(NewInstall.Door.Id);
+                    RollerShutter = (RollerShutterDoor)newInstall.Door; //DoorService.GetRollerShutterDoorById(NewInstall.Door.Id);
                     break;
                 case DoorType.Sectional:
-                    Sectional = (Sectional)newInstall.Door;
+                    Sectional = (SectionalDoor)newInstall.Door;
+                    break;
+                case DoorType.Pedestrian:
+                    Pedestrian = (PedestrianDoor)newInstall.Door;
+                    break;
+                case DoorType.Gates:
+                    Gates = (GatesDoor)newInstall.Door;
+                    break;
+                case DoorType.BarsGrilles:
+                    BarsGrilles = (BarsGrillesDoor)newInstall.Door;
                     break;
                 default:
                     break;
@@ -263,6 +272,18 @@
             case DoorType.Sectional:
                 SectionalDisplay = "d-block";
                 NewInstall.Door = Sectional;
+                break;
+            case DoorType.Pedestrian:
+                PedestrianDisplay = "d-block";
+                NewInstall.Door = Pedestrian;
+                break;
+            case DoorType.Gates:
+                GatesDisplay = "d-block";
+                NewInstall.Door = Gates;
+                break;
+            case DoorType.BarsGrilles:
+                BarsGrillesDisplay = "d-block";
+                NewInstall.Door = BarsGrilles;
                 break;
         }
 

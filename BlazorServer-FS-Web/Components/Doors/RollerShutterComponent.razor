@@ -1,6 +1,4 @@
-﻿@inject INewInstall<NewInstall> NewInstallsService
-
-<div class="progress">
+﻿<div class="progress">
     <div class="progress-bar progress-bg" role="progressbar" style="width: @ProgressPercentage%;" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">@ProgressPercentage%</div>
 </div>
 <br />
@@ -25,7 +23,7 @@
                 <option>Select Sector Type ...</option>
                 @foreach (var type in Enum.GetValues(typeof(SectorType)))
                 {
-                    var isSelected = type.ToString() == RollerShutter.OperationType.ToString();
+                    var isSelected = type.ToString() == RollerShutter.Sector.ToString();
                     <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((SectorType)Enum.Parse(typeof(SectorType), type.ToString()))</option>
                 }
             </select>
@@ -233,8 +231,10 @@
     /*[Parameter]
     public EventCallback<RollerShutter> OnSave { get; set; }*/
 
-    [CascadingParameter]
-    public RollerShutter RollerShutter { get; set; }
+    //[CascadingParameter]
+    //public RollerShutter RollerShutter { get; set; }
+    [Parameter]
+    public RollerShutterDoor RollerShutter { get; set; }
 
     List<EnumOption> operationTypes { get; set; } = EnumToSelect.PopulateOptions<OperationType>();
     List<EnumOption> sectorTypes { get; set; } = EnumToSelect.PopulateOptions<SectorType>();

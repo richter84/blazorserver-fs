@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace BlazorServerLibrary.Models
+namespace BlazorServerLibrary.Models.Doors
 {
     public abstract class Door
     {

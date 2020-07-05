@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BlazorServerLibrary.Models.Doors;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlazorServerLibrary.Models
+namespace BlazorServerLibrary.Models.Jobs
 {
-    public class Servicing : Job
+    public class Repair : Job
     {
         public override string SerialNumber { get; set; }
         public override Door Door { get; set; }

@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlazorServerLibrary.Models
+namespace BlazorServerLibrary.Models.Doors
 {
-    public class Sectional : Door, ISectional, IDoorType
+    public class SectionalDoor : Door, ISectional, IDoorType
     {
         public AntiFallSafety AntiFallSafety { get; set; }
         public double Cable { get; set; }
