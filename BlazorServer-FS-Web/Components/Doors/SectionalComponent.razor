@@ -1,4 +1,4 @@
-﻿<fieldset>
+﻿<fieldset disabled="@Sectional.IsDisabled">
     <legend>Sectional Door Detail</legend>
     <div class="form-group">
         <label for="manufacturer">Manufacturer</label>
@@ -14,8 +14,8 @@
     </div>
     <div class="form-group">
         <label for="sectortype">Sector Type</label>
-        <select @onchange="(eventArgs) => { HandleSelectSectorTypeChange(eventArgs); }" class="form-control" id="sectortype">
-            <option>Select Sector Type ...</option>
+        <select @onchange="(eventArgs) => { Sectional.Sector = (SectorType)HandleSelectChange<SectorType>(eventArgs); }" class="form-control" id="sectortype">
+            <option value=" ">Select Sector Type ...</option>
             @foreach (var type in Enum.GetValues(typeof(SectorType)))
             {
                 var isSelected = type.ToString() == Sectional.Sector.ToString();
@@ -116,8 +116,8 @@
     </div>
     <div class="form-group">
         <label for="operationtype">Operation Type</label>
-        <select @onchange="(eventArgs) => { Sectional.OperationType = HandleSelectChange<OperationType>(Sectional.OperationType, eventArgs); }" class="form-control" id="operationtype">
-            <option value="">Select Operation Type ...</option>
+        <select @onchange="(eventArgs) => { Sectional.OperationType = (OperationType)HandleSelectChange<OperationType>(eventArgs); }" class="form-control" id="operationtype">
+            <option value=" ">Select Operation Type ...</option>
             @foreach (var type in Enum.GetValues(typeof(OperationType)))
             {
                 <option value="@type">@EnumHelper.GetDisplayName((OperationType)Enum.Parse(typeof(OperationType), type.ToString()))</option>
@@ -128,8 +128,8 @@
     {
         <div class="form-group">
             <label for="supplytype">Supply Type</label>
-            <select @onchange="(eventArgs) => { Sectional.ElectricOperation.SupplyType = HandleSelectChange<ElectricalSupplyType>(Sectional.ElectricOperation.SupplyType, eventArgs); }" class="form-control" id="supplytype">
-                <option>Select Supply Type ...</option>
+            <select @onchange="(eventArgs) => { Sectional.ElectricOperation.SupplyType = (ElectricalSupplyType)HandleSelectChange<ElectricalSupplyType>(eventArgs); }" class="form-control" id="supplytype">
+                <option value=" ">Select Supply Type ...</option>
                 @foreach (var type in Enum.GetValues(typeof(ElectricalSupplyType)))
                 {
                     <option value="@type">@EnumHelper.GetDisplayName((ElectricalSupplyType)Enum.Parse(typeof(ElectricalSupplyType), type.ToString()))</option>
@@ -146,8 +146,8 @@
         </div>
         <div class="form-group">
             <label for="supplytype">Electrical Safeties</label>
-            <select @onchange="(eventArgs) => { Sectional.ElectricOperation.ElectricalSafety = HandleSelectChange<ElectricalSafety>(Sectional.ElectricOperation.ElectricalSafety, eventArgs); }" class="form-control" id="supplytype">
-                <option>Select Electrical Safeties ...</option>
+            <select @onchange="(eventArgs) => { Sectional.ElectricOperation.ElectricalSafety = (ElectricalSafety)HandleSelectChange<ElectricalSafety>(eventArgs); }" class="form-control" id="supplytype">
+                <option value=" ">Select Electrical Safeties ...</option>
                 @foreach (var type in Enum.GetValues(typeof(ElectricalSafety)))
                 {
                     <option value="@type">@EnumHelper.GetDisplayName((ElectricalSafety)Enum.Parse(typeof(ElectricalSafety), type.ToString()))</option>
@@ -172,8 +172,8 @@
     </div>
     <div class="form-group">
         <label for="antifallsafety">Anti-Fall Safety</label>
-        <select @onchange="(eventArgs) => { Sectional.AntiFallSafety = HandleSelectChange<AntiFallSafety>(Sectional.AntiFallSafety, eventArgs); }" class="form-control" id="antifallsafety">
-            <option>Select Anti-Fall Safety ...</option>
+        <select @onchange="(eventArgs) => { Sectional.AntiFallSafety = (AntiFallSafety)HandleSelectChange<AntiFallSafety>(eventArgs); }" class="form-control" id="antifallsafety">
+            <option value=" ">Select Anti-Fall Safety ...</option>
             @foreach (var type in Enum.GetValues(typeof(AntiFallSafety)))
             {
                 <option value="@type">@EnumHelper.GetDisplayName((AntiFallSafety)Enum.Parse(typeof(AntiFallSafety), type.ToString()))</option>
@@ -193,19 +193,14 @@
 
     private string IsVisibleSupplierOrderNumber = "d-none";
 
-    public TEnum HandleSelectChange<TEnum>(TEnum EnumType, ChangeEventArgs e) where TEnum : Enum
+    public int HandleSelectChange<TEnum>(ChangeEventArgs e) where TEnum : Enum
     {
-        return (TEnum)Enum.Parse(EnumType.GetType(), e.Value.ToString());
-    }
-
-    public void HandleSelectSectorTypeChange(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
+        if (Enum.IsDefined(typeof(TEnum), e.Value))
         {
-            return;
+            return (int)Enum.Parse(typeof(TEnum), e.Value.ToString());
         }
 
-        Sectional.Sector = (SectorType)Enum.Parse(typeof(SectorType), e.Value.ToString());
+        return 0;
     }
 
     public void HandleSuppliedDoorChange(ChangeEventArgs e)

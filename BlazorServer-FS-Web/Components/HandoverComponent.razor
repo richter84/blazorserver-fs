@@ -1,0 +1,76 @@
+﻿@inject IJSRuntime JSRuntime
+
+    <fieldset >
+        <legend>
+            Handover
+        </legend>
+        <div class="form-group">
+            <label for="startdate">Start Date</label>
+            <InputDate @bind-Value="Handover.StartDate" class="form-control" id="startdate"></InputDate>
+        </div>
+        <div class="form-group">
+            <label for="enddate">End Date</label>
+            <InputDate @bind-Value="Handover.EndDate" class="form-control" id="enddate"></InputDate>
+        </div>
+        <br />
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Handover.Demonstration" class="form-check-input" id="demonstration"></InputCheckbox>
+            <label class="form-check-label" for="demonstration">Demonstration</label>
+        </div>
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Handover.ServiceScheduleLog" class="form-check-input" id="serviceschedulelog"></InputCheckbox>
+            <label class="form-check-label" for="serviceschedulelog">Service Schedule Log</label>
+        </div>
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Handover.ControlsIfApplicable" class="form-check-input" id="controlsifapplicable"></InputCheckbox>
+            <label class="form-check-label" for="controlsifapplicable">Controls if Applicable</label>
+        </div>
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Handover.SafetyDevicesExplained" class="form-check-input" id="safetydevicesexplained"></InputCheckbox>
+            <label class="form-check-label" for="safetydevicesexplained">Safety Devices Explained</label>
+        </div>
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Handover.AllControlsCleaned" class="form-check-input" id="allcontrolscleaned"></InputCheckbox>
+            <label class="form-check-label" for="allcontrolscleaned">All Controls Cleaned</label>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="pointofcontactname">Point of Contact Name</label>
+            <InputText @bind-Value="Handover.PointOfContactName" class="form-control" id="pointofcontactname"></InputText>
+        </div>
+        <div class="form-check">
+            <InputCheckbox @bind-Value="Handover.IsCompleteByEngineer" class="form-check-input" id="engineercomplete"></InputCheckbox>
+            <label class="form-check-label" for="engineercomplete">Completed by Engineer on behalf of customer</label>
+        </div>
+        <br />
+        <div class="form-group">
+            <canvas id="signature-pad" class="signature-pad"></canvas>
+            <br />
+            <button class="btn btn-secondary" id="clear" @onclick:preventDefault formnovalidate>Clear Signature</button>
+            <input hidden="hidden" @bind-value="Handover.PointOfContactSignatureUrl" id="signatureDataUrl" />
+        </div>
+    </fieldset>
+
+@code {
+
+    [Parameter]
+    public Handover Handover { get; set; }
+
+    [Parameter]
+    public string IsDisabled { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("FifeShuttersLtd.setSignature", Handover.PointOfContactSignatureUrl, dotNetReference);
+        }
+    }
+
+    [JSInvokable("AddSignature")]
+    public void AddSignature(string dataUrl)
+    {
+        Handover.PointOfContactSignatureUrl = dataUrl;
+    }
+}

@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorServer_FS_Web.Data;
 using BlazorServerService;
 using BlazorServerService.Data;
 using BlazorServerService.Interfaces;
@@ -42,8 +41,7 @@ namespace BlazorServer_FS_Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddDbContext<DataContext>(options =>
                     options.UseSqlServer(Configuration["OrbitDbServerAzure:ConnectionString"]));
 
@@ -55,6 +53,7 @@ namespace BlazorServer_FS_Web
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<INewInstallService<NewInstall>, NewInstallsService<NewInstall>>();
             services.AddTransient<IDoorService, DoorService>();
+            services.AddTransient<IInvoiceService, InvoiceService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

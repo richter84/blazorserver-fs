@@ -18,7 +18,6 @@ namespace BlazorServerLibrary.Models.Doors
         public bool IsCloser { get; set; }
         public bool IsElectricalEntry { get; set; }
         public bool IsMagLock { get; set; }
-        public bool IsSupplied { get; set; }
         public int NumberOfLockingPoints { get; set; }
         public double SizeOverStandardHeight { get; set; }
         public double SizeOverStandardWidth { get; set; }

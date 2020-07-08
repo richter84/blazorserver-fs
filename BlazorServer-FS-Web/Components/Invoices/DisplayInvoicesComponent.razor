@@ -1,0 +1,31 @@
+﻿
+@if (Invoices.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invoice in Invoices)
+            {
+                var link = @invoice.Key;
+                <tr>
+                    <td><span class="oi oi-file"></span></td>
+                    <td><a href="@invoice.Key" target="_blank">@invoice.Value</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No existing Invoices</p>
+}
+
+@code {
+    [Parameter]
+    public Dictionary<string, string> Invoices { get; set; }
+}

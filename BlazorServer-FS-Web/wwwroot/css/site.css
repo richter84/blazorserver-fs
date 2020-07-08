@@ -160,6 +160,15 @@ app {
     top: 0.5rem;
 }
 
+.invoice-items{
+    border:1px solid #eee;
+    border-radius:5px;
+}
+
+.invoice-totals {
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
 
 .existingaddress-container {
     border: 1px solid #FF7800;
@@ -168,11 +177,8 @@ app {
     padding: 18px;
 }
 
-.existingaddress {
-    margin: 5px;
-    flex: 1;
-    flex-wrap: wrap;
-    width: 100%;
+.flex-row {
+    margin-top:5px;
 }
 
 .existingaddress label {
@@ -195,13 +201,44 @@ input[type=number] {
 
 
 section{
+    background-color: #fdfdfd;
     border:1px solid #FF7800;
     border-radius:5px;
+    margin-top:30px;
+    margin-bottom:30px;
     padding:18px;
 }
 
 .progress-bg{
     background-color:#FF7800;
+}
+
+.signature-pad {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-check{
+    line-height:35px;
+}
+
+.form-check-input{
+    height:30px;
+    width:30px;
+}
+
+.form-check-label{
+    margin-left:25px;
+}
+
+canvas {
+    height:150px;
+    width: 100%;
+}
+
+.invoice-files{
+    margin-top:30px;
 }
 
 @media (max-width: 767.98px) {

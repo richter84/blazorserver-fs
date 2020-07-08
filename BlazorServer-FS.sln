@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerLibrary", "Blaz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerService", "BlazorServerService\BlazorServerService.csproj", "{BDDAE838-FD92-4CBA-8B53-E4030E30EA03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerService-FS-Tests", "BlazorServerService-FS-Tests\BlazorServerService-FS-Tests.csproj", "{CEF30A73-A3E8-41D7-9646-A000F371837C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerService-FS-Tests", "BlazorServerService-FS-Tests\BlazorServerService-FS-Tests.csproj", "{CEF30A73-A3E8-41D7-9646-A000F371837C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

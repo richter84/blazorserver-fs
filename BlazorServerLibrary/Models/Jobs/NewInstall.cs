@@ -10,9 +10,10 @@ namespace BlazorServerLibrary.Models.Jobs
 {
     public class NewInstall : Job
     {
-        [RegularExpression("^[a-zA-Z]+\\/[a-zA-Z]+$", ErrorMessage = "Serial Number format invalid")]
+        //[RegularExpression("^[a-zA-Z]+-[a-zA-Z]+$", ErrorMessage = "Serial Number format invalid")]
         public override string SerialNumber { get; set; }
 
+        [Required]
         public override Door Door { get; set; }
     }
 }

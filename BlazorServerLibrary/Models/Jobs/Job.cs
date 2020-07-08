@@ -16,10 +16,10 @@ namespace BlazorServerLibrary.Models.Jobs
         [MaxLength(20)]
         public abstract string SerialNumber { get; set; }
         public JobStatus Status { get; set; }
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } // = new Customer();
         public abstract Door Door { get; set; }
-        public Handover Handover { get; set; }
-        public ICollection<HistoryStatus> History { get; set; }
+        public Handover Handover { get; set; } = new Handover();
+        public ICollection<HistoryStatus> History { get; set; } = new List<HistoryStatus>();
         public ICollection<Invoice> Invoices { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BlazorServerLibrary.Models;
 using BlazorServerLibrary.Models.Jobs;
+using BlazorServerLibrary.Enums;
 using BlazorServerService.Data;
 using BlazorServerService.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ namespace BlazorServerService.Services
 
             if (existingJob == null)
             {
+                newInstall.SerialNumber = CreateSerialNumber(newInstall);
+                newInstall.Status = JobStatus.Pending;
                 _context.NewInstalls.Add(newInstall);
             }
             else
@@ -51,6 +54,8 @@ namespace BlazorServerService.Services
             return await _context.NewInstalls
                 .Include(n => n.Door)
                 .Include(n => n.Customer)
+                .Include(n => n.Handover)
+                .Include(n => n.History)
                 .FirstOrDefaultAsync(n => n.Id == Id);
         }
 
@@ -61,6 +66,11 @@ namespace BlazorServerService.Services
                 .OrderBy(n => n.Id)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        private string CreateSerialNumber(NewInstall newInstall)
+        {
+            return $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now:yyyy-MM}-{newInstall.Id:0000}";
         }
     }
 }

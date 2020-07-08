@@ -1,0 +1,26 @@
+﻿<EditForm Model=@InvoiceItem OnValidSubmit="@HandleValidSubmit">
+    <div class="d-flex flex-row existingaddress invoice-items">
+        <div class="p-2 col-sm-8">
+            <label>@InvoiceItem.Name</label>
+        </div>
+        <div class="p-2 col-sm-2">
+            <label>£@InvoiceItem.Price</label>
+        </div>
+        <div class="p-2 col-sm-2">
+            <button class="btn btn-danger">Delete</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public InvoiceItem InvoiceItem { get; set; }
+
+    [Parameter]
+    public EventCallback<InvoiceItem> OnDelete { get; set; }
+
+    void HandleValidSubmit()
+    {
+        OnDelete.InvokeAsync(InvoiceItem);
+    }
+}

@@ -170,6 +170,9 @@ namespace BlazorServerService.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("AllControlsCleaned")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("ControlsIfApplicable")
                         .HasColumnType("bit");
 
@@ -182,12 +185,12 @@ namespace BlazorServerService.Data.Migrations
                     b.Property<bool>("IsCompleteByEngineer")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("PointOfContactName")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PointOfContactSignature")
+                    b.Property<string>("PointOfContactName")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<string>("PointOfContactSignatureUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("SafetyDevicesExplained")
                         .HasColumnType("bit");

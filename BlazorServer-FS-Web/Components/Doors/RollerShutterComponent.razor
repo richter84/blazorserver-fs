@@ -3,7 +3,7 @@
 </div>
 <br />
 
-    <fieldset>
+    <fieldset disabled="@RollerShutter.IsDisabled">
         <legend>Roller Shutter Door Detail</legend>
         <div class="form-group">
             <label for="manufacturer">Manufacturer</label>
@@ -19,7 +19,7 @@
         </div>
         <div class="form-group">
             <label for="sectortype">Sector Type</label>
-            <select @onchange="(eventArgs) => { HandleSelectSectorTypeChange(eventArgs); }" class="form-control" id="sectortype">
+            <select @onchange="(eventArgs) => { RollerShutter.Sector = (SectorType)HandleSelectChange<SectorType>(eventArgs); }" class="form-control" id="sectortype">
                 <option>Select Sector Type ...</option>
                 @foreach (var type in Enum.GetValues(typeof(SectorType)))
                 {
@@ -69,7 +69,7 @@
         </div>
         <div class="form-group">
             <label for="operationtype">Operation Type</label>
-            <select @onchange="(eventArgs) => { HandleSelectOperationTypeChange(eventArgs); }" class="form-control" id="operationtype">
+            <select @onchange="(eventArgs) => { RollerShutter.OperationType = (OperationType)HandleSelectChange<OperationType>(eventArgs); }" class="form-control" id="operationtype">
                 <option>Select Operation Type ...</option>
                 @foreach (var type in Enum.GetValues(typeof(OperationType)))
                 {
@@ -82,7 +82,7 @@
         {
             <div class="form-group">
                 <label for="supplytype">Supply Type</label>
-                <select @onchange="(eventArgs) => { HandleSelectSupplyTypeChange(eventArgs); }" class="form-control" id="supplytype">
+                <select @onchange="(eventArgs) => { RollerShutter.ElectricOperation.SupplyType = (ElectricalSupplyType)HandleSelectChange<ElectricalSupplyType>(eventArgs); }" class="form-control" id="supplytype">
                     <option>Select Supply Type ...</option>
                     @foreach (var type in Enum.GetValues(typeof(ElectricalSupplyType)))
                     {
@@ -101,7 +101,7 @@
             </div>
             <div class="form-group">
                 <label for="safetytype">Electrical Safeties</label>
-                <select @onchange="(eventArgs) => { HandleSelectElectricalSafetyChange(eventArgs); }" class="form-control" id="antifallsafety">
+                <select @onchange="(eventArgs) => { RollerShutter.ElectricOperation.ElectricalSafety = (ElectricalSafety)HandleSelectChange<ElectricalSafety>(eventArgs); }" class="form-control" id="antifallsafety">
                     <option>Select Electrical Safeties ...</option>
                     @foreach (var type in Enum.GetValues(typeof(ElectricalSafety)))
                     {
@@ -271,83 +271,13 @@
         IsVisibleFascia = IsVisibleFascia == "d-none" ? "d-block" : "d-none";
     }
 
-    public TEnum HandleSelectChange<TEnum>(TEnum EnumType, ChangeEventArgs e) where TEnum : Enum
+    public int HandleSelectChange<TEnum>(ChangeEventArgs e) where TEnum : Enum
     {
-        return (TEnum)Enum.Parse(EnumType.GetType(), e.Value.ToString());
-    }
-
-    public void HandleSelectSectorTypeChange(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
+        if (Enum.IsDefined(typeof(TEnum), e.Value))
         {
-            return;
+            return (int)Enum.Parse(typeof(TEnum), e.Value.ToString());
         }
 
-        RollerShutter.Sector = (SectorType)Enum.Parse(typeof(SectorType), e.Value.ToString());
-    }
-
-    public void HandleSelectOperationTypeChange(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
-        {
-            return;
-        }
-
-        RollerShutter.OperationType = (OperationType)Enum.Parse(typeof(OperationType), e.Value.ToString());
-    }
-
-    public void HandleSelectSupplyTypeChange(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
-        {
-            return;
-        }
-
-        RollerShutter.ElectricOperation.SupplyType = (ElectricalSupplyType)Enum.Parse(typeof(ElectricalSupplyType), e.Value.ToString());
-    }
-
-    public void HandleSelectElectricalSafetyChange(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
-        {
-            return;
-        }
-
-        RollerShutter.ElectricOperation.ElectricalSafety = (ElectricalSafety)Enum.Parse(typeof(ElectricalSafety), e.Value.ToString());
-    }
-
-    public void HandleSelectAntiFallSafetyChange(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
-        {
-            return;
-        }
-
-        RollerShutter.AntiFallSafety = (AntiFallSafety)Enum.Parse(typeof(AntiFallSafety), e.Value.ToString());
-    }
-
-    public void HandleSelectFireDefenceChange(ChangeEventArgs e)
-    {
-        if(e.Value.ToString() == " ")
-        {
-            return;
-        }
-
-        RollerShutter.FireDefence = (FireDefence)Enum.Parse(typeof(FireDefence), e.Value.ToString());
-    }
-
-    public int HandleSelectChange<TEnum>(ChangeEventArgs e)
-    {
-        if (e.Value.ToString() == " ")
-        {
-            return 0;
-        }
-
-        return (int)Enum.Parse(typeof(TEnum), e.Value.ToString());
-    }
-
-    public async Task HandleFormSubmit()
-    {
-        //OnSave.InvokeAsync(RollerShutter);
+        return 0;
     }
 }

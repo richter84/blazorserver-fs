@@ -1,9 +1,10 @@
 ﻿@page "/Customer/{CustomerId:int}/NewInstall"
 @page "/Customer/{CustomerId:int}/NewInstall/{NewInstallId:int}"
+@inject IWebHostEnvironment WebHostEnvironment
 @inject ICustomerService CustomerService
 @inject INewInstallService<NewInstall> NewInstallService
-@inject IServiceProvider ServiceProvider
-@inject IDoorService DoorService 
+@inject IDoorService DoorService
+@inject IInvoiceService InvoiceService
 
 <h3>Job</h3>
 
@@ -16,8 +17,10 @@
             </div>
             <h3 class="@IsPendingComplete">Pending</h3>
             <p>
-                Tue 18 June 2020
-                <br />10:03am
+                @PendingHistoryDate
+                <br />
+                @PendingHistoryTime
+                <br />
             </p>
         </div>
         <div class="state-line @IsJobComplete"></div>
@@ -27,8 +30,10 @@
             </div>
             <h3 class="@IsJobComplete">Complete</h3>
             <p>
-                Tue 18 June 2020
-                <br />10:15am
+                @CompletedHistoryDate
+                <br />
+                @CompletedHistoryTime
+                <br />
             </p>
         </div>
         <div class="state-line @IsApprovedComplete"></div>
@@ -38,8 +43,10 @@
             </div>
             <h3 class="@IsApprovedComplete">Approved</h3>
             <p>
-                Thu 20 June 2020
-                <br />7:45am
+                @ApprovedHistoryDate
+                <br />
+                @ApprovedHistoryTime
+                <br />
             </p>
         </div>
         <div class="state-line @IsInvoicedComplete"></div>
@@ -49,8 +56,10 @@
             </div>
             <h3 class="@IsInvoicedComplete">Invoiced</h3>
             <p>
-                Fri 21 June 2020
-                <br />3:21pm
+                @InvoicedHistoryDate
+                <br />
+                @InvoicedHistoryTime
+                <br />
             </p>
         </div>
         <div class="state-line @IsPaidComplete"></div>
@@ -60,13 +69,13 @@
             </div>
             <h3 class="@IsPaidComplete">Paid</h3>
             <p>
-                Awaiting Payment
-                <br /><br />
+                @PaidHistoryDate
+                <br />
+                @PaidHistoryTime
+                <br />
             </p>
         </div>
     </div>
-
-    <div></div><div></div>
     <section>
         <fieldset>
             <legend>
@@ -75,21 +84,21 @@
             <div class="row">
                 <div class="col-sm-12">
                     <label for="customername"><strong>Name</strong></label><br />
-                    <label id="customername">@Customer.Name</label>
+                    <label id="customername">@NewInstall.Customer?.Name</label>
                 </div>
                 <div class="col-sm-6">
                     <label for="customeremailaddress"><strong>Email Address</strong></label><br />
-                    <label id="customeremailaddress">@Customer.EmailAddress</label>
+                    <label id="customeremailaddress">@NewInstall.Customer?.EmailAddress</label>
                 </div>
                 <div class="col-sm-6">
                     <label for="customerphonenumber"><strong>Phone Number</strong></label><br />
-                    <label id="customerphonenumber">@Customer.PhoneNumber</label>
+                    <label id="customerphonenumber">@NewInstall.Customer?.PhoneNumber</label>
                 </div>
             </div>
         </fieldset>
     </section>
-    <br /><br />
-    <EditForm Model="@NewInstall" OnSubmit="@HandleSave">
+    <EditForm Model="@NewInstall" OnValidSubmit="@HandleSave">
+        <DataAnnotationsValidator />
         <section>
             <fieldset>
                 <legend>
@@ -125,38 +134,28 @@
                 <BarsGrillesComponent BarsGrilles="@BarsGrilles"></BarsGrillesComponent>
             </div>
         </section>
-        <br /><br />
         <section>
+            <HandoverComponent Handover="@NewInstall.Handover" IsDisabled=""></HandoverComponent>
+        </section>
+        <section class="@DisplayInvoiceItems">
             <fieldset>
                 <legend>
-                    Handover
+                    Invoices
                 </legend>
-                <form>
-                    <div class="form-group">
-                        <label for="startdate">Start Date</label>
-                    </div>
-                    <div class="form-group">
-                        <label for="enddate">End Date</label>
-                    </div>
-                </form>
+                <div>
+                    <AddInvoiceComponent OnAddInvoice="@HandleAddInvoice"></AddInvoiceComponent>
+                </div>
+                <div class="invoice-files">
+                    <DisplayInvoicesComponent Invoices="@Invoices"></DisplayInvoicesComponent>
+                </div>
             </fieldset>
         </section>
-        <div></div>
-        <input type="submit" class="btn btn-primary" value="Save" />
-        <button class="btn btn-secondary btn-mobile-maxwidth" @onclick="HandleUpdateState">
+        <input type="submit" class="btn btn-primary btn-mobile-maxwidth" value="Save" />
+        <button class="btn btn-secondary btn-mobile-maxwidth">
             @ButtonText
         </button>
+        <ValidationSummary />
     </EditForm>
-    <br /><br />
-    <section class="@DisplayInvoiceItems">
-        <fieldset>
-            <legend>
-                Invoice Items
-            </legend>
-            <form>
-            </form>
-        </fieldset>
-    </section>
 </div>
 
 @code {
@@ -166,8 +165,9 @@
     [Parameter]
     public int NewInstallId { get; set; }
 
-    private Customer Customer { get; set; } = new Customer();
-    private NewInstall NewInstall { get; set; } = new NewInstall();
+    private NewInstall NewInstall { get; set; } = new NewInstall() { Invoices = new List<Invoice>() };
+
+    public EventCallback<Invoice> OnAddInvoice { get; set; }
 
     private RollerShutterDoor RollerShutter { get; set; } = new RollerShutterDoor();
     private SectionalDoor Sectional { get; set; } = new SectionalDoor();
@@ -176,6 +176,9 @@
     private BarsGrillesDoor BarsGrilles { get; set; } = new BarsGrillesDoor();
 
     public EventCallback<EditContext> OnSave { get; set; }
+    public Dictionary<string, string> Invoices { get; set; } = new Dictionary<string, string>();
+
+    private Invoice Invoice { get; set; } = new Invoice() { InvoiceItems = new List<InvoiceItem>() };
 
     private string IsPendingComplete;
     private string IsJobComplete;
@@ -183,8 +186,18 @@
     private string IsInvoicedComplete;
     private string IsPaidComplete;
 
+    private string PendingHistoryDate = "Awaiting Save";
+    private string PendingHistoryTime;
+    private string CompletedHistoryDate = "Awaiting Completion";
+    private string CompletedHistoryTime;
+    private string ApprovedHistoryDate = "Awaiting Approval";
+    private string ApprovedHistoryTime;
+    private string InvoicedHistoryDate = "Awaiting Invoice";
+    private string InvoicedHistoryTime;
+    private string PaidHistoryDate = "Awaiting Payment";
+    private string PaidHistoryTime;
+
     private int stateIndex = 1;
-    private JobStatus State;
     private DoorType DoorType;
 
     private const string IsComplete = "complete";
@@ -198,71 +211,108 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Customer = await CustomerService.GetCustomer(CustomerId);
-        var newInstall = await NewInstallService.GetNewInstall(NewInstallId);
-        if (newInstall != null)
+        var newInstallFound = await NewInstallService.GetNewInstall(NewInstallId);
+        if (newInstallFound != null)
         {
-            NewInstall = newInstall;
-            switch (newInstall.Door.DoorType)
+            NewInstall = newInstallFound;
+            switch (NewInstall.Door.DoorType)
             {
                 case DoorType.RollerShutter:
-                    RollerShutter = (RollerShutterDoor)newInstall.Door; //DoorService.GetRollerShutterDoorById(NewInstall.Door.Id);
+                    RollerShutter = (RollerShutterDoor)NewInstall.Door; //DoorService.GetRollerShutterDoorById(NewInstall.Door.Id);
                     break;
                 case DoorType.Sectional:
-                    Sectional = (SectionalDoor)newInstall.Door;
+                    Sectional = (SectionalDoor)NewInstall.Door;
                     break;
                 case DoorType.Pedestrian:
-                    Pedestrian = (PedestrianDoor)newInstall.Door;
+                    Pedestrian = (PedestrianDoor)NewInstall.Door;
                     break;
                 case DoorType.Gates:
-                    Gates = (GatesDoor)newInstall.Door;
+                    Gates = (GatesDoor)NewInstall.Door;
                     break;
                 case DoorType.BarsGrilles:
-                    BarsGrilles = (BarsGrillesDoor)newInstall.Door;
+                    BarsGrilles = (BarsGrillesDoor)NewInstall.Door;
                     break;
                 default:
                     break;
             }
             DoorType = NewInstall.Door.DoorType;
+            NewInstall.Invoices = new List<Invoice>();
             ChangeDoor(DoorType);
-            HandleUpdateState();
+            //await ChangeStatus();
+            await BindInvoicesFromAzureStorage(NewInstall.Customer.Id);
+            RenderProcessMap();
+
+        }
+        else
+        {
+            NewInstall.Customer = await CustomerService.GetCustomer(CustomerId);
         }
     }
 
-    private void HandleUpdateState()
+    private async Task ChangeStatus(bool updateStatus = false)
     {
-        State = (JobStatus)Enum.ToObject(typeof(JobStatus), stateIndex++);
-
-        switch (State)
+        if (updateStatus)
         {
-            case JobStatus.Pending:
-                IsPendingComplete = IsComplete;
-                break;
-            case JobStatus.Complete:
-                IsJobComplete = IsComplete;
-                ButtonText = "Approve Job";
-                break;
-            case JobStatus.Approved:
-                IsApprovedComplete = IsComplete;
-                ButtonText = "Send Invoice";
-                DisplayInvoiceItems = "d-block";
-                break;
-            case JobStatus.Invoiced:
-                IsInvoicedComplete = IsComplete;
-                ButtonText = "Mark as Paid";
-                break;
-            case JobStatus.Paid:
-                IsPaidComplete = IsComplete;
-                break;
-            default:
-                break;
+            NewInstall.Status++;
 
+            //if (NewInstall.Status == JobStatus.Invoiced)
+            //{
+            //var filename = await CreateInvoiceInAzureStorage();
+            //}
+
+
+            var historyStatus = new HistoryStatus() { Status = NewInstall.Status, Entry = DateTimeOffset.Now };
+            NewInstall.History.Add(historyStatus);
+        }
+
+        if (NewInstall.Status != JobStatus.Pending && NewInstall.Status != JobStatus.Complete)
+        {
+            NewInstall.Door.IsDisabled = "disabled";
+        }
+    }
+
+    private void RenderProcessMap()
+    {
+        foreach (var historyStatus in NewInstall.History)
+        {
+            switch (historyStatus.Status)
+            {
+                case JobStatus.Pending:
+                    IsPendingComplete = IsComplete;
+                    PendingHistoryDate = historyStatus.Entry.ToString("ddd dd MMMM yyyy");
+                    PendingHistoryTime = historyStatus.Entry.ToString("h:mmtt").ToLower();
+                    break;
+                case JobStatus.Complete:
+                    IsJobComplete = IsComplete;
+                    ButtonText = "Approve Job";
+                    CompletedHistoryDate = historyStatus.Entry.ToString("ddd dd MMMM yyyy");
+                    CompletedHistoryTime = historyStatus.Entry.ToString("h:mmtt").ToLower();
+                    break;
+                case JobStatus.Approved:
+                    IsApprovedComplete = IsComplete;
+                    ButtonText = "Send Invoice";
+                    DisplayInvoiceItems = "d-block";
+                    ApprovedHistoryDate = historyStatus.Entry.ToString("ddd dd MMMM yyyy");
+                    ApprovedHistoryTime = historyStatus.Entry.ToString("h:mmtt").ToLower();
+                    break;
+                case JobStatus.Invoiced:
+                    IsInvoicedComplete = IsComplete;
+                    ButtonText = "Mark as Paid";
+                    InvoicedHistoryDate = historyStatus.Entry.ToString("ddd dd MMMM yyyy");
+                    InvoicedHistoryTime = historyStatus.Entry.ToString("h:mmtt").ToLower();
+                    break;
+                case JobStatus.Paid:
+                    IsPaidComplete = IsComplete;
+                    PaidHistoryDate = historyStatus.Entry.ToString("ddd dd MMMM yyyy");
+                    PaidHistoryTime = historyStatus.Entry.ToString("h:mmtt").ToLower();
+                    break;
+            }
         }
     }
 
     private void ChangeDoor(DoorType door)
     {
-        SectionalDisplay = RollerShutterDisplay = "d-none";
+        SectionalDisplay = RollerShutterDisplay = PedestrianDisplay = GatesDisplay = BarsGrillesDisplay = "d-none";
         switch (door)
         {
             case DoorType.RollerShutter:
@@ -288,7 +338,6 @@
         }
 
         NewInstall.Door.DoorType = door;
-
     }
 
     private void HandleDoorTypeChange(ChangeEventArgs e)
@@ -297,17 +346,51 @@
         ChangeDoor(doorType);
     }
 
+    private async Task BindInvoicesFromAzureStorage(int customerId)
+    {
+        Invoices = await InvoiceService.GetInvoicesFromAzureStorageByCustomerId(CustomerId);
+    }
+
+    private async Task<string> CreateInvoiceInAzureStorage(Invoice invoice)
+    {
+        string invoiceFile = Path.Combine(WebHostEnvironment.WebRootPath, "templates", "invoice.html");
+        string html = File.ReadAllText(invoiceFile);
+        var filename = $"Invoice-{ Guid.NewGuid() }.pdf";
+        await InvoiceService.UploadToAzureStorageAsync(html, filename, NewInstall.Customer.Id);
+        return filename;
+    }
+
+    private async Task PublishToEventGrid(string filename)
+    {
+        await InvoiceService.PublishTopicToEventGrid("Rich Campbell", "nncrich1984@gmail.com", filename);
+    }
+
     public async Task HandleSave(EditContext editContext)
     {
         var newInstall = (NewInstall)editContext.Model;
-        newInstall.Status = JobStatus.Pending;
-
-        if (string.IsNullOrEmpty(newInstall.SerialNumber))
-        {
-            var SerialNumber = $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now.ToString("yyyy-MM")}-{newInstall.Id.ToString("0000")}";
-            newInstall.SerialNumber = SerialNumber;
-        }
-
+        await ChangeStatus(true);
         await NewInstallService.AddorUpdate(newInstall);
+        RenderProcessMap();
+    }
+
+
+    async Task HandleAddInvoice(Invoice invoice)
+    {
+        try
+        {
+            var filename = await CreateInvoiceInAzureStorage(invoice);
+            invoice.FileName = filename;
+            NewInstall.Invoices.Add(Invoice);
+            await NewInstallService.AddorUpdate(NewInstall);
+
+        }
+        catch(Exception) 
+        { 
+            throw; 
+        }
+        finally 
+        { 
+            await BindInvoicesFromAzureStorage(NewInstall.Customer.Id); 
+        }
     }
 }

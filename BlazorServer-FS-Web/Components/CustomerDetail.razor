@@ -115,13 +115,6 @@
         }
     }
 
-
-    void HandleValidAddAddress(EditContext editContext)
-    {
-        Customer.Address.Add((Address)editContext.Model);
-        Address = new Address();
-    }
-
     void AddAddresses(Address address)
     {
         Customer.Address.Add(address);

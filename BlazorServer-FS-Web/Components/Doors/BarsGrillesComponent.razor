@@ -1,5 +1,5 @@
-﻿<fieldset>
-    <legend>Gates Door Detail</legend>
+﻿<fieldset disabled="@BarsGrilles.IsDisabled">
+    <legend>Bars and Grilles Door Detail</legend>
     <div class="form-group">
         <label for="manufacturer">Manufacturer</label>
         <InputText @bind-Value="BarsGrilles.Manufacturer" class="form-control" id="manufacturer"></InputText>
@@ -14,7 +14,7 @@
     </div>
     <div class="form-group">
         <label for="sectortype">Sector Type</label>
-        <select @onchange="(eventArgs) => { HandleSelectSectorTypeChange(eventArgs); }" class="form-control" id="sectortype">
+        <select @onchange="(eventArgs) => { BarsGrilles.Sector = (SectorType)HandleSelectChange<SectorType>(eventArgs); }" class="form-control" id="sectortype">
             <option>Select Sector Type ...</option>
             @foreach (var type in Enum.GetValues(typeof(SectorType)))
             {
@@ -79,14 +79,16 @@
 
     private string IsVisibleSupplierOrderNumber = "d-none";
 
-    public void HandleSelectSectorTypeChange(ChangeEventArgs e)
+
+
+    public int HandleSelectChange<TEnum>(ChangeEventArgs e)
     {
-        if (e.Value.ToString() == " ")
+        if (Enum.IsDefined(typeof(TEnum), e.Value))
         {
-            return;
+            return (int)Enum.Parse(typeof(TEnum), e.Value.ToString());
         }
 
-        BarsGrilles.Sector = (SectorType)Enum.Parse(typeof(SectorType), e.Value.ToString());
+        return 0;
     }
 
     public void HandleSuppliedDoorChange(ChangeEventArgs e)

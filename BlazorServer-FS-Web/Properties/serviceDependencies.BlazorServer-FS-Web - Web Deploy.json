@@ -5,6 +5,12 @@
       "type": "mssql.azure",
       "connectionId": "OrbitDbServerAzure",
       "secretStore": "AzureAppSettings"
+    },
+    "secrets1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroup1')]/providers/Microsoft.KeyVault/vaults/BlazorServerFSWebvault",
+      "type": "secrets.keyVault",
+      "connectionId": "ASPNETCORE_HOSTINGSTARTUP__KEYVAULT__CONFIGURATIONVAULT",
+      "secretStore": "AzureAppSettings"
     }
   }
 }

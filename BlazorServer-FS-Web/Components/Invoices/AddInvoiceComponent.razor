@@ -1,0 +1,60 @@
+﻿<EditForm Model=@Invoice OnValidSubmit="@HandleValidAddInvoice">
+    <DataAnnotationsValidator />
+    <fieldset class="col-md-6">
+        Create Invoice
+    </fieldset>
+
+        @foreach (InvoiceItem invoiceItem in Invoice.InvoiceItems)
+        {
+            <ExistingInvoiceItemComponent InvoiceItem="@invoiceItem" OnDelete="@HandleDeleteInvoiceItem"></ExistingInvoiceItemComponent>
+        }
+
+        <div class="d-flex flex-row existingaddress invoice-totals">
+            <div class="p-2 col-sm-8">
+                <label>Sub total</label><br />
+                <label>Vat total</label><br />
+                <label><strong>TOTAL</strong></label>
+            </div>
+            <div class="p-2 col-sm-2">
+                <label>£6421.44</label><br />
+                <label>£6421.44</label><br />
+                <label>£6421.44</label>
+            </div>
+            <div class="p-2 col-sm-2">
+
+            </div>
+        </div>
+
+        <AddInvoiceItemComponent OnAdd="@HandleAddInvoiceItem"></AddInvoiceItemComponent>
+
+    <button class="btn btn-primary">Add Invoice</button>
+    <ValidationSummary />
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public EventCallback<Invoice> OnAddInvoice { get; set; }
+
+    public Invoice Invoice { get; set; } = new Invoice();
+
+    void HandleAddInvoiceItem(InvoiceItem invoiceItem)
+    {
+        Invoice.InvoiceItems.Add(invoiceItem);
+    }
+
+    void HandleDeleteInvoiceItem(InvoiceItem invoiceItem)
+    {
+        Invoice.InvoiceItems.Remove(invoiceItem);
+    }
+
+    void HandleValidAddInvoice(EditContext editContext)
+    {
+        Invoice = (Invoice)editContext.Model;
+        if (Invoice.InvoiceItems.Count > 0)
+        {
+            OnAddInvoice.InvokeAsync(Invoice);
+        }
+        Invoice = new Invoice();
+    }
+}

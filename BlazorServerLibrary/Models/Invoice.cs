@@ -15,5 +15,7 @@ namespace BlazorServerLibrary.Models
 
         [MaxLength(100)]
         public string FileName { get; set; }
+
+        public ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
     }
 }
