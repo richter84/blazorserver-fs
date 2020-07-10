@@ -1,5 +1,5 @@
 ﻿
-@if (Invoices.Count > 0)
+@if (InvoiceFiles.Count > 0)
 {
     <table class="table">
         <thead>
@@ -9,12 +9,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var invoice in Invoices)
+            @foreach (var invoice in InvoiceFiles)
             {
-                var link = @invoice.Key;
                 <tr>
                     <td><span class="oi oi-file"></span></td>
-                    <td><a href="@invoice.Key" target="_blank">@invoice.Value</a></td>
+                    <td><a href="@invoice.Url" target="_blank">@invoice.Filename</a></td>
                 </tr>
             }
         </tbody>
@@ -27,5 +26,8 @@ else
 
 @code {
     [Parameter]
-    public Dictionary<string, string> Invoices { get; set; }
+    public List<InvoiceFile> InvoiceFiles { get; set; }
+
+    [Parameter]
+    public EventCallback<List<InvoiceFile>> InvoiceFilesChanged { get; set; }
 }

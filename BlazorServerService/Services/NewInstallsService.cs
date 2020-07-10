@@ -70,7 +70,8 @@ namespace BlazorServerService.Services
 
         private string CreateSerialNumber(NewInstall newInstall)
         {
-            return $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now:yyyy-MM}-{newInstall.Id:0000}";
+            int jobNumber = _context.NewInstalls.Where(n => n.Customer.Id == newInstall.Customer.Id).Count();
+            return $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now:yyyy-MM}-{jobNumber:0000}";
         }
     }
 }

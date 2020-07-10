@@ -339,3 +339,9 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Invoices\ExistingInvoiceItemComponent.razor.g.cs
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Invoices\DisplayInvoicesComponent.razor.g.cs
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Invoices\DisplayInvoicesComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\JobsPage.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Pages\JobsPage.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Status\StatusComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Status\StatusComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Invoices\InvoiceComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\Invoices\InvoiceComponent.razor.g.cs

@@ -29,6 +29,7 @@ a, .btn-link {
     color: #FF7800;
     font-size: 14px;
     font-weight: bold;
+    min-width: 120px;
 }
 
     .btn-secondary:hover {
@@ -47,6 +48,10 @@ app {
     height: 3.5rem;
     display: flex;
     align-items: center;
+}
+
+.nav-item label {
+    color:#fff;
 }
 
 .main {
@@ -196,12 +201,12 @@ hr{
 }
 
 input[type=number] {
-    max-width: 100px;
+    max-width: 120px;
 }
 
 
 section{
-    background-color: #fdfdfd;
+    background-color: #fcfcfc;
     border:1px solid #FF7800;
     border-radius:5px;
     margin-top:30px;
@@ -443,3 +448,45 @@ canvas {
         font-size: 10px;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+.hr-text {
+    line-height: 1em;
+    position: relative;
+    outline: 0;
+    border: 0;
+    color: black;
+    text-align: center;
+    height: 1.5em;
+    opacity: .5;
+    background-color: #fff;
+}
+    .hr-text:before
+    {
+        background-color:#FF7800;
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+    }
+
+    .hr-text:after {
+        content: attr(data-content);
+        position: relative;
+        display: inline-block;
+        color: black;
+        padding: 0 .5em;
+        line-height: 1.5em;
+        background-color: #fff;
+    }

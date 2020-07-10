@@ -1,85 +1,87 @@
-﻿<fieldset disabled="@BarsGrilles.IsDisabled">
-    <legend>Bars and Grilles Door Detail</legend>
-    <div class="form-group">
-        <label for="manufacturer">Manufacturer</label>
-        <InputText @bind-Value="BarsGrilles.Manufacturer" class="form-control" id="manufacturer"></InputText>
-    </div>
-    <div class="form-group">
-        <label for="issupplied">Supplied Door</label>
-        <input type="checkbox" @onchange="HandleSuppliedDoorChange" checked="@BarsGrilles.IsSupplied" class="form-control checkbox" id="issupplied" />
-    </div>
-    <div class="form-group @IsVisibleSupplierOrderNumber">
-        <label for="supplierordernumber">Supplier Order Number</label>
-        <InputText @bind-Value="BarsGrilles.SupplierOrderNumber" class="form-control" id="supplierordernumber"></InputText>
-    </div>
-    <div class="form-group">
-        <label for="sectortype">Sector Type</label>
-        <select @onchange="(eventArgs) => { BarsGrilles.Sector = (SectorType)HandleSelectChange<SectorType>(eventArgs); }" class="form-control" id="sectortype">
-            <option>Select Sector Type ...</option>
-            @foreach (var type in Enum.GetValues(typeof(SectorType)))
-            {
-                var isSelected = type.ToString() == BarsGrilles.Sector.ToString();
-                <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((SectorType)Enum.Parse(typeof(SectorType), type.ToString()))</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="openingsizeheight">Opening Size Height</label>
-        <div class="input-group">
-            <InputNumber @bind-Value="BarsGrilles.OpeningSizeHeight" class="form-control" id="openingsizeheight"></InputNumber>
-            <div class="input-group-append">
-                <span class="input-group-text">mm</span>
+﻿@inherits DoorBase
+@if (IsVisible)
+{
+    <fieldset disabled="@BarsGrilles.IsDisabled">
+        <legend>Bars and Grilles Door Detail</legend>
+        <div class="form-group">
+            <label for="manufacturer">Manufacturer</label>
+            <InputText @bind-Value="BarsGrilles.Manufacturer" class="form-control" id="manufacturer"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="issupplied">Supplied Door</label>
+            <input type="checkbox" @onchange="HandleSuppliedDoorChange" checked="@BarsGrilles.IsSupplied" class="form-control checkbox" id="issupplied" />
+        </div>
+        <div class="form-group @IsVisibleSupplierOrderNumber">
+            <label for="supplierordernumber">Supplier Order Number</label>
+            <InputText @bind-Value="BarsGrilles.SupplierOrderNumber" class="form-control" id="supplierordernumber"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="sectortype">Sector Type</label>
+            <select @onchange="(eventArgs) => { BarsGrilles.Sector = (SectorType)HandleSelectChange<SectorType>(eventArgs); }" class="form-control" id="sectortype">
+                <option>Select Sector Type ...</option>
+                @foreach (var type in Enum.GetValues(typeof(SectorType)))
+                {
+                    var isSelected = type.ToString() == BarsGrilles.Sector.ToString();
+                    <option value="@type" selected="@isSelected">@EnumHelper.GetDisplayName((SectorType)Enum.Parse(typeof(SectorType), type.ToString()))</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="openingsizeheight">Opening Size Height</label>
+            <div class="input-group">
+                <InputNumber @bind-Value="BarsGrilles.OpeningSizeHeight" class="form-control" id="openingsizeheight"></InputNumber>
+                <div class="input-group-append">
+                    <span class="input-group-text">mm</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="openingsizewidth">Opening Size Width</label>
-        <div class="input-group">
-            <InputNumber @bind-Value="BarsGrilles.OpeningSizeWidth" class="form-control" id="openingsizewidth"></InputNumber>
-            <div class="input-group-append">
-                <span class="input-group-text">mm</span>
+        <div class="form-group">
+            <label for="openingsizewidth">Opening Size Width</label>
+            <div class="input-group">
+                <InputNumber @bind-Value="BarsGrilles.OpeningSizeWidth" class="form-control" id="openingsizewidth"></InputNumber>
+                <div class="input-group-append">
+                    <span class="input-group-text">mm</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="fixingtype">Fixing Type</label>
-        <InputText @bind-Value="BarsGrilles.FixingType" class="form-control" id="fixingtype"></InputText>
-    </div>
-    <div class="form-group">
-        <label for="fh">F/H</label>
-        <div class="input-group">
-            <InputNumber @bind-Value="BarsGrilles.FH" class="form-control" id="fh"></InputNumber>
-            <div class="input-group-append">
-                <span class="input-group-text">mm</span>
+        <div class="form-group">
+            <label for="fixingtype">Fixing Type</label>
+            <InputText @bind-Value="BarsGrilles.FixingType" class="form-control" id="fixingtype"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="fh">F/H</label>
+            <div class="input-group">
+                <InputNumber @bind-Value="BarsGrilles.FH" class="form-control" id="fh"></InputNumber>
+                <div class="input-group-append">
+                    <span class="input-group-text">mm</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="fw">F/W</label>
-        <div class="input-group">
-            <InputNumber @bind-Value="BarsGrilles.FW" class="form-control" id="fw"></InputNumber>
-            <div class="input-group-append">
-                <span class="input-group-text">mm</span>
+        <div class="form-group">
+            <label for="fw">F/W</label>
+            <div class="input-group">
+                <InputNumber @bind-Value="BarsGrilles.FW" class="form-control" id="fw"></InputNumber>
+                <div class="input-group-append">
+                    <span class="input-group-text">mm</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="colour">Colour</label>
-        <InputText @bind-Value="BarsGrilles.Colour" class="form-control" id="colour"></InputText>
-    </div>
-    <div class="form-group">
-        <label for="extranotes">Extra Notes</label>
-        <InputTextArea @bind-Value="BarsGrilles.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
-    </div>
-</fieldset>
+        <div class="form-group">
+            <label for="colour">Colour</label>
+            <InputText @bind-Value="BarsGrilles.Colour" class="form-control" id="colour"></InputText>
+        </div>
+        <div class="form-group">
+            <label for="extranotes">Extra Notes</label>
+            <InputTextArea @bind-Value="BarsGrilles.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
+        </div>
+    </fieldset>
+}
 
 @code {
     [Parameter]
     public BarsGrillesDoor BarsGrilles { get; set; }
 
     private string IsVisibleSupplierOrderNumber = "d-none";
-
-
 
     public int HandleSelectChange<TEnum>(ChangeEventArgs e)
     {

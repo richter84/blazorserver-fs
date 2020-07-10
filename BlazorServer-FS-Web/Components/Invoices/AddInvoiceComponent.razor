@@ -4,48 +4,55 @@
         Create Invoice
     </fieldset>
 
+    <AddInvoiceItemComponent OnAdd="@HandleAddInvoiceItem"></AddInvoiceItemComponent>
+
+    @if (Invoice.InvoiceItems.Count > 0)
+    {
         @foreach (InvoiceItem invoiceItem in Invoice.InvoiceItems)
         {
             <ExistingInvoiceItemComponent InvoiceItem="@invoiceItem" OnDelete="@HandleDeleteInvoiceItem"></ExistingInvoiceItemComponent>
         }
-
-        <div class="d-flex flex-row existingaddress invoice-totals">
+        <div class="d-flex flex-row invoice-totals">
             <div class="p-2 col-sm-8">
                 <label>Sub total</label><br />
                 <label>Vat total</label><br />
                 <label><strong>TOTAL</strong></label>
             </div>
             <div class="p-2 col-sm-2">
-                <label>£6421.44</label><br />
-                <label>£6421.44</label><br />
-                <label>£6421.44</label>
+                <label>£@Invoice.SubTotal</label><br />
+                <label>£@Invoice.VatTotal</label><br />
+                <label>£@Invoice.Total</label>
             </div>
             <div class="p-2 col-sm-2">
 
             </div>
         </div>
+        <div>
+            <br />
+            <button class="btn btn-primary">Add Invoice</button>
+        </div>
+        <ValidationSummary />
+    }
 
-        <AddInvoiceItemComponent OnAdd="@HandleAddInvoiceItem"></AddInvoiceItemComponent>
-
-    <button class="btn btn-primary">Add Invoice</button>
-    <ValidationSummary />
 </EditForm>
 
 @code {
 
     [Parameter]
     public EventCallback<Invoice> OnAddInvoice { get; set; }
-
     public Invoice Invoice { get; set; } = new Invoice();
 
     void HandleAddInvoiceItem(InvoiceItem invoiceItem)
     {
+        invoiceItem.Price = Math.Round(invoiceItem.Price, 2);
         Invoice.InvoiceItems.Add(invoiceItem);
+        CalculateTotals();
     }
 
     void HandleDeleteInvoiceItem(InvoiceItem invoiceItem)
     {
         Invoice.InvoiceItems.Remove(invoiceItem);
+        CalculateTotals();
     }
 
     void HandleValidAddInvoice(EditContext editContext)
@@ -56,5 +63,11 @@
             OnAddInvoice.InvokeAsync(Invoice);
         }
         Invoice = new Invoice();
+    }
+
+    void CalculateTotals()
+    {
+        Invoice.SubTotal = Math.Round((Invoice.InvoiceItems.Sum(item => item.Price)), 2);
+        Invoice.VatTotal = Math.Round((Invoice.SubTotal / 100) * 20, 2);
     }
 }

@@ -1,7 +1,7 @@
 ﻿<EditForm Model=@InvoiceItem OnValidSubmit="@HandleValidAddInvoiceItem">
     <DataAnnotationsValidator />
 
-    <div class="d-flex flex-row existingaddress">
+    <div class="d-flex flex-row invoice-items">
         <div class="p-2 col-sm-8">
             <label for="name">Name</label>
             <InputText @bind-Value=InvoiceItem.Name class="form-control" id="name" />

@@ -1,9 +1,13 @@
-﻿<div class="progress">
+﻿@inherits DoorBase
+
+<div class="progress">
     <div class="progress-bar progress-bg" role="progressbar" style="width: @ProgressPercentage%;" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">@ProgressPercentage%</div>
 </div>
 <br />
 
-    <fieldset disabled="@RollerShutter.IsDisabled">
+@if (IsVisible)
+{
+    <fieldset class="@IsVisible" disabled="@RollerShutter.IsDisabled">
         <legend>Roller Shutter Door Detail</legend>
         <div class="form-group">
             <label for="manufacturer">Manufacturer</label>
@@ -216,9 +220,9 @@
             <InputTextArea @bind-Value="RollerShutter.ExtraNotes" class="form-control" id="extranotes"></InputTextArea>
         </div>
     </fieldset>
-
-    <br /><br />
-
+    <br />
+    <br />
+}
 
 @code {
 
@@ -228,8 +232,8 @@
         public string MyTextField { get; set; }
     }
 
-    /*[Parameter]
-    public EventCallback<RollerShutter> OnSave { get; set; }*/
+    [Parameter]
+    public bool IsVisibleTest { get; set; }
 
     //[CascadingParameter]
     //public RollerShutter RollerShutter { get; set; }

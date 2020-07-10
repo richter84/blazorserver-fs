@@ -1,0 +1,58 @@
+﻿@page "/Jobs/{JobType}"
+@inject IJobService JobService
+
+<h1>@JobType</h1>
+
+@if (jobs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Serial Number</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in jobs)
+            {
+                var link = $"Customer/{job.Customer.Id}/{JobType}/{job.Id}";
+                <tr>
+                    <td><NavLink href="@link">@job.SerialNumber</NavLink></td>
+                    <td>@job.SerialNumber</td>
+                    <td>@job.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    [Parameter]
+    public string JobType { get; set; }
+
+    private List<NewInstall> jobs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        switch (JobType.ToLower())
+        {
+            case "newinstalls":
+                jobs = await JobService.GetNewInstalls();
+                break;
+            case "servicings":
+                jobs = null;
+                break;
+            case "repairs":
+                jobs = null;
+                break;
+            default:
+                break;
+        }
+    }
+}

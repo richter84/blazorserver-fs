@@ -10,6 +10,7 @@ namespace BlazorServerLibrary.Models.Doors
     {
         public AntiFallSafety AntiFallSafety { get; set; }
         public double Cable { get; set; }
+        public override DoorType DoorType { get; set; } = DoorType.Sectional;
         public ElectricOperation ElectricOperation { get; set; }
         public string LiftType { get; set; }
         public int NumberOfSprings { get; set; }

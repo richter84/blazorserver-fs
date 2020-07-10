@@ -8,5 +8,6 @@ namespace BlazorServerLibrary.Enums
     {
         Residential = 1,
         Commercial = 2,
+        Industrial = 3
     }
 }

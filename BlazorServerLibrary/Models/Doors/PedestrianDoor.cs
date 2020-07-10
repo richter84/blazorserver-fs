@@ -9,6 +9,7 @@ namespace BlazorServerLibrary.Models.Doors
 {
     public class PedestrianDoor : Door
     {
+        public override DoorType DoorType { get; set; } = DoorType.Pedestrian;
         public ElectricalEntry ElectricalEntry { get;set; }
         public FireDefence FireDefence { get; set; }
         public bool IsFireEscape { get; set; }

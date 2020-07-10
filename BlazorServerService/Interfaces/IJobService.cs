@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace BlazorServerService.Interfaces
 {
-    public interface IJobService<TEntity> : IService<TEntity> where TEntity : NewInstall
+    public interface IJobService
     {
+        Task<List<NewInstall>> GetNewInstalls();
     }
 }

@@ -14,7 +14,7 @@ namespace BlazorServerLibrary.Models.Doors
 
         [MaxLength(20)]
         public string Colour { get; set; }
-        public DoorType DoorType { get; set; }
+        public abstract DoorType DoorType { get; set; }
         public string ExtraNotes { get; set; }
         public string FixingType { get; set; }
 

@@ -54,6 +54,7 @@ namespace BlazorServer_FS_Web
             services.AddTransient<INewInstallService<NewInstall>, NewInstallsService<NewInstall>>();
             services.AddTransient<IDoorService, DoorService>();
             services.AddTransient<IInvoiceService, InvoiceService>();
+            services.AddTransient<IJobService, JobService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

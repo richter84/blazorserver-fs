@@ -1,0 +1,71 @@
+﻿@inherits DoorBase
+@inject IInvoiceService InvoiceService
+@inject IWebHostEnvironment WebHostEnvironment
+
+@if (IsVisible)
+{
+    <section>
+        <fieldset>
+            <legend>
+                Invoices
+            </legend>
+            <div>
+                <AddInvoiceComponent OnAddInvoice="@HandleAddInvoice"></AddInvoiceComponent>
+            </div>
+            <div class="invoice-files">
+                 <DisplayInvoicesComponent @bind-InvoiceFiles="@InvoiceFiles"></DisplayInvoicesComponent>
+            </div>
+        </fieldset>
+    </section>
+}
+
+@code {
+
+    [Parameter]
+    public NewInstall NewInstall { get; set; }
+
+    [Parameter]
+    public EventCallback<Invoice> AddInvoice { get; set; }
+
+    private List<Invoice> Invoices { get; set; } = new List<Invoice>();
+    public List<InvoiceFile> InvoiceFiles { get; set; } = new List<InvoiceFile>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await BindInvoices();
+    }
+
+    private async Task HandleAddInvoice(Invoice invoice)
+    {
+        try
+        {
+            var filename = await CreateInvoiceInAzureStorage(invoice);
+            invoice.FileName = filename;
+            invoice.JobId = NewInstall.Id;
+            invoice.SerialNumber = NewInstall.SerialNumber;
+            await AddInvoice.InvokeAsync(invoice);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            await BindInvoices();
+        }
+    }
+
+    private async Task<string> CreateInvoiceInAzureStorage(Invoice invoice)
+    {
+        string filename = $"{ Guid.NewGuid() }.pdf";
+        string html = await InvoiceService.PrepareInvoiceHtmlToPdf(invoice, NewInstall.Customer, WebHostEnvironment.WebRootPath);
+        await InvoiceService.UploadToAzureStorageAsync(html, filename, NewInstall.Customer.Id, NewInstall.Id);
+        return filename;
+    }
+
+    private async Task BindInvoices()
+    {
+        Invoices = await InvoiceService.GetInvoicesByJobId(NewInstall.Id);
+        InvoiceFiles = await InvoiceService.GetInvoicesFromAzureStorageByCustomerId(NewInstall.Customer.Id, NewInstall.Id);
+    }
+}

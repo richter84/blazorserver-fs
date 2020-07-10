@@ -27,6 +27,8 @@ namespace BlazorServerService.Data
         public DbSet<NewInstall> NewInstalls { get; set; }
         public DbSet<Servicing> Servicings { get; set; }
         public DbSet<Repair> Repair { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,12 +39,15 @@ namespace BlazorServerService.Data
             builder.Entity<Door>().ToTable("Door");
             //builder.Entity<RollerShutter>().ToTable("RollerShutter");
             builder.Entity<Job>().ToTable("Job");
+            builder.Entity<Invoice>().ToTable("Invoice");
             //builder.Entity<NewInstall>().ToTable("NewInstall");
 
 
             builder.Entity<Customer>().Property<DateTimeOffset>("LastUpdated");
             builder.Entity<Customer>().Property<DateTimeOffset>("Created");
             builder.Entity<NewInstall>().Property<DateTimeOffset>("Created");
+
+            builder.Entity<Job>().HasDiscriminator<string>("Discriminator");
         }
     }
 }

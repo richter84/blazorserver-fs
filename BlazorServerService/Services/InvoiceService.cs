@@ -13,20 +13,39 @@ using BlazorServerLibrary.Models;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 using Azure;
+using BlazorServerService.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorServerService.Services
 {
     public class InvoiceService : IInvoiceService
     {
         private readonly IConfiguration Configuration;
-        public InvoiceService(IConfiguration configuration)
+        private readonly DataContext _context;
+        public InvoiceService(IConfiguration configuration, DataContext context)
         {
             Configuration = configuration;
+            _context = context;
         }
 
-        public async Task<Dictionary<string, string>> GetInvoicesFromAzureStorageByCustomerId(int customerId)
+        public async Task<Invoice> Add(Invoice invoice)
         {
-            Dictionary<string, string> InvoiceFiles = new Dictionary<string, string>();
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync();
+            return invoice;
+        }
+
+        public async Task<List<Invoice>> GetInvoicesByJobId(int jobId)
+        {
+            return await _context.Invoices
+                        .Include(i => i.InvoiceItems)
+                        .Where(i => i.JobId == jobId).ToListAsync();
+        }
+
+        public async Task<List<InvoiceFile>> GetInvoicesFromAzureStorageByCustomerId(int customerId, int jobId)
+        {
+            List<InvoiceFile> InvoiceFiles = new List<InvoiceFile>();
             var containerName = $"invoices";
             string connectionString = Configuration["AzureStorage:FifeShutters:ConnectionString"];
             BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
@@ -35,15 +54,17 @@ namespace BlazorServerService.Services
             {
                 await blobServiceClient.GetBlobContainerClient(containerName).ExistsAsync();
                 BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);
-                var blobPages = blobContainerClient.GetBlobsByHierarchy(prefix: $"{customerId}/", delimiter:"/").AsPages();
+                var blobPages = blobContainerClient.GetBlobsByHierarchy(prefix: $"{customerId}/{jobId}/", delimiter:"/").AsPages();
 
                 foreach (Page<BlobHierarchyItem> blobPage in blobPages)
                 {
                     foreach (BlobHierarchyItem blobItem in blobPage.Values)
                     {
                         var uri = $"{blobContainerClient.Uri.AbsoluteUri}/{blobItem.Blob.Name}";
-                        var createdOn = blobItem.Blob.Properties.CreatedOn.Value.ToString("dddd, dd MMMM yyyy");
-                        InvoiceFiles.Add(uri, createdOn);
+                        var createdOn = blobItem.Blob.Properties.CreatedOn.Value;
+                        var filename = blobItem.Blob.Name;
+                        InvoiceFile invoiceFile = new InvoiceFile() { CreatedOn = createdOn, Filename = filename, Url = uri };
+                        InvoiceFiles.Add(invoiceFile);
                     }
                 }
 
@@ -55,7 +76,30 @@ namespace BlazorServerService.Services
             }
         }
 
-        public async Task<string> UploadToAzureStorageAsync(string html, string filename, int customerId)
+        public async Task<string> PrepareInvoiceHtmlToPdf(Invoice invoice, Customer customer, string path)
+        {
+            string invoiceFile = Path.Combine(path, "templates", "invoice.html");
+            string html = File.ReadAllText(invoiceFile);
+            html.Replace("{{body}}", $"{customer.Name}, your job ({invoice.SerialNumber}) has been invoiced!");
+
+            StringBuilder invoiceItemNames = new StringBuilder();
+            StringBuilder invoiceItemPrices = new StringBuilder();
+            foreach (var invoiceItem in invoice.InvoiceItems)
+            {
+                invoiceItemNames.Append($"<p>{invoiceItem.Name}</p>");
+                invoiceItemPrices.Append($"<p>{invoiceItem.Price}</p>");
+            }
+
+            html = html.Replace("{{invoiceitems.name}}", invoiceItemNames.ToString())
+            .Replace("{{invoiceitems.price}}", invoiceItemPrices.ToString())
+            .Replace("{{subtotal}}", invoice.SubTotal.ToString())
+            .Replace("{{vattotal}}", invoice.VatTotal.ToString())
+            .Replace("{{total}}", invoice.Total.ToString());
+
+            return html;
+        }
+
+        public async Task<string> UploadToAzureStorageAsync(string html, string filename, int customerId, int jobId)
         {
             SelectPdf.HtmlToPdf convert = new SelectPdf.HtmlToPdf();
             SelectPdf.PdfDocument doc = convert.ConvertHtmlString(html);
@@ -68,15 +112,14 @@ namespace BlazorServerService.Services
                     var containerName = $"invoices";
                     BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
                     await blobContainerClient.CreateIfNotExistsAsync();
-                    await blobContainerClient.UploadBlobAsync($"{customerId}/{filename}", stream);
+                    await blobContainerClient.UploadBlobAsync($"{customerId}/{jobId}/{filename}", stream);
                     return filename;
                 }
             }
             catch { throw; }
-
         }
 
-        public async Task PublishTopicToEventGrid(string CustomerName, string CustomerEmailAddress, string filename)
+        public async Task PublishInvoiceCreatedToEventGrid(InvoiceCreatedEvent invoiceCreatedEventData)
         {
             string TopicEndpoint = "https://invoicecreated.uksouth-1.eventgrid.azure.net/api/events"; //Configuration["AppSettings:TopicEndpoint"];
             string TopicKey = "4B7Wi9qpCRyCtaq58iqGNI7POTChFHnFPLbYZPi0y/w="; //Configuration["AppSettings:TopicKey"];
@@ -89,17 +132,7 @@ namespace BlazorServerService.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 EventType = "invoiceCreated",
-                Data = new InvoiceCreatedEvent()
-                {
-                    JobId = 123123,
-                    CustomerName = CustomerName,
-                    CustomerEmailAddress = CustomerEmailAddress,
-                    SubTotal = 30.99,
-                    VatTotal = 5.99,
-                    JobItems = new List<InvoiceItem>(),
-                    FileName = filename
-                },
-
+                Data = invoiceCreatedEventData,
                 EventTime = DateTime.Now,
                 Subject = "New Door",
                 DataVersion = "2.0"

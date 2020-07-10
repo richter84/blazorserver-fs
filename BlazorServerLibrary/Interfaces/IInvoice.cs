@@ -8,7 +8,7 @@ namespace BlazorServerLibrary.Interfaces
     public interface IInvoice
     {
         int Id { get; set; }
-        string InvoiceNumber { get; set; }
+        string SerialNumber { get; set; }
         ICollection<InvoiceItem> InvoiceItems { get; set; }
     }
 }
