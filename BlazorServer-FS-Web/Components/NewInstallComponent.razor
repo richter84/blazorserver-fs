@@ -87,7 +87,7 @@ else{
             <GatesComponent IsVisible="@IsGatesVisible" Gates="@Gates"></GatesComponent>
             <BarsGrillesComponent IsVisible="@IsBarsGrillesVisible" BarsGrilles="@BarsGrilles"></BarsGrillesComponent>
         </section>
-            <HandoverComponent IsVisible="@IsHandoverVisible" Handover="@NewInstall.Handover" IsDisabled=""></HandoverComponent>
+            <HandoverComponent @bind-IsHandoverVisible="@IsHandoverVisible" Handover="@NewInstall.Handover" IsDisabled=""></HandoverComponent>
             <InvoiceComponent IsVisible="@IsInvoiceVisible" NewInstall="@NewInstall" AddInvoice="@HandleAddInvoice"></InvoiceComponent>
         <input type="submit" class="btn btn-secondary btn-mobile-maxwidth @IsSaveVisible" value="Save" />
         <label class="@IsLoading">Fetching data ...</label>

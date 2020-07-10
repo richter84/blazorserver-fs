@@ -2,7 +2,7 @@
 @inject IJSRuntime JSRuntime
 
 
-@if (IsVisible)
+@if (IsHandoverVisible)
 {
     <section>
         <fieldset>
@@ -58,26 +58,32 @@
     </section>
 }
 
-        @code {
+@code {
 
-            [Parameter]
-            public Handover Handover { get; set; }
+    [Parameter]
+    public bool IsHandoverVisible { get; set; }
 
-            [Parameter]
-            public string IsDisabled { get; set; }
+    [Parameter]
+    public EventCallback<bool> IsHandoverVisibleChanged { get; set; }
+
+    [Parameter]
+    public Handover Handover { get; set; }
+
+    [Parameter]
+    public string IsDisabled { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (IsHandoverVisible)
         {
-            if (firstRender && IsVisible)
-            {
-                var dotNetReference = DotNetObjectReference.Create(this);
-                await JSRuntime.InvokeVoidAsync("FifeShuttersLtd.setSignature", Handover.PointOfContactSignatureUrl, dotNetReference);
-            }
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("FifeShuttersLtd.setSignature", Handover.PointOfContactSignatureUrl, dotNetReference);
         }
+    }
 
-        [JSInvokable("AddSignature")]
-        public void AddSignature(string dataUrl)
-        {
-            Handover.PointOfContactSignatureUrl = dataUrl;
-        }
-        }
+    [JSInvokable("AddSignature")]
+    public void AddSignature(string dataUrl)
+    {
+        Handover.PointOfContactSignatureUrl = dataUrl;
+    }
+}
