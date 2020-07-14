@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BlazorServerLibrary.Models.Doors
 {
-    public class SectionalDoor : Door, ISectional, IDoorType
+    public class SectionalDoor : Door, ISectional
     {
         public AntiFallSafety AntiFallSafety { get; set; }
         public double Cable { get; set; }
@@ -24,5 +24,10 @@ namespace BlazorServerLibrary.Models.Doors
         public double SpringLength { get; set; }
         public double TopOfTrackSize { get; set; }
         public bool WicketEuroDoor { get; set; }
+
+        public SectionalDoor()
+        {
+            ElectricOperation = new ElectricOperation();
+        }
     }
 }

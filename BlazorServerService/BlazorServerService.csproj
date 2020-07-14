@@ -15,6 +15,8 @@
     <Compile Remove="Data\Migrations\20200705145517_SectionalPedestrianEntityAddedFields.Designer.cs" />
     <Compile Remove="Data\Migrations\20200705153535_GatesAndBarsEntityAddedFields.cs" />
     <Compile Remove="Data\Migrations\20200705153535_GatesAndBarsEntityAddedFields.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200713140836_UpdatedModels2.cs" />
+    <Compile Remove="Data\Migrations\20200713140836_UpdatedModels2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +30,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.5" />
     <PackageReference Include="Select.HtmlToPdf.NetCore" Version="20.1.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="12.0.5" />
   </ItemGroup>
 
   <ItemGroup>

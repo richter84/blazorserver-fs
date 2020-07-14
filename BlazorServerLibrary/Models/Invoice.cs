@@ -20,7 +20,7 @@ namespace BlazorServerLibrary.Models
         [MaxLength(100)]
         public string FileName { get; set; }
 
-        public ICollection<InvoiceItem> InvoiceItems { get; set; } = new List<InvoiceItem>();
+        public ICollection<InvoiceItem> InvoiceItems { get; set; }
 
         [DataType(DataType.Currency)]
         public double SubTotal { get; set; }
@@ -29,6 +29,9 @@ namespace BlazorServerLibrary.Models
 
         [NotMapped]
         public double Total { get { return SubTotal + VatTotal; } }
-
+        public Invoice()
+        {
+            InvoiceItems = new List<InvoiceItem>();
+        }
     }
 }

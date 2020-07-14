@@ -16,17 +16,20 @@ using Azure;
 using BlazorServerService.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.IO.Abstractions;
 
 namespace BlazorServerService.Services
 {
     public class InvoiceService : IInvoiceService
     {
+        private readonly IFileSystem _fileSystem;
         private readonly IConfiguration Configuration;
         private readonly DataContext _context;
-        public InvoiceService(IConfiguration configuration, DataContext context)
+        public InvoiceService(IConfiguration configuration, DataContext context, IFileSystem fileSystem)
         {
             Configuration = configuration;
             _context = context;
+            _fileSystem = fileSystem;
         }
 
         public async Task<Invoice> Add(Invoice invoice)
@@ -76,10 +79,10 @@ namespace BlazorServerService.Services
             }
         }
 
-        public async Task<string> PrepareInvoiceHtmlToPdf(Invoice invoice, Customer customer, string path)
+        public string PrepareInvoiceHtmlToPdf(Invoice invoice, Customer customer, string path)
         {
-            string invoiceFile = Path.Combine(path, "templates", "invoice.html");
-            string html = File.ReadAllText(invoiceFile);
+            string invoiceFile = _fileSystem.Path.Combine(path, "templates", "invoice.html");
+            string html = _fileSystem.File.ReadAllText(invoiceFile);
             html.Replace("{{body}}", $"{customer.Name}, your job ({invoice.SerialNumber}) has been invoiced!");
 
             StringBuilder invoiceItemNames = new StringBuilder();

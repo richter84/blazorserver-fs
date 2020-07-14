@@ -12,7 +12,7 @@ namespace BlazorServerService.Interfaces
         Task<Invoice> Add(Invoice invoice);
         Task<List<Invoice>> GetInvoicesByJobId(int jobId);
         Task<List<InvoiceFile>> GetInvoicesFromAzureStorageByCustomerId(int customerId, int jobId);
-        Task<string> PrepareInvoiceHtmlToPdf(Invoice invoice, Customer customer, string path);
+        string PrepareInvoiceHtmlToPdf(Invoice invoice, Customer customer, string path);
         Task PublishInvoiceCreatedToEventGrid(InvoiceCreatedEvent invoiceCreatedEventData);
         Task<string> UploadToAzureStorageAsync(string html, string filename, int customerId, int jobId);
     }

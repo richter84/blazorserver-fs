@@ -1,5 +1,5 @@
 ﻿
-@if (InvoiceFiles.Count > 0)
+@if (Invoices.Count > 0)
 {
     <table class="table">
         <thead>
@@ -9,11 +9,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var invoice in InvoiceFiles)
+            @foreach (var invoice in Invoices)
             {
                 <tr>
-                    <td><span class="oi oi-file"></span></td>
-                    <td><a href="@invoice.Url" target="_blank">@invoice.Filename</a></td>
+                    <td><input type="checkbox" @onchange="(eventArgs) => HandleChecked(invoice, eventArgs)" /></td>
+                    <td><a href="#" target="_blank">@invoice.FileName</a></td>
                 </tr>
             }
         </tbody>
@@ -26,8 +26,28 @@ else
 
 @code {
     [Parameter]
-    public List<InvoiceFile> InvoiceFiles { get; set; }
+    public List<Invoice> Invoices { get; set; }
 
     [Parameter]
-    public EventCallback<List<InvoiceFile>> InvoiceFilesChanged { get; set; }
+    public EventCallback<List<Invoice>> InvoicesChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<List<Invoice>> HandleCheck { get; set; }
+
+    [CascadingParameter(Name = "InvoicesToBeSent")]
+    private List<Invoice> InvoicesToBeSent { get; set; }
+
+    private void HandleChecked(Invoice invoice, ChangeEventArgs eventArgs)
+    {
+        if ((bool)eventArgs.Value == true)
+        {
+            InvoicesToBeSent.Add(invoice);
+        }
+        else
+        {
+            InvoicesToBeSent.Remove(invoice);
+        }
+
+        HandleCheck.InvokeAsync(InvoicesToBeSent);
+    }
 }

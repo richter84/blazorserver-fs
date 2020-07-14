@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace BlazorServer_FS_Web.Components.Doors
 {
-    public class DoorBase : ComponentBase
+    public class JobComponentBase : ComponentBase
     {
+        [Parameter]
+        public string IsDisabled { get; set; }
+
         [Parameter]
         public bool IsVisible { get; set; }
     }

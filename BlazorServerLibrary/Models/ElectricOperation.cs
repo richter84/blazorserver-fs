@@ -1,4 +1,5 @@
 ﻿using BlazorServerLibrary.Enums;
+using BlazorServerLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace BlazorServerLibrary.Models
 {
-    public class ElectricOperation
+    public class ElectricOperation : IElectricOperation
     {
         public int Id { get; set; }
         public string Control { get; set; }

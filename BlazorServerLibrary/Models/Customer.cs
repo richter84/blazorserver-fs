@@ -27,6 +27,11 @@ namespace BlazorServerLibrary.Models
         [MaxLength(50)]
         //[Phone(ErrorMessage = "Phone Number is not valid"]
         public string PhoneNumber { get; set; }
-        public ICollection<Address> Address { get; set; } = new List<Address>();
+        public ICollection<Address> Address { get; set; }
+
+        public Customer()
+        {
+            Address = new List<Address>();
+        }
     }
 }

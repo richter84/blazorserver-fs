@@ -1,4 +1,4 @@
-﻿@inherits DoorBase
+﻿@inherits JobComponentBase
 @inject IInvoiceService InvoiceService
 @inject IWebHostEnvironment WebHostEnvironment
 
@@ -13,7 +13,7 @@
                 <AddInvoiceComponent OnAddInvoice="@HandleAddInvoice"></AddInvoiceComponent>
             </div>
             <div class="invoice-files">
-                 <DisplayInvoicesComponent @bind-InvoiceFiles="@InvoiceFiles"></DisplayInvoicesComponent>
+                 <DisplayInvoicesComponent @bind-Invoices="@Invoices" HandleCheck="@HandleInvoiceChecked"></DisplayInvoicesComponent>
             </div>
         </fieldset>
     </section>
@@ -25,10 +25,9 @@
     public NewInstall NewInstall { get; set; }
 
     [Parameter]
-    public EventCallback<Invoice> AddInvoice { get; set; }
+    public EventCallback<List<Invoice>> EnableSendInvoice { get; set; }
 
-    private List<Invoice> Invoices { get; set; } = new List<Invoice>();
-    public List<InvoiceFile> InvoiceFiles { get; set; } = new List<InvoiceFile>();
+    public List<Invoice> Invoices { get; set; } = new List<Invoice>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,7 +42,7 @@
             invoice.FileName = filename;
             invoice.JobId = NewInstall.Id;
             invoice.SerialNumber = NewInstall.SerialNumber;
-            await AddInvoice.InvokeAsync(invoice);
+            await InvoiceService.Add(invoice);
         }
         catch (Exception)
         {
@@ -58,7 +57,7 @@
     private async Task<string> CreateInvoiceInAzureStorage(Invoice invoice)
     {
         string filename = $"{ Guid.NewGuid() }.pdf";
-        string html = await InvoiceService.PrepareInvoiceHtmlToPdf(invoice, NewInstall.Customer, WebHostEnvironment.WebRootPath);
+        string html = InvoiceService.PrepareInvoiceHtmlToPdf(invoice, NewInstall.Customer, WebHostEnvironment.WebRootPath);
         await InvoiceService.UploadToAzureStorageAsync(html, filename, NewInstall.Customer.Id, NewInstall.Id);
         return filename;
     }
@@ -66,6 +65,11 @@
     private async Task BindInvoices()
     {
         Invoices = await InvoiceService.GetInvoicesByJobId(NewInstall.Id);
-        InvoiceFiles = await InvoiceService.GetInvoicesFromAzureStorageByCustomerId(NewInstall.Customer.Id, NewInstall.Id);
+        //InvoiceFiles = await InvoiceService.GetInvoicesFromAzureStorageByCustomerId(NewInstall.Customer.Id, NewInstall.Id);
+    }
+
+    public async Task HandleInvoiceChecked(List<Invoice> lst)
+    {
+        await EnableSendInvoice.InvokeAsync(lst);
     }
 }

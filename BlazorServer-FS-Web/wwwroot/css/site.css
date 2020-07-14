@@ -175,13 +175,6 @@ app {
     border-radius: 5px;
 }
 
-.existingaddress-container {
-    border: 1px solid #FF7800;
-    border-radius: 5px;
-    margin-top: 18px;
-    padding: 18px;
-}
-
 .flex-row {
     margin-top:5px;
 }
@@ -298,6 +291,30 @@ canvas {
 }
 
 
+.flex-group {
+    display: flex;
+    flex-flow: row wrap;
+    margin-top:5px;
+}
+    .flex-group a {
+        margin-right: 5px;
+    }
+    .flex-group label:first-of-type {
+        flex: 1;
+    }
+    .flex-group input[type=number] {
+        max-width:100%;
+    }
+
+@media screen and (max-width: 500px) {
+    .flex-group {
+        flex-direction: column;
+    }
+        .flex-group a {
+            margin-top: 5px;
+        }
+}
+
 
 
 
@@ -305,6 +322,7 @@ canvas {
 .state-map-container {
     align-items: center;
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     padding: 40px;
 }
@@ -319,6 +337,7 @@ canvas {
     align-items: center;
     display: flex;
     flex-direction: column;
+    min-width:90px;
 }
 
 .state-icon {
@@ -380,6 +399,12 @@ canvas {
     .btn-mobile-maxwidth{
         margin-bottom:10px; 
         width:100%;
+    }
+    .state{
+        min-width:50px;
+    }
+    .state p {
+        font-size:8px;
     }
 }
 
@@ -449,14 +474,26 @@ canvas {
     }
 }
 
+.button-group{
+    margin:auto;
+    width:35%;
+}
 
+@media screen and (max-width: 500px) {
+    .button-group {
+        width: 100%;
+    }
+}
 
-
-
-
-
-
-
+.updated {
+    border: 1px dotted #199033;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top:15px;
+    padding:10px;
+    text-align: center;
+}
 
 
 .hr-text {

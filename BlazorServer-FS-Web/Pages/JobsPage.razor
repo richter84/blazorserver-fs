@@ -12,19 +12,20 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
                 <th>Serial Number</th>
                 <th>Status</th>
+                <th>Customer</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var job in jobs)
             {
                 var link = $"Customer/{job.Customer.Id}/{JobType}/{job.Id}";
+
                 <tr>
                     <td><NavLink href="@link">@job.SerialNumber</NavLink></td>
-                    <td>@job.SerialNumber</td>
                     <td>@job.Status</td>
+                    <td>@job.Customer.Name</td>
                 </tr>
             }
         </tbody>
@@ -42,13 +43,13 @@ else
     {
         switch (JobType.ToLower())
         {
-            case "newinstalls":
+            case "newinstall":
                 jobs = await JobService.GetNewInstalls();
                 break;
-            case "servicings":
+            case "servicing":
                 jobs = null;
                 break;
-            case "repairs":
+            case "repair":
                 jobs = null;
                 break;
             default:

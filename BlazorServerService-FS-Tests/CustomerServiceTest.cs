@@ -12,13 +12,11 @@ namespace BlazorServerService_FS_Tests
 {
     public class CustomerServiceTest : ServiceTestBase
     {
-        private readonly ICustomerService _customerService;
-        public CustomerServiceTest(ICustomerService customerService)
+        public CustomerServiceTest()
             : base(new DbContextOptionsBuilder<DataContext>()
                   .UseInMemoryDatabase("InMemoryDataContext")
                   .Options)
         {
-            _customerService = customerService;
         }
 
         [Fact]
@@ -26,9 +24,9 @@ namespace BlazorServerService_FS_Tests
         {
             using var context = new DataContext(ContextOptions);
             var customerId = 1;
-            var customerService = new CustomerService(context);
+            var customerService = FactoryService.CreateCustomerService(context);
 
-            var customer = await _customerService.GetCustomer(customerId);
+            var customer = await customerService.GetCustomer(customerId);
 
             Assert.Equal("Customer One", customer.Name);
             Assert.Equal(2, customer.Address.Count);
@@ -39,7 +37,7 @@ namespace BlazorServerService_FS_Tests
         {
             using var context = new DataContext(ContextOptions);
             var customerId = 2;
-            var customerService = new CustomerService(context);
+            var customerService = FactoryService.CreateCustomerService(context);
 
             var customer = await customerService.GetCustomer(customerId);
 
@@ -52,7 +50,7 @@ namespace BlazorServerService_FS_Tests
         {
             using var context = new DataContext(ContextOptions);
             var customerId = 200;
-            var customerService = new CustomerService(context);
+            var customerService = FactoryService.CreateCustomerService(context);
 
             var customer = await customerService.GetCustomer(customerId);
 
@@ -63,14 +61,8 @@ namespace BlazorServerService_FS_Tests
         public async Task AddorUpdate_AddNewCustomer_ReturnsCustomer()
         {
             using var context = new DataContext(ContextOptions);
-            var newCustomer = new Customer()
-            {
-                Name = "Customer Four",
-                EmailAddress = "ddd@example.com",
-                PhoneNumber = "0700000004"
-            };
-
-            var customerService = new CustomerService(context);
+            var newCustomer = FactoryService.CreateCustomer();
+            var customerService = FactoryService.CreateCustomerService(context);
             var customer = await customerService.AddorUpdate(newCustomer);
 
             Assert.Equal("Customer Four", customer.Name);
@@ -82,13 +74,8 @@ namespace BlazorServerService_FS_Tests
         public async Task AddorUpdate_UpdateExistingCustomerName_ReturnsCustomer()
         {
             using var context = new DataContext(ContextOptions);
-            var existingCustomer = new Customer()
-            {
-                Id = 1,
-                Name = "Customer One Updated",
-                EmailAddress = "ddd@example.com",
-                PhoneNumber = "0700000004"
-            };
+            var existingCustomer = context.Customers.Find(1);
+            existingCustomer.Name = "Customer One Updated";
 
             var customerService = new CustomerService(context);
             var customer = await customerService.AddorUpdate(existingCustomer);

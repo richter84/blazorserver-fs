@@ -17,7 +17,7 @@ namespace BlazorServerLibrary.Models.Doors
         public string CanopyCutSize { get; set; }
         public string CurtainType { get; set; }
         public override DoorType DoorType { get; set; } = DoorType.RollerShutter;
-        public ElectricOperation ElectricOperation { get; set; } = new ElectricOperation();
+        public ElectricOperation ElectricOperation { get; set; }
         public string FHSize { get; set; }
         public bool Fascia { get; set; }
         public string FasciaType { get; set; }
@@ -31,5 +31,10 @@ namespace BlazorServerLibrary.Models.Doors
         public string TubeTypeGauge { get; set; }
         public string RollerCutSize { get; set; }
         public bool WicketEuroDoor { get; set; }
+
+        public RollerShutterDoor()
+        {
+            ElectricOperation = new ElectricOperation();
+        }
     }
 }

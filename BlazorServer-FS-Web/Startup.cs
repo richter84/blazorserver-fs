@@ -22,6 +22,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using BlazorServerLibrary.Models.Doors;
 using BlazorServerLibrary.Models.Jobs;
+using System.IO.Abstractions;
 
 namespace BlazorServer_FS_Web
 {
@@ -48,13 +49,14 @@ namespace BlazorServer_FS_Web
             //services.AddTransient<ICustomer, Customer>();
             //services.AddTransient<IJob, Job>();
 
-            services.AddTransient<IDataContext, DataContext>();
+            //services.AddTransient<IDataContext, DataContext>();
             services.AddTransient<IDoor, RollerShutterDoor>().AddOptions();
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<INewInstallService<NewInstall>, NewInstallsService<NewInstall>>();
             services.AddTransient<IDoorService, DoorService>();
             services.AddTransient<IInvoiceService, InvoiceService>();
             services.AddTransient<IJobService, JobService>();
+            services.AddTransient<IFileSystem, FileSystem>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

@@ -10,7 +10,6 @@ namespace BlazorServerLibrary.Helpers
         public static List<EnumOption> PopulateOptions<TEnum>() where TEnum : Enum
         {
             List<EnumOption> list = new List<EnumOption>();
-            //list.Add(new EnumOption { Text = "Select ... ", Value = " " });
             foreach (TEnum item in Enum.GetValues(typeof(TEnum)))
             {
                 var text = EnumHelper.GetDisplayName((TEnum)Enum.Parse(typeof(TEnum), item.ToString()));

@@ -1,13 +1,8 @@
-﻿@inherits DoorBase
-
-<div class="progress">
-    <div class="progress-bar progress-bg" role="progressbar" style="width: @ProgressPercentage%;" aria-valuenow="@ProgressPercentage" aria-valuemin="0" aria-valuemax="100">@ProgressPercentage%</div>
-</div>
-<br />
+﻿@inherits JobComponentBase
 
 @if (IsVisible)
 {
-    <fieldset class="@IsVisible" disabled="@RollerShutter.IsDisabled">
+    <fieldset class="@IsVisible" disabled="@IsDisabled">
         <legend>Roller Shutter Door Detail</legend>
         <div class="form-group">
             <label for="manufacturer">Manufacturer</label>
@@ -144,10 +139,7 @@
         </div>
         <div class="form-group">
             <label for="boltonguides">Bolt on Guides</label>
-            <select @bind="RollerShutter.IsBoltOnGuides" class="form-control" id="supplytype">
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-            </select>
+            <InputCheckbox @bind-Value="RollerShutter.IsBoltOnGuides" class="form-control checkbox" id="boltonguides"></InputCheckbox>
         </div>
         <div class="form-group">
             <label for="angletype">Angle Type</label>
@@ -159,7 +151,7 @@
         </div>
         <div class="form-group">
             <label for="iscanopy">Canopy</label>
-            <input type="checkbox" @onchange="HandleCanopyChange" class="form-control checkbox" id="iscanopy" />
+            <input type="checkbox" @onchange="HandleCanopyChange" checked="@RollerShutter.Canopy" class="form-control checkbox" id="iscanopy" />
         </div>
         <div class="@IsVisibleCanopy">
             <div class="form-group">
@@ -173,7 +165,7 @@
         </div>
         <div class="form-group">
             <label for="isfascia">Fascia</label>
-            <input type="checkbox" @onchange="HandleFasciaChange" class="form-control checkbox" id="isfascia" />
+            <input type="checkbox" @onchange="HandleFasciaChange" checked="@RollerShutter.Fascia" class="form-control checkbox" id="isfascia" />
         </div>
         <div class="@IsVisibleFascia">
             <div class="form-group">
@@ -191,7 +183,7 @@
         </div>
         <div class="form-group">
             <label for="wicketeurodoor">Wicket / Euro Door</label>
-            <input type="checkbox" class="form-control checkbox" id="wicketeurodoor" />
+            <InputCheckbox @bind-Value="RollerShutter.WicketEuroDoor" class="form-control checkbox" id="wicketeurodoor"></InputCheckbox>
         </div>
         <div class="form-group">
             <label for="antifallsafety">Anti-Fall Safety</label>
@@ -225,36 +217,25 @@
 }
 
 @code {
-
-    public class EnumDdlModel
-    {
-        public SectorType MyValueField { get; set; }
-        public string MyTextField { get; set; }
-    }
-
-    [Parameter]
-    public bool IsVisibleTest { get; set; }
-
-    //[CascadingParameter]
-    //public RollerShutter RollerShutter { get; set; }
     [Parameter]
     public RollerShutterDoor RollerShutter { get; set; }
 
-    List<EnumOption> operationTypes { get; set; } = EnumToSelect.PopulateOptions<OperationType>();
-    List<EnumOption> sectorTypes { get; set; } = EnumToSelect.PopulateOptions<SectorType>();
-    List<EnumOption> supplyTypes { get; set; } = EnumToSelect.PopulateOptions<ElectricalSupplyType>();
-    List<EnumOption> safetyTypes { get; set; } = EnumToSelect.PopulateOptions<ElectricalSafety>();
-    List<EnumOption> antiFallSafetyTypes { get; set; } = EnumToSelect.PopulateOptions<AntiFallSafety>();
-    List<EnumOption> fireDefenceTypes { get; set; } = EnumToSelect.PopulateOptions<FireDefence>();
+    private List<EnumOption> operationTypes { get; set; } = EnumToSelect.PopulateOptions<OperationType>();
+    private List<EnumOption> sectorTypes { get; set; } = EnumToSelect.PopulateOptions<SectorType>();
+    private List<EnumOption> supplyTypes { get; set; } = EnumToSelect.PopulateOptions<ElectricalSupplyType>();
+    private List<EnumOption> safetyTypes { get; set; } = EnumToSelect.PopulateOptions<ElectricalSafety>();
+    private List<EnumOption> antiFallSafetyTypes { get; set; } = EnumToSelect.PopulateOptions<AntiFallSafety>();
+    private List<EnumOption> fireDefenceTypes { get; set; } = EnumToSelect.PopulateOptions<FireDefence>();
 
     private string IsVisibleCanopy = "d-none";
     private string IsVisibleFascia = "d-none";
     private string IsVisibleSupplierOrderNumber = "d-none";
-    private int ProgressPercentage = 0;
 
     protected override void OnInitialized()
     {
-
+        IsVisibleSupplierOrderNumber = RollerShutter.IsSupplied ? "d-block" : "d-none";
+        IsVisibleCanopy = RollerShutter.Canopy ? "d-block" : "d-none";
+        IsVisibleFascia = RollerShutter.Fascia ? "d-block" : "d-none";
     }
 
 
@@ -262,16 +243,17 @@
     {
         RollerShutter.IsSupplied = (bool)e.Value;
         IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
-        ProgressPercentage = 10;
     }
 
     public void HandleCanopyChange(ChangeEventArgs e)
     {
+        RollerShutter.Canopy = (bool)e.Value;
         IsVisibleCanopy = IsVisibleCanopy == "d-none" ? "d-block" : "d-none";
     }
 
     public void HandleFasciaChange(ChangeEventArgs e)
     {
+        RollerShutter.Fascia = (bool)e.Value;
         IsVisibleFascia = IsVisibleFascia == "d-none" ? "d-block" : "d-none";
     }
 

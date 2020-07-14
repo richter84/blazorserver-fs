@@ -7,6 +7,7 @@ namespace BlazorServerLibrary.Events
 {
     public class InvoiceCreatedEvent
     {
+        public int JobId { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerEmailAddress { get; set; }

@@ -85,6 +85,10 @@
               "target": "Package",
               "version": "[3.1.3, )"
             },
+            "System.IO.Abstractions": {
+              "target": "Package",
+              "version": "[12.0.5, )"
+            },
             "signaturepad": {
               "target": "Package",
               "version": "[1.5.3, )"
@@ -258,6 +262,10 @@
             "Select.HtmlToPdf.NetCore": {
               "target": "Package",
               "version": "[20.1.0, )"
+            },
+            "System.IO.Abstractions": {
+              "target": "Package",
+              "version": "[12.0.5, )"
             }
           },
           "imports": [

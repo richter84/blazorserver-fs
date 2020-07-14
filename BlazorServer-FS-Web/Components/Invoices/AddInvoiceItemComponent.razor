@@ -1,13 +1,13 @@
 ﻿<EditForm Model=@InvoiceItem OnValidSubmit="@HandleValidAddInvoiceItem">
     <DataAnnotationsValidator />
 
-    <div class="d-flex flex-row invoice-items">
-        <div class="p-2 col-sm-8">
+    <div class="flex-group invoice-items">
+        <div class="p-2">
             <label for="name">Name</label>
             <InputText @bind-Value=InvoiceItem.Name class="form-control" id="name" />
             <ValidationMessage For="() => InvoiceItem.Name"></ValidationMessage>
         </div>
-        <div class="p-2 col-sm-2">
+        <div class="p-2">
             <label for="price">Price</label>
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -17,7 +17,7 @@
                 <ValidationMessage For="() => InvoiceItem.Price"></ValidationMessage>
             </div>
         </div>
-        <div class="p-2 col-sm-2">
+        <div class="p-2">
             <label for="add">Action</label><br />
             <button class="btn btn-secondary" id="add">Add</button>
         </div>

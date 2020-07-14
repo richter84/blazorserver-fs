@@ -16,7 +16,7 @@ else{
 <div class="col-sm-10 col-md-8">
 
     <div class="state-map-container">
-        @foreach(var type in Enum.GetValues(typeof(JobStatus)))
+        @foreach (var type in Enum.GetValues(typeof(JobStatus)))
         {
             string IsComplete = string.Empty;
             string Date = "Awaiting";
@@ -32,7 +32,7 @@ else{
                 Date = item.Entry.ToString("ddd dd MMMM yyyy");
                 Time = item.Entry.ToString("h:mmtt").ToLower();
             }
-            if(jobStatus == JobStatus.Paid)
+            if (jobStatus == JobStatus.Paid)
             {
                 IsLastStatus = true;
             }
@@ -81,245 +81,270 @@ else{
                 </div>
             </fieldset>
 
-            <RollerShutterComponent IsVisible="@IsRollerShutterVisible" RollerShutter="@RollerShutter"></RollerShutterComponent>
-            <SectionalComponent IsVisible="@IsSectionalVisible" Sectional="@Sectional"></SectionalComponent>
-            <PedestrianComponent IsVisible="@IsPedestrianVisible" Pedestrian="@Pedestrian"></PedestrianComponent>
-            <GatesComponent IsVisible="@IsGatesVisible" Gates="@Gates"></GatesComponent>
-            <BarsGrillesComponent IsVisible="@IsBarsGrillesVisible" BarsGrilles="@BarsGrilles"></BarsGrillesComponent>
+            <RollerShutterComponent IsDisabled="@IsDoorDisabled" IsVisible="@IsRollerShutterVisible" RollerShutter="@RollerShutter"></RollerShutterComponent>
+            <SectionalComponent IsDisabled="@IsDoorDisabled" IsVisible="@IsSectionalVisible" Sectional="@Sectional"></SectionalComponent>
+            <PedestrianComponent IsDisabled="@IsDoorDisabled" IsVisible="@IsPedestrianVisible" Pedestrian="@Pedestrian"></PedestrianComponent>
+            <GatesComponent IsDisabled="@IsDoorDisabled" IsVisible="@IsGatesVisible" Gates="@Gates"></GatesComponent>
+            <BarsGrillesComponent IsDisabled="@IsDoorDisabled" IsVisible="@IsBarsGrillesVisible" BarsGrilles="@BarsGrilles"></BarsGrillesComponent>
         </section>
-            <HandoverComponent @bind-IsHandoverVisible="@IsHandoverVisible" Handover="@NewInstall.Handover" IsDisabled=""></HandoverComponent>
-            <InvoiceComponent IsVisible="@IsInvoiceVisible" NewInstall="@NewInstall" AddInvoice="@HandleAddInvoice"></InvoiceComponent>
-        <input type="submit" class="btn btn-secondary btn-mobile-maxwidth @IsSaveVisible" value="Save" />
-        <label class="@IsLoading">Fetching data ...</label>
+        <HandoverComponent IsVisible="@IsHandoverVisible" Handover="@NewInstall.Handover" IsDisabled="@IsHandoverDisabled"></HandoverComponent>
+        
+        <CascadingValue Name="InvoicesToBeSent" Value="@InvoicesToBeSent">
+            <InvoiceComponent IsVisible="@IsInvoiceVisible" NewInstall="@NewInstall" EnableSendInvoice="@EnableSendInvoice"></InvoiceComponent>
+        </CascadingValue>
+       
+        <div class="button-group">
+            <input type="submit" class="btn btn-secondary btn-lg btn-block @IsSaveVisible" value="Save" />
+            <div class="@IsSaveUpdated updated text-success alert-success"><span>Updated</span> <span class="oi oi-circle-check"></span></div>
+        </div>
+
         <ValidationSummary />
     </EditForm>
-
-    @if (NewInstall.Status < JobStatus.Approved)
-    {
-        <hr class="hr-text @IsUpdateStatusVisible" data-content="Or">
-    }
-    <button class="btn btn-primary btn-mobile-maxwidth @IsUpdateStatusVisible" @onclick="HandleUpdateStatus">
-        @ButtonText
-    </button>
-
-    <br /><br />
-</div>
-}
-
-@code {
-
-    [Parameter]
-    public int CustomerId { get; set; }
-    [Parameter]
-    public int NewInstallId { get; set; }
-
-    public EventCallback<Invoice> OnAddInvoice { get; set; }
-    public EventCallback<EditContext> OnSave { get; set; }
-    public List<InvoiceFile> InvoiceFiles { get; set; } = new List<InvoiceFile>();
-
-    private NewInstall NewInstall { get; set; }
-    private RollerShutterDoor RollerShutter { get; set; } = new RollerShutterDoor();
-    private SectionalDoor Sectional { get; set; } = new SectionalDoor();
-    private PedestrianDoor Pedestrian { get; set; } = new PedestrianDoor();
-    private GatesDoor Gates { get; set; } = new GatesDoor();
-    private BarsGrillesDoor BarsGrilles { get; set; } = new BarsGrillesDoor();
-
-
-    private Invoice Invoice { get; set; } = new Invoice() { InvoiceItems = new List<InvoiceItem>() };
-
-    private string IsSaveVisible = "d-none";
-    private string IsLoading = "d-none";
-    private string IsUpdateStatusVisible = "d-none";
-    private bool IsInvoiceVisible = false;
-
-    private const string IsComplete = "complete";
-    private string ButtonText = "Save";
-    private bool IsRollerShutterVisible, IsSectionalVisible, IsPedestrianVisible, IsGatesVisible, IsBarsGrillesVisible, IsHandoverVisible = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await Bind(NewInstallId);
-    }
-
-    private async Task Bind(int newInstallId)
-    {
-        NewInstall = await NewInstallService.GetNewInstall(newInstallId);
-        if (NewInstall != null)
+    <div class="button-group">
+        @if (NewInstall.Status < JobStatus.Approved)
         {
-            switch (NewInstall.Door.DoorType)
+            <hr class="hr-text @IsUpdateStatusVisible" data-content="Or">
+        }
+        <button @attributes="InputAttributes" class="btn btn-primary btn-lg btn-block @IsUpdateStatusVisible" @onclick="HandleUpdateStatus">
+            @ButtonText
+        </button>
+        <div class="@IsStatusUpdated updated text-success alert-success"><span>Updated to @NewInstall.Status</span> <span class="oi oi-circle-check"></span></div>
+    </div>
+        <br /><br />
+    </div>
+    }
+
+    @code {
+
+        [Parameter]
+        public int CustomerId { get; set; }
+        [Parameter]
+        public int NewInstallId { get; set; }
+
+        private List<Invoice> InvoicesToBeSent { get; set; } = new List<Invoice>();
+
+        private NewInstall NewInstall { get; set; }
+        private RollerShutterDoor RollerShutter { get; set; } = new RollerShutterDoor();
+        private SectionalDoor Sectional { get; set; } = new SectionalDoor();
+        private PedestrianDoor Pedestrian { get; set; } = new PedestrianDoor();
+        private GatesDoor Gates { get; set; } = new GatesDoor();
+        private BarsGrillesDoor BarsGrilles { get; set; } = new BarsGrillesDoor();
+
+        private Dictionary<string, object> InputAttributes { get; set; } = new Dictionary<string, object>();
+
+        private Invoice Invoice { get; set; } = new Invoice();
+
+        private string IsSaveVisible = "d-none";
+        private string IsSaveUpdated = "d-none";
+        private string IsStatusUpdated = "d-none";
+        private string IsUpdateStatusVisible = "d-none";
+        private string IsUpdateStatusDisabled = "disabled";
+        private bool IsInvoiceVisible = false;
+
+        private string ButtonText = "Save";
+        private bool IsRollerShutterVisible, IsSectionalVisible, IsPedestrianVisible, IsGatesVisible, IsBarsGrillesVisible, IsHandoverVisible = false;
+        private string IsDoorDisabled, IsHandoverDisabled;
+
+        protected override async Task OnInitializedAsync()
+        {
+            await Bind(NewInstallId);
+        }
+
+        private async Task Bind(int newInstallId)
+        {
+            NewInstall = await NewInstallService.GetNewInstall(newInstallId);
+            if (NewInstall != null)
+            {
+                switch (NewInstall.Door.DoorType)
+                {
+                    case DoorType.RollerShutter:
+                        RollerShutter = (RollerShutterDoor)NewInstall.Door;
+                        break;
+                    case DoorType.Sectional:
+                        Sectional = (SectionalDoor)NewInstall.Door;
+                        break;
+                    case DoorType.Pedestrian:
+                        Pedestrian = (PedestrianDoor)NewInstall.Door;
+                        break;
+                    case DoorType.Gates:
+                        Gates = (GatesDoor)NewInstall.Door;
+                        break;
+                    case DoorType.BarsGrilles:
+                        BarsGrilles = (BarsGrillesDoor)NewInstall.Door;
+                        break;
+                    default:
+                        break;
+                }
+
+                BindDoor(NewInstall.Door.DoorType);
+                //await BindInvoices(CustomerId);
+                RenderStatus();
+            }
+            else
+            {
+                NewInstall = new NewInstall() { Customer = await CustomerService.GetCustomer(CustomerId) };
+            }
+        }
+
+
+        private void BindDoor(DoorType door)
+        {
+            IsRollerShutterVisible = IsSectionalVisible = IsPedestrianVisible = IsGatesVisible = IsBarsGrillesVisible = IsHandoverVisible = false;
+            switch (door)
             {
                 case DoorType.RollerShutter:
-                    RollerShutter = (RollerShutterDoor)NewInstall.Door;
+                    IsRollerShutterVisible = true;
+                    NewInstall.Door = RollerShutter;
                     break;
                 case DoorType.Sectional:
-                    Sectional = (SectionalDoor)NewInstall.Door;
+                    IsSectionalVisible = true;
+                    NewInstall.Door = Sectional;
                     break;
                 case DoorType.Pedestrian:
-                    Pedestrian = (PedestrianDoor)NewInstall.Door;
+                    IsPedestrianVisible = true;
+                    NewInstall.Door = Pedestrian;
                     break;
                 case DoorType.Gates:
-                    Gates = (GatesDoor)NewInstall.Door;
+                    IsGatesVisible = true;
+                    NewInstall.Door = Gates;
                     break;
                 case DoorType.BarsGrilles:
-                    BarsGrilles = (BarsGrillesDoor)NewInstall.Door;
+                    IsBarsGrillesVisible = true;
+                    NewInstall.Door = BarsGrilles;
                     break;
                 default:
+                    IsHandoverVisible = false;
+                    IsSaveVisible = "d-none";
+                    NewInstall.Door = null;
                     break;
             }
 
-            BindDoor(NewInstall.Door.DoorType);
-            //await BindInvoices(CustomerId);
-            RenderStatus();
+            if (NewInstall.Door != null)
+            {
+                IsHandoverVisible = true;
+                IsSaveVisible = "d-block";
+            }
         }
-        else
-        {
-            NewInstall = new NewInstall() { Customer = await CustomerService.GetCustomer(CustomerId) };
-        }
-    }
 
 
-    private void BindDoor(DoorType door)
-    {
-        IsRollerShutterVisible = IsSectionalVisible = IsPedestrianVisible = IsGatesVisible = IsBarsGrillesVisible = IsHandoverVisible = false;
-        switch (door)
+        private async Task ChangeStatus()
         {
-            case DoorType.RollerShutter:
-                IsRollerShutterVisible = true;
-                NewInstall.Door = RollerShutter;
-                break;
-            case DoorType.Sectional:
-                IsSectionalVisible = true;
-                NewInstall.Door = Sectional;
-                break;
-            case DoorType.Pedestrian:
-                IsPedestrianVisible = true;
-                NewInstall.Door = Pedestrian;
-                break;
-            case DoorType.Gates:
-                IsGatesVisible = true;
-                NewInstall.Door = Gates;
-                break;
-            case DoorType.BarsGrilles:
-                IsBarsGrillesVisible = true;
-                NewInstall.Door = BarsGrilles;
-                break;
-            default:
-                IsHandoverVisible = false;
+            NewInstall.Status++;
+            AddHistory();
+
+            if (NewInstall.Status == JobStatus.Invoiced
+                && InvoicesToBeSent.Any())
+            {
+                await PublishToEventGrid(InvoicesToBeSent.Last());
+            }
+        }
+
+        private void AddHistory()
+        {
+            var historyStatus = new HistoryStatus() { Status = NewInstall.Status, Entry = DateTimeOffset.Now };
+            NewInstall.History.Add(historyStatus);
+        }
+
+        private void RenderStatus()
+        {
+            switch (NewInstall.Status)
+            {
+                case JobStatus.Pending:
+                    ButtonText = "Complete";
+                    break;
+                case JobStatus.Complete:
+                    ButtonText = "Approve";
+                    break;
+                case JobStatus.Approved:
+                    ButtonText = "Send Invoice";
+                    IsInvoiceVisible = true;
+                    InputAttributes.Add("disabled", "disabled");
+                    IsUpdateStatusDisabled = "disabled";
+                    break;
+                case JobStatus.Invoiced:
+                    ButtonText = "Mark as Paid";
+                    break;
+                case JobStatus.Paid:
+                    IsUpdateStatusVisible = "d-none";
+                    break;
+            }
+
+            IsStatusUpdated = "d-none";
+            IsSaveUpdated = "d-none";
+            IsUpdateStatusVisible = "d-block";
+
+            if (NewInstall.Status > JobStatus.Complete)
+            {
+                IsDoorDisabled = "disabled";
+                IsHandoverDisabled = "disabled";
                 IsSaveVisible = "d-none";
-                NewInstall.Door = null;
-                break;
+            }
         }
 
-        if(NewInstall.Door != null)
+        private void EnableSendInvoice(List<Invoice> invoices)
         {
-            IsHandoverVisible = true;
-            IsSaveVisible = "d-block";
-        }
-    }
-
-
-    private async Task ChangeStatus()
-    {
-        NewInstall.Status++;
-        AddHistory();
-
-        if (NewInstall.Status == JobStatus.Invoiced)
-        {
-            //await PublishToEventGrid(Invoices.Last());
-        }
-    }
-
-    private void AddHistory()
-    {
-        var historyStatus = new HistoryStatus() { Status = NewInstall.Status, Entry = DateTimeOffset.Now };
-        NewInstall.History.Add(historyStatus);
-    }
-
-    private void RenderStatus()
-    {
-        switch (NewInstall.Status)
-        {
-            case JobStatus.Pending:
-                ButtonText = "Complete";
-                break;
-            case JobStatus.Complete:
-                ButtonText = "Approve";
-                break;
-            case JobStatus.Approved:
-                ButtonText = "Send Invoice";
-                IsInvoiceVisible = true;
-                break;
-            case JobStatus.Invoiced:
-                ButtonText = "Mark as Paid";
-                break;
-            case JobStatus.Paid:
-                break;
+            if(InvoicesToBeSent.Any())
+            {
+                InputAttributes.Remove("disabled");
+            }
+            else
+            {
+                InputAttributes.Add("disabled", "disabled");
+            }
         }
 
-        IsUpdateStatusVisible = "d-block";
-
-        if (NewInstall.Status > JobStatus.Complete)
+        private async Task PublishToEventGrid(Invoice invoice)
         {
-            NewInstall.Door.IsDisabled = "disabled";
-            IsSaveVisible = "d-none";
-        }
-    }
+            InvoiceCreatedEvent invoicecreatedEvent = new InvoiceCreatedEvent()
+            {
+                JobId = NewInstall.Id,
+                CustomerId = NewInstall.Customer.Id,
+                CustomerName = NewInstall.Customer.Name,
+                CustomerEmailAddress = NewInstall.Customer.EmailAddress,
+                InvoiceItems = invoice.InvoiceItems,
+                SubTotal = invoice.SubTotal,
+                VatTotal = invoice.VatTotal,
+                SerialNumber = invoice.SerialNumber,
+                FileName = invoice.FileName
+            };
 
-    private async Task HandleAddInvoice(Invoice invoice)
-    {
-        await InvoiceService.Add(invoice);
-        //await Bind(NewInstall.Id);
-    }
-
-    private async Task PublishToEventGrid(Invoice invoice)
-    {
-        InvoiceCreatedEvent invoicecreatedEvent = new InvoiceCreatedEvent()
-        {
-            CustomerId = NewInstall.Customer.Id,
-            CustomerName = NewInstall.Customer.Name,
-            CustomerEmailAddress = NewInstall.Customer.EmailAddress,
-            InvoiceItems = invoice.InvoiceItems,
-            SubTotal = invoice.SubTotal,
-            VatTotal = invoice.VatTotal,
-            SerialNumber = invoice.SerialNumber,
-            FileName = invoice.FileName
-        };
-
-        await InvoiceService.PublishInvoiceCreatedToEventGrid(invoicecreatedEvent);
-    }
-
-    private void HandleDoorTypeChange(ChangeEventArgs e)
-    {
-        DoorType doorType;
-        if (Enum.IsDefined(typeof(DoorType), e.Value))
-        {
-            doorType = (DoorType)Enum.Parse(typeof(DoorType), e.Value.ToString());
-        }
-        else
-        {
-            doorType = (DoorType)Enum.ToObject(typeof(DoorType), 0);
+            await InvoiceService.PublishInvoiceCreatedToEventGrid(invoicecreatedEvent);
         }
 
-        BindDoor(doorType);
+        private void HandleDoorTypeChange(ChangeEventArgs e)
+        {
+            DoorType doorType;
+            if (Enum.IsDefined(typeof(DoorType), e.Value))
+            {
+                doorType = (DoorType)Enum.Parse(typeof(DoorType), e.Value.ToString());
+            }
+            else
+            {
+                doorType = (DoorType)Enum.ToObject(typeof(DoorType), 0);
+            }
+
+            BindDoor(doorType);
+        }
+
+
+
+        private async Task HandleSave(EditContext editContext)
+        {
+
+            var newInstall = (NewInstall)editContext.Model;
+            newInstall.Status = JobStatus.Pending;
+            AddHistory();
+            await NewInstallService.AddorUpdate(newInstall);
+            await Bind(newInstall.Id);
+            IsSaveUpdated = "d-block";
+        }
+
+        private async Task HandleUpdateStatus()
+        {
+            await ChangeStatus();
+            AddHistory();
+            await NewInstallService.AddorUpdate(NewInstall);
+            await Bind(NewInstall.Id);
+            IsStatusUpdated = "d-block";
+        }
     }
-
-
-
-    private async Task HandleSave(EditContext editContext)
-    {
-        IsLoading = "d-block";
-        var newInstall = (NewInstall)editContext.Model;
-        newInstall.Status = JobStatus.Pending;
-        AddHistory();
-        await NewInstallService.AddorUpdate(newInstall);
-        await Bind(newInstall.Id);
-    }
-
-    private async Task HandleUpdateStatus()
-    {
-        await ChangeStatus();
-        AddHistory();
-        await NewInstallService.AddorUpdate(NewInstall);
-        await Bind(NewInstall.Id);
-    }
-}

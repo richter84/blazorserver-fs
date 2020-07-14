@@ -17,9 +17,6 @@ namespace BlazorServerLibrary.Models.Doors
         public abstract DoorType DoorType { get; set; }
         public string ExtraNotes { get; set; }
         public string FixingType { get; set; }
-
-        [NotMapped]
-        public string IsDisabled { get; set; }
         public bool IsSupplied { get; set; }
         public string Manufacturer { get; set; }
         public double OpeningSizeHeight { get; set; }

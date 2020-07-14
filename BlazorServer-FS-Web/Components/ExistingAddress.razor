@@ -1,6 +1,6 @@
 ﻿<EditForm Model=@Address OnValidSubmit="@HandleValidSubmit">
-    <div class="d-flex flex-row existingaddress">
-        <label class="p-2">@Address.Street</label>
+    <div class="flex-group">
+        <label class="p-2" id="street">@Address.Street</label>
         <label class="p-2">@Address.TownCity</label>
         <label class="p-2">@Address.Region</label>
         <label class="p-2">@Address.PostCode</label>

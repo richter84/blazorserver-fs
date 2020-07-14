@@ -1,7 +1,7 @@
-﻿@inherits DoorBase
+﻿@inherits JobComponentBase
 @if (IsVisible)
 {
-    <fieldset disabled="@Sectional.IsDisabled">
+    <fieldset disabled="@IsDisabled">
         <legend>Sectional Door Detail</legend>
         <div class="form-group">
             <label for="manufacturer">Manufacturer</label>
@@ -191,7 +191,6 @@
 }
 
 @code {
-
     [Parameter]
     public SectionalDoor Sectional { get; set; }
 
@@ -209,6 +208,6 @@
 
     public void HandleSuppliedDoorChange(ChangeEventArgs e)
     {
-    IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
+        IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
     }
 }
