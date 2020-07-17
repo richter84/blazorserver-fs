@@ -4,14 +4,16 @@ using BlazorServerService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BlazorServerService.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20200715134054_UpdatedElectricalSafetyToCollection")]
+    partial class UpdatedElectricalSafetyToCollection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +169,7 @@ namespace BlazorServerService.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ElectricOperationId")
+                    b.Property<int?>("ElectricOperationId")
                         .HasColumnType("int");
 
                     b.Property<int>("ElectricalSafety")
@@ -584,9 +586,7 @@ namespace BlazorServerService.Data.Migrations
                 {
                     b.HasOne("BlazorServerLibrary.Models.ElectricOperation", null)
                         .WithMany("ElectricalSafety")
-                        .HasForeignKey("ElectricOperationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ElectricOperationId");
                 });
 
             modelBuilder.Entity("BlazorServerLibrary.Models.HistoryStatus", b =>

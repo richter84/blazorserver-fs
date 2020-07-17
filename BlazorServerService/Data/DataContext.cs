@@ -40,8 +40,8 @@ namespace BlazorServerService.Data
             //builder.Entity<RollerShutter>().ToTable("RollerShutter");
             builder.Entity<Job>().ToTable("Job");
             builder.Entity<Invoice>().ToTable("Invoice");
-            //builder.Entity<NewInstall>().ToTable("NewInstall");
 
+            //builder.Entity<NewInstall>().ToTable("NewInstall");
 
             builder.Entity<Customer>().Property<DateTimeOffset>("LastUpdated");
             builder.Entity<Customer>().Property<DateTimeOffset>("Created");

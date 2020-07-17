@@ -7,13 +7,12 @@ namespace BlazorServerLibrary.Enums
 {
     public enum ElectricalSafety
     {
-        All = 1,
         [Display(Name = "Safety Edge")]
-        SafetyEdge = 2,
+        SafetyEdge = 1,
         [Display(Name = "P.E.C")]
-        PEC = 3,
+        PEC = 2,
         [Display(Name = "Wired Brake")]
-        WiredBrake = 4,
-        Interlock = 5
+        WiredBrake = 3,
+        Interlock = 4
     }
 }

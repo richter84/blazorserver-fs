@@ -26,6 +26,8 @@ namespace BlazorServerService_FS_Tests
             Mock<IFileSystem> fileSystem = new Mock<IFileSystem>();
             fileSystem.Setup(fs => fs.Path.Combine(It.IsAny<string>())).Returns(It.IsAny<string>());
             fileSystem.Setup(fs => fs.File.ReadAllText(It.IsAny<string>())).Returns(html);
+            var connectionString = "DefaultEndpointsProtocol=https;AccountName=test;AccountKey=test;EndpointSuffix=core.windows.net";
+            configuration.Setup(c => c["AzureStorage:FifeShutters:ConnectionString"]).Returns(connectionString);
 
             return new InvoiceService(configuration.Object, context, fileSystem.Object);
         }

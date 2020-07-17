@@ -1,7 +1,7 @@
 ﻿var FifeShuttersLtd = FifeShuttersLtd || {};
 
 FifeShuttersLtd.setSignature = function (data, dotNetObject) {
-
+    console.log("in here too");
     var canvas = document.querySelector('canvas');
 
     var signaturePad = new SignaturePad(canvas);

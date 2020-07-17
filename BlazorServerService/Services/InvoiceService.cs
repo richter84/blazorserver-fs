@@ -114,7 +114,7 @@ namespace BlazorServerService.Services
                     string connectionString = Configuration["AzureStorage:FifeShutters:ConnectionString"];
                     var containerName = $"invoices";
                     BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
-                    await blobContainerClient.CreateIfNotExistsAsync();
+                    //await blobContainerClient.CreateIfNotExistsAsync();
                     await blobContainerClient.UploadBlobAsync($"{customerId}/{jobId}/{filename}", stream);
                     return filename;
                 }

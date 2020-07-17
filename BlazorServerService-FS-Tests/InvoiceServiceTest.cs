@@ -1,11 +1,17 @@
-﻿using BlazorServerService.Data;
+﻿using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using BlazorServerService.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
+using SelectPdf;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -41,14 +47,13 @@ namespace BlazorServerService_FS_Tests
             var invoiceService = FactoryService.CreateInvoiceService(context);
             var invoice = FactoryService.CreateInvoice();
             var customer = FactoryService.CreateCustomer();
-            string path = string.Empty;
             string name = "{{invoiceitems.name}}";
             string price = "{{invoiceitems.price}}";
             string subtotal = "{{subtotal}}";
             string vattotal = "{{vattotal}}";
             string total = "{{total}}";
 
-            string result = invoiceService.PrepareInvoiceHtmlToPdf(invoice, customer, path);
+            string result = invoiceService.PrepareInvoiceHtmlToPdf(invoice, customer, It.IsAny<string>());
 
             Assert.DoesNotContain(name, result);
             Assert.DoesNotContain(price, result);
@@ -66,7 +71,25 @@ namespace BlazorServerService_FS_Tests
             var customer = FactoryService.CreateCustomer();
             string path = string.Empty;
 
-            Assert.Throws<FileNotFoundException>(() => invoiceService.PrepareInvoiceHtmlToPdf(invoice, customer, path));
+            Assert.Throws<FileNotFoundException>(() => invoiceService.PrepareInvoiceHtmlToPdf(invoice, customer, It.IsAny<string>()));
+        }
+
+        [Fact]
+        public async Task UploadToAzureStorageAsync_SuccessfullyUploads_ReturnsFilename()
+        {
+            using var context = new DataContext(ContextOptions);
+            var invoiceService = FactoryService.CreateInvoiceService(context);
+            Mock<Stream> mockMemoryStream = new Mock<Stream>();
+            Mock<BlobContainerClient> mockBlobContainerClient = new Mock<BlobContainerClient>();
+            var blobContentInfo = BlobsModelFactory.BlobContentInfo(It.IsAny<ETag>(), It.IsAny<DateTimeOffset>(), It.IsAny<byte[]>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<long>());
+            Mock<Task<Response<BlobContentInfo>>> mockResponse = new Mock<Task<Response<BlobContentInfo>>>(blobContentInfo);
+            string html = "<html><body></body></html>";
+            
+            mockBlobContainerClient.Setup(c => c.UploadBlobAsync(It.IsAny<string>(), mockMemoryStream.Object, CancellationToken.None)).Returns(mockResponse.Object);
+
+            var result = await invoiceService.UploadToAzureStorageAsync(html, It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>());
+
+            Assert.True(true);
         }
     }
 }

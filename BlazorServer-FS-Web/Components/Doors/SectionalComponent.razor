@@ -149,7 +149,7 @@
             </div>
             <div class="form-group">
                 <label for="supplytype">Electrical Safeties</label>
-                <select @onchange="(eventArgs) => { Sectional.ElectricOperation.ElectricalSafety = (ElectricalSafety)HandleSelectChange<ElectricalSafety>(eventArgs); }" class="form-control" id="supplytype">
+                <select @onchange="(eventArgs) => { HandleMultiSelect(eventArgs); }" class="form-control" id="supplytype">
                     <option value=" ">Select Electrical Safeties ...</option>
                     @foreach (var type in Enum.GetValues(typeof(ElectricalSafety)))
                     {
@@ -157,7 +157,7 @@
                     }
                 </select>
             </div>
-            @if (Sectional.ElectricOperation.ElectricalSafety == ElectricalSafety.PEC)
+            @if (Sectional.ElectricOperation.ElectricalSafety.Where(e => e.ElectricalSafety == ElectricalSafety.PEC).Any())
             {
                 <div class="form-group">
                     <label for="pecqty">P.E.C Qty</label>
@@ -209,5 +209,24 @@
     public void HandleSuppliedDoorChange(ChangeEventArgs e)
     {
         IsVisibleSupplierOrderNumber = IsVisibleSupplierOrderNumber == "d-none" ? "d-block" : "d-none";
+    }
+
+    private void HandleMultiSelect(ChangeEventArgs e)
+    {
+        if (Enum.IsDefined(typeof(ElectricalSafety), e.Value))
+        {
+            ElectricalSafetySelection electricalSafetySelection = new ElectricalSafetySelection();
+            electricalSafetySelection.ElectricalSafety = (ElectricalSafety)Enum.Parse(typeof(ElectricalSafety), e.Value.ToString());
+            if (Sectional.ElectricOperation.ElectricalSafety.Contains(electricalSafetySelection))
+            {
+                Sectional.ElectricOperation.ElectricalSafety.Remove(electricalSafetySelection);
+            }
+            else
+            {
+                Sectional.ElectricOperation.ElectricalSafety.Add(electricalSafetySelection);
+            }
+        }
+
+
     }
 }

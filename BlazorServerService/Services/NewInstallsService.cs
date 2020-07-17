@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlazorServerLibrary.Models.Doors;
 
 namespace BlazorServerService.Services
 {
@@ -51,12 +52,16 @@ namespace BlazorServerService.Services
 
         public async Task<NewInstall> GetNewInstall(int Id)
         {
-            return await _context.NewInstalls
+            var query = _context.NewInstalls
                 .Include(n => n.Door)
                 .Include(n => n.Customer)
                 .Include(n => n.Handover)
-                .Include(n => n.History)
-                .FirstOrDefaultAsync(n => n.Id == Id);
+                .Include(n => n.History);
+
+            query.OfType<RollerShutterDoor>().Include(r => r.ElectricOperation).ThenInclude(e => e.ElectricalSafety);
+
+            var result = await query.FirstOrDefaultAsync(n => n.Id == Id);
+            return result;
         }
 
         public async Task<List<NewInstall>> GetNewInstalls(int customerId)
@@ -71,7 +76,7 @@ namespace BlazorServerService.Services
         private string CreateSerialNumber(NewInstall newInstall)
         {
             int jobNumber = _context.NewInstalls.Where(n => n.Customer.Id == newInstall.Customer.Id).Count();
-            return $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now:yyyy-MM}-{jobNumber:0000}";
+            return $"{newInstall.Customer.Name.ToUpper().Substring(0, 4)}-{DateTime.Now:yyyy-MM}-{++jobNumber:0000}";
         }
     }
 }

@@ -17,6 +17,8 @@
     <Compile Remove="Data\Migrations\20200705153535_GatesAndBarsEntityAddedFields.Designer.cs" />
     <Compile Remove="Data\Migrations\20200713140836_UpdatedModels2.cs" />
     <Compile Remove="Data\Migrations\20200713140836_UpdatedModels2.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717113816_ElectricOperations.cs" />
+    <Compile Remove="Data\Migrations\20200717113816_ElectricOperations.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

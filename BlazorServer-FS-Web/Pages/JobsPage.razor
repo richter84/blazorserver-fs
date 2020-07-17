@@ -24,7 +24,7 @@ else
 
                 <tr>
                     <td><NavLink href="@link">@job.SerialNumber</NavLink></td>
-                    <td>@job.Status</td>
+                    <td><span class="badge badge-primary @job.Status.ToString().ToLower()">@job.Status</span></td>
                     <td>@job.Customer.Name</td>
                 </tr>
             }

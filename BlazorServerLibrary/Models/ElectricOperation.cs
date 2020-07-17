@@ -11,7 +11,7 @@ namespace BlazorServerLibrary.Models
     {
         public int Id { get; set; }
         public string Control { get; set; }
-        public ElectricalSafety ElectricalSafety { get; set; }
+        public List<ElectricalSafetySelection> ElectricalSafety { get; set; } = new List<ElectricalSafetySelection>();
         public string MotorType { get; set; }
         public ElectricalSupplyType SupplyType { get; set; }
         public int PECQty { get; set; }
