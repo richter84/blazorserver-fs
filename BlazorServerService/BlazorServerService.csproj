@@ -19,6 +19,8 @@
     <Compile Remove="Data\Migrations\20200713140836_UpdatedModels2.Designer.cs" />
     <Compile Remove="Data\Migrations\20200717113816_ElectricOperations.cs" />
     <Compile Remove="Data\Migrations\20200717113816_ElectricOperations.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200717133816_AddedForeignKeyToDoorModel.cs" />
+    <Compile Remove="Data\Migrations\20200717133816_AddedForeignKeyToDoorModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

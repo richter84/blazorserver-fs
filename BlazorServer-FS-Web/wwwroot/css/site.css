@@ -320,21 +320,21 @@ canvas {
     min-width:65px;
 }
 
-.badge.badge-primary.pending{
-    background-color:#FF7800;
-}
+    .badge.badge-primary.pending {
+        background-color: #820000;
+    }
 
-.badge.badge-primary.complete {
-    background-color: #FF7800;
-}
+    .badge.badge-primary.complete {
+        background-color: #d53a00;
+    }
 
-.badge.badge-primary.approved {
-    background-color: #003E78;
-}
+    .badge.badge-primary.approved {
+        background-color: #faa405;
+    }
 
-.badge.badge-primary.invoiced {
-    background-color: #003E78;
-}
+    .badge.badge-primary.invoiced {
+        background-color: #FF7800;
+    }
 
 .badge.badge-primary.paid {
     background-color: #26b050;
@@ -519,6 +519,16 @@ canvas {
     text-align: center;
 }
 
+.updating {
+    border: 1px dotted #FF7800;
+    border-radius: 5px;
+    color: #FF7800;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 15px;
+    padding: 10px;
+    text-align: center;
+}
 
 .hr-text {
     line-height: 1em;

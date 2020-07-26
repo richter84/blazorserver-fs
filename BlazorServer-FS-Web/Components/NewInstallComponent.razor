@@ -19,7 +19,7 @@ else{
         @foreach (var type in Enum.GetValues(typeof(JobStatus)))
         {
             string IsComplete = string.Empty;
-            string Date = "Awaiting";
+            DateTimeOffset? Date = null;
             string Time = string.Empty;
             bool IsLastStatus = false;
             JobStatus jobStatus = (JobStatus)Enum.ToObject(typeof(JobStatus), type);
@@ -29,7 +29,7 @@ else{
             foreach (var item in history)
             {
                 IsComplete = "complete";
-                Date = item.Entry.ToString("ddd dd MMMM yyyy");
+                Date = item.Entry;
                 Time = item.Entry.ToString("h:mmtt").ToLower();
             }
             if (jobStatus == JobStatus.Paid)

@@ -346,3 +346,5 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.genruntimeconfig.cache
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\BusyButtonComponent.razor.g.cs
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\Razor\Components\BusyButtonComponent.razor.g.cs

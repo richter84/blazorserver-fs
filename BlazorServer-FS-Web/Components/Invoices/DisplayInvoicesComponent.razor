@@ -11,9 +11,10 @@
         <tbody>
             @foreach (var invoice in Invoices)
             {
+                var url = $"https://fifeshuttersstorage.blob.core.windows.net/invoices/{CustomerId}/{invoice.JobId}/{invoice.FileName}";
                 <tr>
                     <td><input type="checkbox" @onchange="(eventArgs) => HandleChecked(invoice, eventArgs)" /></td>
-                    <td><a href="#" target="_blank">@invoice.FileName</a></td>
+                    <td><a href="@url" target="_blank">@invoice.FileName</a></td>
                 </tr>
             }
         </tbody>
@@ -25,6 +26,9 @@ else
 }
 
 @code {
+    [Parameter]
+    public int CustomerId { get; set; }
+
     [Parameter]
     public List<Invoice> Invoices { get; set; }
 

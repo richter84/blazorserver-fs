@@ -24,5 +24,8 @@ namespace BlazorServerLibrary.Models.Doors
         [Required]
         public SectorType Sector { get; set; }
         public string SupplierOrderNumber { get; set; }
+
+        [ForeignKey("JobId")]
+        public int JobId { get; set; }
     }
 }

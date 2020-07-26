@@ -18,7 +18,7 @@ namespace BlazorServerService.Data
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        //public DbSet<Door> Doors { get; set; }
+        public DbSet<Door> Doors { get; set; }
         public DbSet<RollerShutterDoor> RollerShutters { get; set; }
         public DbSet<SectionalDoor> Sectionals { get; set; }
         public DbSet<PedestrianDoor> Pedestrians { get; set; }

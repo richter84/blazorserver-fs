@@ -1,16 +1,43 @@
 ﻿
-<div class="state">
-    <div class="state-icon @IsComplete">
-        <span class="oi oi-check"></span>
+    <div class="state">
+        <div class="state-icon @IsComplete">
+            <span class="oi oi-check"></span>
+        </div>
+
+        <h3 class="@IsComplete">@State</h3>
+        <div class="d-none d-sm-block">
+            <p>
+                @if (Date.HasValue)
+                {
+                    @Date.Value.ToString("ddd dd MMMM yyyy")
+                }
+                else
+                {
+                    <span>Awaiting</span>
+                }
+
+                <br />
+                @Time
+                <br />
+            </p>
+        </div>
+        <div class="d-block d-sm-none">
+            <p>
+                @if (Date.HasValue)
+                {
+                    @Date.Value.ToString("dd/MM/yyyy")
+                }
+                else
+                {
+                    <span>Awaiting</span>
+                }
+
+                <br />
+                @Time
+                <br />
+            </p>
+        </div>
     </div>
-    <h3 class="@IsComplete">@State</h3>
-    <p>
-        @Date
-        <br />
-        @Time
-        <br />
-    </p>
-</div>
 @if (!IsLastStatus)
 {
     <div class="state-line @IsComplete"></div>
@@ -24,7 +51,7 @@
     public string IsComplete { get; set; }
 
     [Parameter]
-    public string Date { get; set; }
+    public DateTimeOffset? Date { get; set; }
 
     [Parameter]
     public string Time { get; set; }

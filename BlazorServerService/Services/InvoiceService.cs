@@ -119,7 +119,7 @@ namespace BlazorServerService.Services
                     return filename;
                 }
             }
-            catch { throw; }
+            catch(Exception e) { throw e; }
         }
 
         public async Task PublishInvoiceCreatedToEventGrid(InvoiceCreatedEvent invoiceCreatedEventData)

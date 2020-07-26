@@ -10,10 +10,10 @@
                 Invoices
             </legend>
             <div>
-                <AddInvoiceComponent OnAddInvoice="@HandleAddInvoice"></AddInvoiceComponent>
+                <AddInvoiceComponent NewInstall="@NewInstall" OnAddInvoice="@HandleAddInvoice"></AddInvoiceComponent>
             </div>
             <div class="invoice-files">
-                 <DisplayInvoicesComponent @bind-Invoices="@Invoices" HandleCheck="@HandleInvoiceChecked"></DisplayInvoicesComponent>
+                 <DisplayInvoicesComponent CustomerId="@NewInstall.Customer.Id" @bind-Invoices="@Invoices" HandleCheck="@HandleInvoiceChecked"></DisplayInvoicesComponent>
             </div>
         </fieldset>
     </section>
@@ -34,32 +34,9 @@
         await BindInvoices();
     }
 
-    private async Task HandleAddInvoice(Invoice invoice)
+    private async Task HandleAddInvoice()
     {
-        try
-        {
-            var filename = await CreateInvoiceInAzureStorage(invoice);
-            invoice.FileName = filename;
-            invoice.JobId = NewInstall.Id;
-            invoice.SerialNumber = NewInstall.SerialNumber;
-            await InvoiceService.Add(invoice);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-        finally
-        {
-            await BindInvoices();
-        }
-    }
-
-    private async Task<string> CreateInvoiceInAzureStorage(Invoice invoice)
-    {
-        string filename = $"{ Guid.NewGuid() }.pdf";
-        string html = InvoiceService.PrepareInvoiceHtmlToPdf(invoice, NewInstall.Customer, WebHostEnvironment.WebRootPath);
-        await InvoiceService.UploadToAzureStorageAsync(html, filename, NewInstall.Customer.Id, NewInstall.Id);
-        return filename;
+        await BindInvoices();
     }
 
     private async Task BindInvoices()

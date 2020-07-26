@@ -1,0 +1,42 @@
+﻿<button class="btn btn-primary" type="submit" disabled="@IsBusy" onclick="@OnClickCallback" @onclick:preventDefault="@PreventDefault">
+    <span>@DisplayCaption</span>
+</button>
+
+@code {
+
+    [Parameter]
+    public bool IsBusy { get; set; }
+    [Parameter]
+    public EventCallback<bool> isBusyChanged { get; set; }
+
+    private string DisplayCaption
+    {
+        get
+        {
+            if (IsBusy) return IsBusyCaption;
+            return Caption;
+        }
+    }
+
+    [Parameter]
+    public string Caption { get; set; }
+
+    [Parameter]
+    public string IsBusyCaption { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallback { get; set; }
+
+    private bool PreventDefault
+    {
+        get
+        {
+            return OnClickCallback.HasDelegate;
+        }
+    }
+
+    public BusyButtonComponent()
+    {
+        IsBusy = false;
+    }
+}

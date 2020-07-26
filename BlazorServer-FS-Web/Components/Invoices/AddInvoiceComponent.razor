@@ -1,4 +1,7 @@
-﻿<EditForm Model=@Invoice OnValidSubmit="@HandleValidAddInvoice">
+﻿@inject IInvoiceService InvoiceService
+@inject IWebHostEnvironment WebHostEnvironment
+
+<EditForm Model=@Invoice OnValidSubmit="@HandleValidAddInvoice">
     <DataAnnotationsValidator />
     <fieldset class="col-md-6">
         Create Invoice
@@ -6,8 +9,7 @@
 
     <AddInvoiceItemComponent OnAdd="@HandleAddInvoiceItem"></AddInvoiceItemComponent>
 
-    @if (Invoice.InvoiceItems.Count > 0)
-    {
+
         @foreach (InvoiceItem invoiceItem in Invoice.InvoiceItems)
         {
             <ExistingInvoiceItemComponent InvoiceItem="@invoiceItem" OnDelete="@HandleDeleteInvoiceItem"></ExistingInvoiceItemComponent>
@@ -29,18 +31,36 @@
         </div>
         <div>
             <br />
-            <button class="btn btn-primary">Add Invoice</button>
+            <button class="btn btn-primary" @onclick="UpdateBusy">Add Invoice</button>
+
+            @if (isBusy)
+            {
+                <div class="updating alert-warning">
+                    <span>Creating Invoice File...</span>
+                </div>
+            }
+
         </div>
         <ValidationSummary />
-    }
 
 </EditForm>
 
 @code {
 
     [Parameter]
+    public NewInstall NewInstall { get; set; }
+
+    [Parameter]
     public EventCallback<Invoice> OnAddInvoice { get; set; }
+
     public Invoice Invoice { get; set; } = new Invoice();
+
+    private bool isBusy = false;
+
+    private void UpdateBusy()
+    {
+        isBusy = true;
+    }
 
     void HandleAddInvoiceItem(InvoiceItem invoiceItem)
     {
@@ -55,19 +75,41 @@
         CalculateTotals();
     }
 
-    void HandleValidAddInvoice(EditContext editContext)
+    async Task HandleValidAddInvoice(EditContext editContext)
     {
         Invoice = (Invoice)editContext.Model;
-        if (Invoice.InvoiceItems.Count > 0)
+
+        try
         {
-            OnAddInvoice.InvokeAsync(Invoice);
+            var filename = await CreateInvoiceInAzureStorage(Invoice);
+            Invoice.FileName = filename;
+            Invoice.JobId = NewInstall.Id;
+            Invoice.SerialNumber = NewInstall.SerialNumber;
+            await InvoiceService.Add(Invoice);
         }
-        Invoice = new Invoice();
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            isBusy = false;
+            Invoice = new Invoice();
+            await OnAddInvoice.InvokeAsync(Invoice);
+        }
     }
 
     void CalculateTotals()
     {
         Invoice.SubTotal = Math.Round((Invoice.InvoiceItems.Sum(item => item.Price)), 2);
         Invoice.VatTotal = Math.Round((Invoice.SubTotal / 100) * 20, 2);
+    }
+
+    private async Task<string> CreateInvoiceInAzureStorage(Invoice invoice)
+    {
+        string filename = $"{ Guid.NewGuid() }.pdf";
+        string html = InvoiceService.PrepareInvoiceHtmlToPdf(invoice, NewInstall.Customer, WebHostEnvironment.WebRootPath);
+        await InvoiceService.UploadToAzureStorageAsync(html, filename, NewInstall.Customer.Id, NewInstall.Id);
+        return filename;
     }
 }

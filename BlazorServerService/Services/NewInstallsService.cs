@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BlazorServerLibrary.Models.Doors;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BlazorServerService.Services
 {
@@ -52,15 +53,31 @@ namespace BlazorServerService.Services
 
         public async Task<NewInstall> GetNewInstall(int Id)
         {
-            var query = _context.NewInstalls
+            IQueryable<NewInstall> query = _context.NewInstalls
                 .Include(n => n.Door)
                 .Include(n => n.Customer)
                 .Include(n => n.Handover)
-                .Include(n => n.History);
+                .Include(n => n.History)
+                .Where(n => n.Id == Id);
 
-            query.OfType<RollerShutterDoor>().Include(r => r.ElectricOperation).ThenInclude(e => e.ElectricalSafety);
+            var q = _context.Doors.Where(d => d.JobId == Id)
+                .OfType<RollerShutterDoor>()
+                .Include(r => r.ElectricOperation)
+                .ThenInclude(e => e.ElectricalSafety);
 
-            var result = await query.FirstOrDefaultAsync(n => n.Id == Id);
+
+
+            var w = q.FirstOrDefault();
+
+            //var door = query.OfType<RollerShutterDoor>();
+            //var s = door.FirstOrDefault();
+
+            query = query;
+
+
+            //.Include(r => r.ElectricOperation).ThenInclude(e => e.ElectricalSafety);
+
+            var result = await query.FirstOrDefaultAsync();
             return result;
         }
 
