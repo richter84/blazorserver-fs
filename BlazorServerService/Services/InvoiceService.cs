@@ -83,21 +83,29 @@ namespace BlazorServerService.Services
         {
             string invoiceFile = _fileSystem.Path.Combine(path, "templates", "invoice.html");
             string html = _fileSystem.File.ReadAllText(invoiceFile);
-            html.Replace("{{body}}", $"{customer.Name}, your job ({invoice.SerialNumber}) has been invoiced!");
+            //html.Replace("{{body}}", $"{customer.Name}, your job ({invoice.SerialNumber}) has been invoiced!");
 
-            StringBuilder invoiceItemNames = new StringBuilder();
-            StringBuilder invoiceItemPrices = new StringBuilder();
+            StringBuilder invoiceItems = new StringBuilder();
             foreach (var invoiceItem in invoice.InvoiceItems)
             {
-                invoiceItemNames.Append($"<p>{invoiceItem.Name}</p>");
-                invoiceItemPrices.Append($"<p>{invoiceItem.Price}</p>");
+                invoiceItems.Append($"<tr><td height=\"100%\" valign=\"top\" role=\"module-content\">");
+                invoiceItems.Append($"<div style=\"padding:18px\">");
+                invoiceItems.Append($"<div style=\"width:50%\">");
+                invoiceItems.Append($"<div><span style=\"color: #1E373B\"><strong>{invoiceItem.Name}</strong></span></div>");
+                invoiceItems.Append($"</div>");
+                invoiceItems.Append($"<div style=\"width:50%\">");
+                invoiceItems.Append($"<div style=\"text-align:right\"><span style=\"color: #1E373B\"><strong>{invoiceItem.Price:C}</strong></span></div>");
+                invoiceItems.Append($"</div>");
+                invoiceItems.Append($"</div>");
+                invoiceItems.Append($"</td>");
+                invoiceItems.Append($"</tr>");
             }
 
-            html = html.Replace("{{invoiceitems.name}}", invoiceItemNames.ToString())
-            .Replace("{{invoiceitems.price}}", invoiceItemPrices.ToString())
-            .Replace("{{subtotal}}", invoice.SubTotal.ToString())
-            .Replace("{{vattotal}}", invoice.VatTotal.ToString())
-            .Replace("{{total}}", invoice.Total.ToString());
+            html = html.Replace("{{body}}", $"{customer.Name}, your job ({invoice.SerialNumber}) has been invoiced!")
+            .Replace("{{invoiceitems}}", invoiceItems.ToString())
+            .Replace("{{subtotal}}", invoice.SubTotal.ToString("C"))
+            .Replace("{{vattotal}}", invoice.VatTotal.ToString("C"))
+            .Replace("{{total}}", invoice.Total.ToString("C"));
 
             return html;
         }
@@ -114,7 +122,7 @@ namespace BlazorServerService.Services
                     string connectionString = Configuration["AzureStorage:FifeShutters:ConnectionString"];
                     var containerName = $"invoices";
                     BlobContainerClient blobContainerClient = new BlobContainerClient(connectionString, containerName);
-                    //await blobContainerClient.CreateIfNotExistsAsync();
+                    await blobContainerClient.CreateIfNotExistsAsync();
                     await blobContainerClient.UploadBlobAsync($"{customerId}/{jobId}/{filename}", stream);
                     return filename;
                 }
@@ -125,7 +133,7 @@ namespace BlazorServerService.Services
         public async Task PublishInvoiceCreatedToEventGrid(InvoiceCreatedEvent invoiceCreatedEventData)
         {
             string TopicEndpoint = "https://invoicecreated.uksouth-1.eventgrid.azure.net/api/events"; //Configuration["AppSettings:TopicEndpoint"];
-            string TopicKey = "4B7Wi9qpCRyCtaq58iqGNI7POTChFHnFPLbYZPi0y/w="; //Configuration["AppSettings:TopicKey"];
+            string TopicKey = "TqwOyc5LEmdA2CNx7LLPGKqhjIFX8IF7OQyrJOBHj6w="; //Configuration["AppSettings:TopicKey"];
             string topicHostname = new Uri(TopicEndpoint).Host;
 
             TopicCredentials topicCredentials = new TopicCredentials(TopicKey);
@@ -138,7 +146,7 @@ namespace BlazorServerService.Services
                 Data = invoiceCreatedEventData,
                 EventTime = DateTime.Now,
                 Subject = "New Door",
-                DataVersion = "2.0"
+                DataVersion = "2.0",
             };
 
             List<EventGridEvent> events = new List<EventGridEvent>();
