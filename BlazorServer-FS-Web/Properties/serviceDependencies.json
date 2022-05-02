@@ -1,12 +1,12 @@
 {
   "dependencies": {
+    "secrets1": {
+      "type": "secrets",
+      "connectionId": null
+    },
     "mssql1": {
       "type": "mssql",
       "connectionId": "OrbitDbServerAzure"
-    },
-    "secrets1": {
-      "type": "secrets",
-      "connectionId": "ASPNETCORE_HOSTINGSTARTUP__KEYVAULT__CONFIGURATIONVAULT"
     }
   }
 }

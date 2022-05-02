@@ -23,6 +23,10 @@ using Microsoft.Extensions.Options;
 using BlazorServerLibrary.Models.Doors;
 using BlazorServerLibrary.Models.Jobs;
 using System.IO.Abstractions;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
+using Azure.Storage.Blobs;
+using Azure.Core.Extensions;
 
 namespace BlazorServer_FS_Web
 {
@@ -44,7 +48,7 @@ namespace BlazorServer_FS_Web
             services.AddRazorPages();
             services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddDbContext<DataContext>(options =>
-                    options.UseSqlServer(Configuration["OrbitDbServerAzure:ConnectionString"]));
+                    options.UseSqlServer(Configuration["ConnectionStrings:OrbitDbServerAzure"]));
 
             //services.AddTransient<ICustomer, Customer>();
             //services.AddTransient<IJob, Job>();
@@ -57,6 +61,16 @@ namespace BlazorServer_FS_Web
             services.AddTransient<IInvoiceService, InvoiceService>();
             services.AddTransient<IJobService, JobService>();
             services.AddTransient<IFileSystem, FileSystem>();
+            services.AddAzureClients(builder =>
+            {
+                builder.AddBlobServiceClient(Configuration["ConnectionStrings:AZURE_STORAGE_CONNECTION_STRING:blob"], preferMsi: true);
+                builder.AddQueueServiceClient(Configuration["ConnectionStrings:AZURE_STORAGE_CONNECTION_STRING:queue"], preferMsi: true);
+            });
+            services.AddAzureClients(builder =>
+            {
+                builder.AddBlobServiceClient(Configuration["ConnectionStrings:AZURE_STORAGE_CONNECTION_STRING:blob"], preferMsi: true);
+                builder.AddQueueServiceClient(Configuration["ConnectionStrings:AZURE_STORAGE_CONNECTION_STRING:queue"], preferMsi: true);
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -98,6 +112,31 @@ namespace BlazorServer_FS_Web
             });
 
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+        }
+    }
+    internal static class StartupExtensions
+    {
+        public static IAzureClientBuilder<BlobServiceClient, BlobClientOptions> AddBlobServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddBlobServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddBlobServiceClient(serviceUriOrConnectionString);
+            }
+        }
+        public static IAzureClientBuilder<QueueServiceClient, QueueClientOptions> AddQueueServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddQueueServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddQueueServiceClient(serviceUriOrConnectionString);
+            }
         }
     }
 }

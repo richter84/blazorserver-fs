@@ -14,4 +14,3 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netsta
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.csproj.CoreCompileInputs.cache
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.pdb
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServerLibrary\obj\Debug\netstandard2.0\BlazorServerLibrary.csprojAssemblyReference.cache

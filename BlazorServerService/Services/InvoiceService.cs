@@ -17,6 +17,7 @@ using BlazorServerService.Data;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.IO.Abstractions;
+using System.Globalization;
 
 namespace BlazorServerService.Services
 {
@@ -85,11 +86,12 @@ namespace BlazorServerService.Services
             string html = _fileSystem.File.ReadAllText(invoiceFile);
             //html.Replace("{{body}}", $"{customer.Name}, your job ({invoice.SerialNumber}) has been invoiced!");
 
+            CultureInfo.CurrentCulture = new CultureInfo("en-GB", false);
             StringBuilder invoiceItems = new StringBuilder();
             foreach (var invoiceItem in invoice.InvoiceItems)
             {
                 invoiceItems.Append($"<tr><td height=\"100%\" valign=\"top\" role=\"module-content\">");
-                invoiceItems.Append($"<div style=\"padding:18px\">");
+                invoiceItems.Append($"<div style=\"padding:18px;display:flex\">");
                 invoiceItems.Append($"<div style=\"width:50%\">");
                 invoiceItems.Append($"<div><span style=\"color: #1E373B\"><strong>{invoiceItem.Name}</strong></span></div>");
                 invoiceItems.Append($"</div>");
