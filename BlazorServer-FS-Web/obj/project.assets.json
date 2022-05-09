@@ -9303,7 +9303,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
             "C:\\Users\\nncri\\source\\repos\\BlazorServer-FS\\BlazorServerLibrary\\BlazorServerLibrary.csproj": {
               "projectPath": "C:\\Users\\nncri\\source\\repos\\BlazorServer-FS\\BlazorServerLibrary\\BlazorServerLibrary.csproj"
@@ -9322,7 +9321,6 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
-        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Autofac": {
             "target": "Package",
@@ -9390,11 +9388,7 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[3.1.10, 3.1.10]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[3.1.24, 3.1.24]"
+            "version": "[3.1.2, 3.1.2]"
           }
         ],
         "frameworkReferences": {
@@ -9405,7 +9399,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
       }
     }
   }

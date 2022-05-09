@@ -135,9 +135,6 @@ C:\Users\nncri\OneDrive\Desktop\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\ne
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Select.Html.dep
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\appsettings.json
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.exe
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.deps.json
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServer-FS-Web.runtimeconfig.json
@@ -281,7 +278,6 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServerService.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServerLibrary.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\BlazorServerService.pdb
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.csprojAssemblyReference.cache
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.AssemblyInfoInputs.cache
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.AssemblyInfo.cs
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.csproj.CoreCompileInputs.cache
@@ -351,7 +347,12 @@ C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcor
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.Views.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.csproj.CopyComplete
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\staticwebassets\BlazorServer-FS-Web.StaticWebAssets.Manifest.cache
-C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\staticwebassets\BlazorServer-FS-Web.StaticWebAssets.xml
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.dll
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.pdb
 C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.genruntimeconfig.cache
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\launchSettings.json
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\bin\Debug\netcoreapp3.1\Properties\ServiceDependencies\local\secrets2.arm.json
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\BlazorServer-FS-Web.csprojAssemblyReference.cache
+C:\Users\nncri\source\repos\BlazorServer-FS\BlazorServer-FS-Web\obj\Debug\netcoreapp3.1\staticwebassets\BlazorServer-FS-Web.StaticWebAssets.xml
